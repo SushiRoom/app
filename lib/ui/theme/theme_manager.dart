@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:sushi_room/services/internal_api.dart';
+import 'package:sushi_room/services/routes.dart';
 import 'package:sushi_room/ui/pages/test.dart';
 
 import 'package:sushi_room/utils/globals.dart' as globals;
@@ -61,7 +62,8 @@ class _DynamicThemeBuilderState extends State<DynamicThemeBuilder> {
                 initTheme: internalAPI.getLastTheme(),
                 builder: (_, theme) => GetMaterialApp(
                   theme: theme,
-                  home: widget.home,
+                  initialRoute: RouteGenerator.testPageRoute,
+                  onGenerateRoute: RouteGenerator.generateRoute,
                   debugShowCheckedModeBanner: false,
                   localizationsDelegates: const [
                     ...GlobalMaterialLocalizations.delegates,
