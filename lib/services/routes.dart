@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sushi_room/ui/pages/test.dart';
+import 'package:sushi_room/ui/pages/home.dart';
 
 class RouteGenerator {
   static const String mainPageRoute = '/';

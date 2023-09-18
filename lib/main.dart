@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:sushi_room/services/internal_api.dart';
-import 'package:sushi_room/ui/pages/test.dart';
+import 'package:sushi_room/ui/pages/home.dart';
 import 'package:sushi_room/ui/theme/theme_manager.dart';
 
 void main() async {

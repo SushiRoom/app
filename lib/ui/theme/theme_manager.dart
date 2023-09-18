@@ -5,7 +5,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:sushi_room/services/internal_api.dart';
 import 'package:sushi_room/services/routes.dart';
-import 'package:sushi_room/ui/pages/test.dart';
+import 'package:sushi_room/ui/pages/home.dart';
 
 import 'package:sushi_room/utils/globals.dart' as globals;
 
