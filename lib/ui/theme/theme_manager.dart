@@ -5,16 +5,12 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:sushi_room/services/internal_api.dart';
 import 'package:sushi_room/services/routes.dart';
-import 'package:sushi_room/ui/pages/home.dart';
 
 import 'package:sushi_room/utils/globals.dart' as globals;
 
 class DynamicThemeBuilder extends StatefulWidget {
-  final TestPage home;
-
   const DynamicThemeBuilder({
     super.key,
-    required this.home,
   });
 
   @override
@@ -62,7 +58,7 @@ class _DynamicThemeBuilderState extends State<DynamicThemeBuilder> {
                 initTheme: internalAPI.getLastTheme(),
                 builder: (_, theme) => GetMaterialApp(
                   theme: theme,
-                  initialRoute: RouteGenerator.testPageRoute,
+                  initialRoute: RouteGenerator.homePageRoute,
                   onGenerateRoute: RouteGenerator.generateRoute,
                   debugShowCheckedModeBanner: false,
                   localizationsDelegates: const [

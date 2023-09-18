@@ -1,16 +1,17 @@
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:sushi_room/services/internal_api.dart';
 
-class TestPage extends StatefulWidget {
-  const TestPage({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<TestPage> createState() => _TestPageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _TestPageState extends State<TestPage> {
+class _HomePageState extends State<HomePage> {
   InternalAPI internalAPI = Get.find<InternalAPI>();
 
   Widget drawer() {
@@ -44,7 +45,7 @@ class _TestPageState extends State<TestPage> {
 
   PreferredSizeWidget appBar() {
     return AppBar(
-      title: const Text('Test'),
+      title: const Text('Sushi Room'),
       actions: [
         ThemeSwitcher(
           builder: (ctx) => IconButton(
@@ -96,7 +97,40 @@ class _TestPageState extends State<TestPage> {
     );
   }
 
-  int counter = 0;
+  Widget body() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            "Sushi Room",
+            style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                  fontFamily: GoogleFonts.manrope().fontFamily,
+                  fontWeight: FontWeight.w700,
+                ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  Get.toNamed("/join");
+                },
+                child: const Text("Join Room"),
+              ),
+              const SizedBox(width: 10),
+              FilledButton(
+                onPressed: () {
+                  Get.toNamed("/create");
+                },
+                child: const Text("Create Room"),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,6 +138,7 @@ class _TestPageState extends State<TestPage> {
       child: Scaffold(
         appBar: appBar(),
         drawer: drawer(),
+        body: body(),
       ),
     );
   }

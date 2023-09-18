@@ -19,6 +19,7 @@ dependencies:
   shared_preferences: ^2.2.1
   device_info_plus: ^9.0.3
   dynamic_color: ^1.6.6
+  google_fonts: ^6.0.0
 
 dev_dependencies:
   flutter_test:
