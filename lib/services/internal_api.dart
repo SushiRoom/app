@@ -5,6 +5,9 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sushi_room/utils/globals.dart' as globals;
+import 'package:location/location.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:app_settings/app_settings.dart';
 
 class InternalAPI {
   late SharedPreferences prefs;
@@ -53,5 +56,14 @@ class InternalAPI {
     isDynamicTheme ? themeName += 'Dynamic' : null;
 
     return globals.allThemes[themeName]!;
+  }
+
+  Future<bool> requestLocation() async {
+    var res = await Permission.location.request();
+    if (res.isDenied || res.isPermanentlyDenied) {
+      await AppSettings.openAppSettings();
+      res = await Permission.location.request();
+    }
+    return res.isGranted;
   }
 }
