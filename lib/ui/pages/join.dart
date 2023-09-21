@@ -39,26 +39,46 @@ class _JoinPageState extends State<JoinPage> {
   Widget somethingIsMissingWidget({
     required String title,
     required String buttonText,
-    required Icon icon,
     void Function()? onPressed,
+    Color? color,
   }) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          icon,
-          const SizedBox(height: 20),
-          Text(
-            title,
-            style: const TextStyle(fontSize: 20),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: onPressed,
-            child: Text(buttonText),
-          ),
-        ],
+    color ??= Theme.of(context).colorScheme.primary;
+    return Card(
+      elevation: 2,
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: Container(
+        width: double.maxFinite,
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 15,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                FilledButton.tonal(
+                  onPressed: onPressed,
+                  child: Row(
+                    children: [
+                      Text(buttonText),
+                      const SizedBox(width: 5),
+                      const Icon(
+                        Icons.arrow_forward,
+                        size: 20,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
@@ -70,59 +90,60 @@ class _JoinPageState extends State<JoinPage> {
       );
     }
 
+    List<Widget> errors = [];
     if (hasLocationPermissions == PermissionStatus.denied || hasLocationPermissions == PermissionStatus.deniedForever) {
-      return somethingIsMissingWidget(
-        title: 'Location permissions are off',
-        buttonText: 'Turn on location permissions',
-        icon: const Icon(Icons.location_off_outlined),
-        onPressed: () async {
-          bool res = await internalAPI.requestLocation();
-          if (res) {
-            initLocationStuff();
-            setState(() {
-              isLoading = true;
-            });
-          }
-        },
+      errors.add(
+        somethingIsMissingWidget(
+          title: "We need location permissions to let you see rooms around you",
+          buttonText: "Ask permissions",
+          onPressed: () async {
+            bool res = await internalAPI.requestLocation();
+            if (res) {
+              initLocationStuff();
+              setState(() {
+                isLoading = true;
+              });
+            }
+          },
+        ),
       );
     }
 
     if (!isLocationOn!) {
-      return somethingIsMissingWidget(
-        title: 'Location is off',
-        buttonText: 'Turn on location',
-        icon: const Icon(Icons.location_off_outlined),
-        onPressed: () async {
-          bool res = await location.requestService();
-          if (res) {
-            initLocationStuff();
-            setState(() {
-              isLoading = true;
-            });
-          }
-        },
+      errors.add(
+        somethingIsMissingWidget(
+          title: "To see rooms around you, we need your location to be turned on",
+          buttonText: "Turn on",
+          onPressed: () async {
+            bool res = await location.requestService();
+            if (res) {
+              initLocationStuff();
+              setState(() {
+                isLoading = true;
+              });
+            }
+          },
+        ),
       );
     }
 
-    if (locationData == null) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
-    }
-
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // write longitude and latitude in a text
-          Text(
-            'Longitude: ${locationData!.longitude}\nLatitude: ${locationData!.latitude}',
-            style: const TextStyle(fontSize: 20),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-    );
+    return errors.isEmpty
+        ? Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // write longitude and latitude in a text
+                Text(
+                  'Longitude: ${locationData!.longitude}\nLatitude: ${locationData!.latitude}',
+                  style: const TextStyle(fontSize: 20),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          )
+        : Column(
+            children: errors,
+          );
   }
 
   @override

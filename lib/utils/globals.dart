@@ -7,3 +7,11 @@ var allThemes = <String, ThemeData>{
   'dark': darkCustomTheme,
   'light': lightCustomTheme,
 };
+
+var errorFaces = [
+  "(･o･;)",
+  "Σ(ಠ_ಠ)",
+  "ಥ_ಥ",
+  "(˘･_･˘)",
+  "(｡･ω･｡)",
+];
