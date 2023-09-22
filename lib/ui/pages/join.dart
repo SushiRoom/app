@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:sushi_room/services/internal_api.dart';
+import 'package:animations/animations.dart';
+import 'package:sushi_room/ui/pages/scan_code.dart';
 
 class JoinPage extends StatefulWidget {
   const JoinPage({super.key});
@@ -44,7 +46,7 @@ class _JoinPageState extends State<JoinPage> {
   }) {
     color ??= Theme.of(context).colorScheme.primary;
     return Card(
-      elevation: 2,
+      elevation: 1.5,
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Container(
         width: double.maxFinite,
@@ -146,6 +148,28 @@ class _JoinPageState extends State<JoinPage> {
           );
   }
 
+  Widget fab() {
+    return OpenContainer(
+      closedBuilder: (context, openContainer) {
+        return FloatingActionButton(
+          onPressed: openContainer,
+          child: const Icon(Icons.qr_code_rounded),
+        );
+      },
+      openBuilder: (context, closedContainer) {
+        return const ScanCodePage();
+      },
+      closedShape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(17),
+        ),
+      ),
+      openColor: Theme.of(context).colorScheme.primaryContainer,
+      closedColor: Theme.of(context).colorScheme.primaryContainer,
+      middleColor: Theme.of(context).colorScheme.primaryContainer,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -153,6 +177,7 @@ class _JoinPageState extends State<JoinPage> {
         title: const Text('Join a Room'),
       ),
       body: body(),
+      floatingActionButton: fab(),
     );
   }
 }
