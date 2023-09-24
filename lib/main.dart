@@ -26,7 +26,6 @@ void main() async {
   );
 
   await FirebaseAuth.instance.signInAnonymously();
-
   runApp(const SushiRoom());
 }
 
