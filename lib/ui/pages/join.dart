@@ -150,12 +150,13 @@ class _JoinPageState extends State<JoinPage> {
 
   Widget fab() {
     return OpenContainer(
+      useRootNavigator: true,
       closedBuilder: (context, openContainer) {
         return FloatingActionButton(
           onPressed: openContainer,
           child: const Icon(Icons.qr_code_rounded),
         );
-      },
+      },  
       openBuilder: (context, closedContainer) {
         return const ScanCodePage();
       },

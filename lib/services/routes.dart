@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:sushi_room/ui/pages/home.dart';
 import 'package:sushi_room/ui/pages/join.dart';
 import 'package:sushi_room/ui/pages/create.dart';
+import 'package:sushi_room/ui/pages/room.dart';
 
 class RouteGenerator {
   static const String homePageRoute = '/';
   static const String createPageRoute = '/create';
   static const String joinPageRoute = '/join';
+  static const String roomPageRoute = '/room';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     //ignore: unused_local_variable
@@ -29,6 +31,14 @@ class RouteGenerator {
         return MaterialPageRoute(
           settings: RouteSettings(name: settings.name),
           builder: (_) => const JoinPage(),
+        );
+
+      case roomPageRoute:
+        return MaterialPageRoute(
+          settings: RouteSettings(name: settings.name),
+          builder: (_) => RoomPage(
+            roomId: args?[0] ?? "invalid",
+          ),
         );
 
       default:
