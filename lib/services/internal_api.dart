@@ -38,7 +38,6 @@ class InternalAPI {
 
     ThemeSwitcher.of(ctx).changeTheme(
       theme: globals.allThemes[themeName]!,
-      isReversed: !value,
     );
   }
 
