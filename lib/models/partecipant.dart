@@ -1,14 +1,14 @@
-class User {
+class Partecipant {
   final String uid;
   final String name;
 
-  User({
+  Partecipant({
     required this.uid,
     required this.name,
   });
 
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
+  factory Partecipant.fromJson(Map<dynamic, dynamic> json) {
+    return Partecipant(
       uid: json['uid'],
       name: json['name'],
     );

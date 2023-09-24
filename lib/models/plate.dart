@@ -1,9 +1,9 @@
-import 'package:sushi_room/models/user.dart';
+import 'package:sushi_room/models/partecipant.dart';
 
 class Plate {
   String id;
   String quantity;
-  User orderedBy;
+  Partecipant orderedBy;
   bool arrived;
 
   Plate({
@@ -17,7 +17,7 @@ class Plate {
     return Plate(
       id: json['id'],
       quantity: json['quantity'],
-      orderedBy: User.fromJson(json['orderedBy']),
+      orderedBy: Partecipant.fromJson(json['orderedBy']),
       arrived: json['arrived'],
     );
   }
