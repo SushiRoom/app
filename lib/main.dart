@@ -1,8 +1,10 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:sushi_room/services/internal_api.dart';
 import 'package:sushi_room/ui/theme/theme_manager.dart';
+import 'package:sushi_room/firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,6 +19,11 @@ void main() async {
       systemNavigationBarColor: Colors.black.withOpacity(0.002),
     ),
   );
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(const SushiRoom());
 }
 
