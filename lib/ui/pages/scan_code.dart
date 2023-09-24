@@ -29,25 +29,19 @@ class _ScanCodePageState extends State<ScanCodePage> {
                   title: const Text('Room found!'),
                   content: Text("Room ID: ${element.rawValue}"),
                   actions: [
-                    IconButton(
+                    OutlinedButton(
                       onPressed: () {
                         Get.back();
                       },
-                      icon: Icon(
-                        Icons.close,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
+                      child: const Text("Retry"),
                     ),
-                    IconButton(
+                    FilledButton(
                       onPressed: () {
                         controller.stop();
                         Get.back();
                         Get.offAndToNamed('/room', arguments: [element.rawValue]);
                       },
-                      icon: Icon(
-                        Icons.check,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
+                      child: const Text("Join"),
                     ),
                   ],
                 ),
