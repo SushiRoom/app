@@ -14,38 +14,67 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   InternalAPI internalAPI = Get.find<InternalAPI>();
 
+  @override
+  void initState() {
+    super.initState();
+  }
+
   Widget drawer() {
     return Drawer(
-      child: ListView(
-        children: [
-          FutureBuilder(
-            future: internalAPI.isDynamicThemeSupported(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData && snapshot.data!) {
-                return ListTile(
-                  title: const Text("Dynamic Theme"),
-                  trailing: ThemeSwitcher(
-                    builder: (ctx) => Switch(
-                      value: internalAPI.isDynamicTheme,
+      child: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
+              child: Row(
+                children: [
+                  Text("Hi, ", style: Theme.of(context).textTheme.titleLarge),
+                  Expanded(
+                    child: TextField(
+                      decoration: const InputDecoration.collapsed(
+                        hintText: "Name",
+                      ),
+                      style: Theme.of(context).textTheme.titleLarge,
+                      controller: TextEditingController(text: internalAPI.currentUserName),
                       onChanged: (value) {
-                        internalAPI.setDynamicMode(value, ctx);
+                        internalAPI.currentUserName = value;
                       },
                     ),
                   ),
-                );
-              } else {
-                return const SizedBox.shrink();
-              }
-            },
-          ),
-        ],
+                ],
+              ),
+            ),
+            const Spacer(),
+            FutureBuilder(
+              future: internalAPI.isDynamicThemeSupported(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData && snapshot.data!) {
+                  return ListTile(
+                    subtitle: const Text("Use colors based on your phone"),
+                    title: const Text("Dynamic Theme"),
+                    trailing: ThemeSwitcher(
+                      builder: (ctx) => Switch(
+                        value: internalAPI.isDynamicTheme,
+                        onChanged: (value) {
+                          internalAPI.setDynamicMode(value, ctx);
+                        },
+                      ),
+                    ),
+                  );
+                } else {
+                  return const SizedBox.shrink();
+                }
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
 
   PreferredSizeWidget appBar() {
     return AppBar(
-      title: const Text('Sushi Room'),
+      title: const Text('Home'),
       actions: [
         ThemeSwitcher(
           builder: (ctx) => IconButton(
