@@ -1,8 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:sushi_room/services/internal_api.dart';
 import 'package:animations/animations.dart';
 import 'package:sushi_room/ui/pages/scan_code.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:sushi_room/utils/globals.dart' as globals;
 
 class JoinPage extends StatefulWidget {
   const JoinPage({super.key});
@@ -130,18 +134,50 @@ class _JoinPageState extends State<JoinPage> {
     }
 
     return errors.isEmpty
-        ? Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // write longitude and latitude in a text
-                Text(
-                  'Longitude: ${locationData!.longitude}\nLatitude: ${locationData!.latitude}',
-                  style: const TextStyle(fontSize: 20),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
+        ? StreamBuilder(
+            stream: FirebaseDatabase.instance.ref().child('rooms').onValue,
+            builder: (context, snapshot) {
+              var query = snapshot.data?.snapshot.children.where((element) {
+                var data = element.value as Map<String, dynamic>;
+                if (data['usesLocation'] == true) {
+                  var location = data['location'] as List<dynamic>;
+                  var distance = sqrt(pow(location[0] - locationData!.latitude!, 2) + pow(location[1] - locationData!.longitude!, 2));
+                  return distance <= 0.1;
+                }
+                return false;
+              });
+              if (query == null) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+
+              if (query.isEmpty) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        globals.errorFaces[Random().nextInt(globals.errorFaces.length)],
+                        style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        "No rooms found nearby",
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+
+              return SizedBox();
+              // var rooms = query.map((e) => e.value as Map<String, dynamic>).toList();
+            },
           )
         : Column(
             children: errors,
@@ -156,7 +192,7 @@ class _JoinPageState extends State<JoinPage> {
           onPressed: openContainer,
           child: const Icon(Icons.qr_code_rounded),
         );
-      },  
+      },
       openBuilder: (context, closedContainer) {
         return const ScanCodePage();
       },
