@@ -138,11 +138,20 @@ class _JoinPageState extends State<JoinPage> {
             stream: FirebaseDatabase.instance.ref().child('rooms').onValue,
             builder: (context, snapshot) {
               var query = snapshot.data?.snapshot.children.where((element) {
-                var data = element.value as Map<String, dynamic>;
+                var data = element.value as Map<dynamic, dynamic>;
                 if (data['usesLocation'] == true) {
                   var location = data['location'] as List<dynamic>;
-                  var distance = sqrt(pow(location[0] - locationData!.latitude!, 2) + pow(location[1] - locationData!.longitude!, 2));
-                  return distance <= 0.1;
+                  var distance = sqrt(
+                    pow(
+                          double.parse(location[0]) - locationData!.latitude!,
+                          2,
+                        ) +
+                        pow(
+                          double.parse(location[1]) - locationData!.longitude!,
+                          2,
+                        ),
+                  );
+                  return distance <= 200;
                 }
                 return false;
               });
@@ -175,6 +184,7 @@ class _JoinPageState extends State<JoinPage> {
                 );
               }
 
+              debugPrint(query.toString());
               return SizedBox();
               // var rooms = query.map((e) => e.value as Map<String, dynamic>).toList();
             },
