@@ -1,7 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:location/location.dart';
+import 'package:sushi_room/models/room.dart';
 import 'package:sushi_room/services/internal_api.dart';
 import 'package:animations/animations.dart';
 import 'package:sushi_room/ui/pages/scan_code.dart';
@@ -151,7 +153,7 @@ class _JoinPageState extends State<JoinPage> {
                           2,
                         ),
                   );
-                  return distance <= 200;
+                  return distance <= 0.5;
                 }
                 return false;
               });
@@ -184,14 +186,60 @@ class _JoinPageState extends State<JoinPage> {
                 );
               }
 
-              debugPrint(query.toString());
-              return SizedBox();
-              // var rooms = query.map((e) => e.value as Map<String, dynamic>).toList();
+              List<Room> rooms = query.map((e) => e.value as Map<dynamic, dynamic>).map((e) => Room.fromJson(e)).toList();
+              return ListView(
+                children: [
+                  for (var room in rooms) roomCard(room),
+                ],
+              );
             },
           )
         : Column(
             children: errors,
           );
+  }
+
+  Widget roomCard(Room room) {
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      child: ListTile(
+        onTap: () {
+          Get.toNamed('/room', arguments: [room.id]);
+        },
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(17),
+          ),
+        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        title: Text(room.name),
+        leading: room.password != null
+            ? const Icon(
+                Icons.lock,
+                size: 20,
+              )
+            : const Icon(
+                Icons.lock_open,
+                size: 20,
+              ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(
+              Icons.people,
+              size: 20,
+            ),
+            const SizedBox(width: 5),
+            Text(
+              room.users.length.toString(),
+              style: const TextStyle(
+                fontSize: 20,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget fab() {
