@@ -31,8 +31,10 @@ class _HomePageState extends State<HomePage> {
                   Text("Hi, ", style: Theme.of(context).textTheme.titleLarge),
                   Expanded(
                     child: TextField(
-                      decoration: const InputDecoration.collapsed(
+                      decoration: const InputDecoration(
                         hintText: "Name",
+                        suffixIcon: Icon(Icons.edit),
+                        border: InputBorder.none,
                       ),
                       style: Theme.of(context).textTheme.titleLarge,
                       controller: TextEditingController(text: internalAPI.currentUserName),
