@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:location/location.dart';
 import 'package:sushi_room/models/room.dart';
+import 'package:sushi_room/services/internal_api.dart';
 import 'package:sushi_room/services/rooms_api.dart';
 
 class CreatePage extends StatefulWidget {
@@ -13,6 +15,8 @@ class CreatePage extends StatefulWidget {
 
 class _CreatePageState extends State<CreatePage> {
   RoomsAPI roomsAPI = RoomsAPI();
+  InternalAPI internalAPI = Get.find<InternalAPI>();
+
   String uid = FirebaseAuth.instance.currentUser!.uid;
 
   // Room params
@@ -20,21 +24,60 @@ class _CreatePageState extends State<CreatePage> {
   bool usesLocation = false;
   bool usesPassword = false;
   String password = '';
+  List<String>? location;
+
+  //location stuff
+  bool? hasLocationPermissions;
+  bool? isLocationOn;
+  bool isLoading = true;
+
+  final Location _location = Location();
+
+  initLocationStuff() async {
+    var temp = await _location.hasPermission();
+    hasLocationPermissions = temp == PermissionStatus.granted || temp == PermissionStatus.deniedForever;
+    isLocationOn = await _location.serviceEnabled();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initLocationStuff();
+  }
 
   createNewRoom() async {
-    if (roomName.isNotEmpty) {
-      Room room = Room(
-        name: roomName,
-        usesLocation: usesLocation,
-        password: usesPassword ? password : null,
-        creator: uid,
-      );
+    Room room = Room(
+      name: roomName,
+      usesLocation: usesLocation,
+      password: usesPassword ? password : null,
+      creator: uid,
+      location: location,
+    );
 
-      var roomId = await roomsAPI.createRoom(room);
-      debugPrint('Room created with id: $roomId');
+    var roomId = await roomsAPI.createRoom(room);
+    debugPrint('Room created with id: $roomId');
 
-      Get.toNamed('/room', arguments: [roomId]);
-    } else {}
+    Get.offAndToNamed('/room', arguments: [roomId]);
+  }
+
+  requestSnackBar({
+    required String title,
+    required void Function() onClick,
+    required String subtitle,
+    required String buttonText,
+  }) {
+    Get.snackbar(
+      title,
+      subtitle,
+      onTap: (_) => onClick(),
+      mainButton: TextButton(
+        onPressed: onClick,
+        child: Text(buttonText),
+      ),
+      snackPosition: SnackPosition.BOTTOM,
+      overlayBlur: 0,
+      isDismissible: true,
+    );
   }
 
   @override
@@ -62,14 +105,66 @@ class _CreatePageState extends State<CreatePage> {
               ),
             ),
             SwitchListTile(
-                value: usesLocation,
-                onChanged: (value) {
-                  setState(() {
-                    usesLocation = value;
-                  });
-                },
-                secondary: const Icon(Icons.location_on_outlined),
-                title: const Text("Use location")),
+              value: usesLocation,
+              onChanged: (value) async {
+                if (hasLocationPermissions!) {
+                  if (isLocationOn!) {
+                    setState(() {
+                      usesLocation = value;
+                      isLoading = true;
+                    });
+                    var locationData = await _location.getLocation();
+                    location = [locationData.latitude.toString(), locationData.longitude.toString()];
+                    setState(() {
+                      isLoading = false;
+                    });
+                  } else {
+                    requestSnackBar(
+                      title: "You need to turn on location",
+                      subtitle: "Click to turn on location",
+                      buttonText: "Turn on",
+                      onClick: () async {
+                        bool res = await _location.requestService();
+                        if (res) {
+                          initLocationStuff();
+                          setState(() {
+                            usesLocation = hasLocationPermissions! && isLocationOn!;
+                          });
+                        }
+                      },
+                    );
+                  }
+                } else {
+                  requestSnackBar(
+                    title: "You need location permissions",
+                    subtitle: "Click to ask permissions",
+                    buttonText: "Ask",
+                    onClick: () async {
+                      bool res = await internalAPI.requestLocation();
+                      if (res) {
+                        initLocationStuff();
+                        setState(() {
+                          usesLocation = hasLocationPermissions! && isLocationOn!;
+                        });
+                      }
+                    },
+                  );
+                }
+              },
+              secondary: usesLocation
+                  ? isLoading
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : const Icon(Icons.location_on_outlined)
+                  : const Icon(Icons.location_off_outlined),
+              //
+              title: const Text("Use location"),
+            ),
             SwitchListTile(
                 value: usesPassword,
                 onChanged: (value) {
@@ -97,8 +192,13 @@ class _CreatePageState extends State<CreatePage> {
                     ),
                   )
                 : const SizedBox.shrink(),
+            const SizedBox(height: 20),
             FilledButton(
-              onPressed: roomName.isNotEmpty && ((usesPassword && password.isNotEmpty) || (!usesPassword)) ? createNewRoom : null,
+              onPressed: roomName.isNotEmpty &&
+                      ((usesPassword && password.isNotEmpty) || (!usesPassword)) &&
+                      ((usesLocation && !isLoading) || (!usesLocation))
+                  ? createNewRoom
+                  : null,
               child: const Text('Create'),
             ),
           ],

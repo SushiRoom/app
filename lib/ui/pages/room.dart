@@ -59,8 +59,6 @@ class _RoomPageState extends State<RoomPage> {
     await roomsAPI.addUser(roomId, user);
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,13 +77,15 @@ class _RoomPageState extends State<RoomPage> {
                 Map<String, dynamic> roomData = (snapshot.data!.snapshot.value as Map).cast<String, dynamic>();
                 Room room = Room.fromJson(roomData);
 
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text("Room name: ${room.name}"),
-                    Text("Partecipants: ${room.users.length}"),
-                    for (var user in room.users) Text(user.name),
-                  ],
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Room name: ${room.name}"),
+                      Text("Partecipants: ${room.users.length}"),
+                      for (var user in room.users) Text(user.name),
+                    ],
+                  ),
                 );
               } else {
                 return const Center(
