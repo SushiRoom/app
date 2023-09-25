@@ -28,7 +28,7 @@ class Room {
       id: json['id'],
       name: json['name'],
       usesLocation: json['usesLocation'],
-      location: json['location'],
+      location: json['location'] != null ? (json['location'] as List).map((e) => e.toString()).toList() : [],
       password: json['password'],
       creator: json['creator'],
       users: json['users'] != null ? (json['users'] as List).map((e) => Partecipant.fromJson(e)).toList() : [],
