@@ -23,19 +23,81 @@ class _RoomPageState extends State<RoomPage> {
   RoomsAPI roomsAPI = RoomsAPI();
   InternalAPI internalAPI = Get.find<InternalAPI>();
 
+  bool passwordNeeded = true;
+
   @override
   void initState() {
-    addCurrentUser(widget.roomId);
+    checkPassword();
     super.initState();
   }
 
   @override
   void dispose() {
-    removeUser(
-      widget.roomId,
-      FirebaseAuth.instance.currentUser!.uid,
-    );
+    if (!passwordNeeded) {
+      removeUser(
+        widget.roomId,
+        FirebaseAuth.instance.currentUser!.uid,
+      );
+    }
     super.dispose();
+  }
+
+  Future<void> checkPassword() async {
+    Room room = await roomsAPI.getRoom(widget.roomId);
+    setState(() {
+      passwordNeeded = room.password != null && room.creator != FirebaseAuth.instance.currentUser!.uid;
+    });
+
+    if (passwordNeeded) {
+      String password = '';
+      Get.dialog(
+        AlertDialog(
+          title: const Text("Insert room password"),
+          content: TextField(
+            obscureText: true,
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Password',
+              isDense: true,
+            ),
+            onChanged: (value) {
+              password = value;
+            },
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Get.back(
+                  closeOverlays: true,
+                );
+              },
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () {
+                if (password == room.password) {
+                  Get.back();
+                  addCurrentUser(widget.roomId);
+                  setState(() {
+                    passwordNeeded = false;
+                  });
+                } else {
+                  if (!Get.isSnackbarOpen) {
+                    Get.snackbar(
+                      "Wrong password",
+                      "Please try again",
+                      snackPosition: SnackPosition.BOTTOM,
+                    );
+                  }
+                }
+              },
+              child: const Text("Confirm"),
+            ),
+          ],
+        ),
+        barrierDismissible: false,
+      );
+    }
   }
 
   removeUser(roomId, userId) async {
@@ -63,39 +125,37 @@ class _RoomPageState extends State<RoomPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Column(
-        children: [
-          QrImageView(
-            data: widget.roomId,
-            backgroundColor: Colors.white,
-            size: 90,
-          ),
-          StreamBuilder(
-            stream: FirebaseDatabase.instance.ref().child('rooms').child(widget.roomId).onValue,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                Map<String, dynamic> roomData = (snapshot.data!.snapshot.value as Map).cast<String, dynamic>();
-                Room room = Room.fromJson(roomData);
+      body: !passwordNeeded
+          ? StreamBuilder(
+              stream: FirebaseDatabase.instance.ref().child('rooms').child(widget.roomId).onValue,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  Map<String, dynamic> roomData = (snapshot.data!.snapshot.value as Map).cast<String, dynamic>();
+                  Room room = Room.fromJson(roomData);
 
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text("Room name: ${room.name}"),
-                      Text("Partecipants: ${room.users.length}"),
-                      for (var user in room.users) Text(user.name),
-                    ],
-                  ),
-                );
-              } else {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            },
-          ),
-        ],
-      ),
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        QrImageView(
+                          data: widget.roomId,
+                          backgroundColor: Colors.white,
+                          size: 90,
+                        ),
+                        Text("Room name: ${room.name}"),
+                        Text("Partecipants: ${room.users.length}"),
+                        for (var user in room.users) Text(user.name),
+                      ],
+                    ),
+                  );
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              },
+            )
+          : const SizedBox.shrink(),
     );
   }
 }
