@@ -59,6 +59,8 @@ class _RoomPageState extends State<RoomPage> {
     await roomsAPI.addUser(roomId, user);
   }
 
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,7 +70,7 @@ class _RoomPageState extends State<RoomPage> {
           QrImageView(
             data: widget.roomId,
             backgroundColor: Colors.white,
-            size: 200,
+            size: 90,
           ),
           StreamBuilder(
             stream: FirebaseDatabase.instance.ref().child('rooms').child(widget.roomId).onValue,
@@ -78,10 +80,10 @@ class _RoomPageState extends State<RoomPage> {
                 Room room = Room.fromJson(roomData);
 
                 return Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Center(
-                      child: Text(room.name),
-                    ),
+                    Text("Room name: ${room.name}"),
+                    Text("Partecipants: ${room.users.length}"),
                     for (var user in room.users) Text(user.name),
                   ],
                 );
