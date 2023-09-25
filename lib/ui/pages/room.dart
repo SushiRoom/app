@@ -61,40 +61,99 @@ class _RoomPageState extends State<RoomPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Column(
-        children: [
-          QrImageView(
-            data: widget.roomId,
-            backgroundColor: Colors.white,
-            size: 90,
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Room"),
+          bottom: const TabBar(
+            tabs: [
+              Tab(text: "Room"),
+              Tab(text: "Order"),
+            ],
           ),
-          StreamBuilder(
-            stream: FirebaseDatabase.instance.ref().child('rooms').child(widget.roomId).onValue,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                Map<String, dynamic> roomData = (snapshot.data!.snapshot.value as Map).cast<String, dynamic>();
-                Room room = Room.fromJson(roomData);
+        ),
+        body: TabBarView(
+          children: [
+            Column(
+              children: [
+                QrImageView(
+                  data: widget.roomId,
+                  backgroundColor: Colors.white,
+                  size: 90,
+                ),
+                StreamBuilder(
+                  stream: FirebaseDatabase.instance
+                      .ref()
+                      .child('rooms')
+                      .child(widget.roomId)
+                      .onValue,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      Map<String, dynamic> roomData =
+                          (snapshot.data!.snapshot.value as Map)
+                              .cast<String, dynamic>();
+                      Room room = Room.fromJson(roomData);
 
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text("Room name: ${room.name}"),
-                      Text("Partecipants: ${room.users.length}"),
-                      for (var user in room.users) Text(user.name),
-                    ],
-                  ),
-                );
-              } else {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            },
-          ),
-        ],
+                      return Column(
+                        children: [
+                          Text("Room name: ${room.name}"),
+                          Text("Partecipants: ${room.users.length}"),
+                          for (var user in room.users) Text(user.name),
+                        ],
+                      );
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  },
+                ),
+              ],
+            ),
+            Center(child: Text("La roba dei pesi")),
+          ],
+        ),
+
+        // body: Column(
+        //   children: [
+        //     QrImageView(
+        //       data: widget.roomId,
+        //       backgroundColor: Colors.white,
+        //       size: 90,
+        //     ),
+        //     StreamBuilder(
+        //       stream: FirebaseDatabase.instance
+        //           .ref()
+        //           .child('rooms')
+        //           .child(widget.roomId)
+        //           .onValue,
+        //       builder: (context, snapshot) {
+        //         if (snapshot.hasData) {
+        //           Map<String, dynamic> roomData =
+        //               (snapshot.data!.snapshot.value as Map)
+        //                   .cast<String, dynamic>();
+        //           Room room = Room.fromJson(roomData);
+
+        //           return Center(
+        //             child: Column(
+        //               mainAxisAlignment: MainAxisAlignment.center,
+        //               children: [
+        //                 Text("Room name: ${room.name}"),
+        //                 Text("Partecipants: ${room.users.length}"),
+        //                 for (var user in room.users) Text(user.name),
+        //               ],
+        //             ),
+        //           );
+        //         } else {
+        //           return const Center(
+        //             child: CircularProgressIndicator(),
+        //           );
+        //         }
+        //       },
+        //     ),
+        //   ],
+        // ),
       ),
     );
   }
