@@ -22,17 +22,19 @@ class _CreatePageState extends State<CreatePage> {
   String password = '';
 
   createNewRoom() async {
-    Room room = Room(
-      name: roomName,
-      usesLocation: usesLocation,
-      password: usesPassword ? password : null,
-      creator: uid,
-    );
+    if (roomName.isNotEmpty) {
+      Room room = Room(
+        name: roomName,
+        usesLocation: usesLocation,
+        password: usesPassword ? password : null,
+        creator: uid,
+      );
 
-    var roomId = await roomsAPI.createRoom(room);
-    debugPrint('Room created with id: $roomId');
+      var roomId = await roomsAPI.createRoom(room);
+      debugPrint('Room created with id: $roomId');
 
-    Get.toNamed('/room', arguments: [roomId]);
+      Get.toNamed('/room', arguments: [roomId]);
+    } else {}
   }
 
   @override
@@ -73,6 +75,9 @@ class _CreatePageState extends State<CreatePage> {
                 onChanged: (value) {
                   setState(() {
                     usesPassword = value;
+                    if (!usesPassword) {
+                      password = '';
+                    }
                   });
                 },
                 secondary: usesPassword ? const Icon(Icons.lock_outline) : const Icon(Icons.lock_open_outlined),
@@ -93,7 +98,7 @@ class _CreatePageState extends State<CreatePage> {
                   )
                 : const SizedBox.shrink(),
             FilledButton(
-              onPressed: createNewRoom,
+              onPressed: roomName.isNotEmpty && ((usesPassword && password.isNotEmpty) || (!usesPassword)) ? createNewRoom : null,
               child: const Text('Create'),
             ),
           ],
