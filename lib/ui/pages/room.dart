@@ -177,9 +177,12 @@ class _RoomPageState extends State<RoomPage> {
                               : IconButton(
                                   onPressed: () {
                                     if (user.name.isNotEmpty) removeUser(widget.roomId, user.uid);
+                                    if (localUsers.indexOf(user) == currentUser) currentUser = 0;
+
                                     localSetState(() {
                                       localUsers.remove(user);
                                     });
+                                    setState(() {});
                                   },
                                   icon: const Icon(Icons.close_outlined),
                                 ),
