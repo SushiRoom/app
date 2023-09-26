@@ -54,50 +54,67 @@ class _RoomPageState extends State<RoomPage> {
 
     if (passwordNeeded) {
       String password = '';
+      bool showText = false;
       Get.dialog(
-        AlertDialog(
-          title: const Text("Insert room password"),
-          content: TextField(
-            obscureText: true,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Password',
-              isDense: true,
+        StatefulBuilder(
+          builder: (context, localSetState) => AlertDialog(
+            title: const Text("Insert room password"),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  obscureText: !showText,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Password',
+                    isDense: true,
+                  ),
+                  onChanged: (value) {
+                    password = value;
+                  },
+                ),
+                CheckboxListTile(
+                  title: const Text("Show password"),
+                  value: showText,
+                  onChanged: (value) {
+                    localSetState(() {
+                      showText = value!;
+                    });
+                  },
+                ),
+              ],
             ),
-            onChanged: (value) {
-              password = value;
-            },
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Get.back(
-                  closeOverlays: true,
-                );
-              },
-              child: const Text("Cancel"),
-            ),
-            TextButton(
-              onPressed: () {
-                if (password == room.password) {
-                  Get.back();
-                  addCurrentUser(widget.roomId);
-                  setState(() {
-                    passwordNeeded = false;
-                  });
-                } else {
-                  if (!Get.isSnackbarOpen) {
-                    Get.snackbar(
-                      "Wrong password",
-                      "Please try again",
-                      snackPosition: SnackPosition.BOTTOM,
-                    );
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Get.back(
+                    closeOverlays: true,
+                  );
+                },
+                child: const Text("Cancel"),
+              ),
+              TextButton(
+                onPressed: () {
+                  if (password == room.password) {
+                    Get.back();
+                    addCurrentUser(widget.roomId);
+                    setState(() {
+                      passwordNeeded = false;
+                    });
+                  } else {
+                    if (!Get.isSnackbarOpen) {
+                      Get.snackbar(
+                        "Wrong password",
+                        "Please try again",
+                        snackPosition: SnackPosition.BOTTOM,
+                      );
+                    }
                   }
-                }
-              },
-              child: const Text("Confirm"),
-            ),
-          ],
+                },
+                child: const Text("Confirm"),
+              ),
+            ],
+          ),
         ),
         barrierDismissible: false,
       );
