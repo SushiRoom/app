@@ -11,13 +11,14 @@ class RoomLanding extends StatefulWidget {
   State<RoomLanding> createState() => _RoomLandingState();
 }
 
-class _RoomLandingState extends State<RoomLanding>
-    with AutomaticKeepAliveClientMixin {
+class _RoomLandingState extends State<RoomLanding> with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return Column(
       children: [
         QrImageView(
@@ -26,16 +27,10 @@ class _RoomLandingState extends State<RoomLanding>
           size: 90,
         ),
         StreamBuilder(
-          stream: FirebaseDatabase.instance
-              .ref()
-              .child('rooms')
-              .child(widget.roomId)
-              .onValue,
+          stream: FirebaseDatabase.instance.ref().child('rooms').child(widget.roomId).onValue,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              Map<String, dynamic> roomData =
-                  (snapshot.data!.snapshot.value as Map)
-                      .cast<String, dynamic>();
+              Map<String, dynamic> roomData = (snapshot.data!.snapshot.value as Map).cast<String, dynamic>();
               Room room = Room.fromJson(roomData);
 
               return Column(

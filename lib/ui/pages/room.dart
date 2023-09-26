@@ -1,14 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:get/get.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 import 'package:sushi_room/models/room.dart';
 import 'package:sushi_room/models/partecipant.dart';
 import 'package:sushi_room/services/internal_api.dart';
 import 'package:sushi_room/services/rooms_api.dart';
 import 'package:sushi_room/ui/components/hero_dialog.dart';
-import 'package:sushi_room/ui/pages/room/order.dart';
 import 'package:sushi_room/ui/pages/room/room_landing.dart';
 
 class RoomPage extends StatefulWidget {
@@ -291,46 +288,6 @@ class _RoomPageState extends State<RoomPage> {
             // OrderPage(room: room),
           ],
         ),
-
-        // body: Column(
-        //   children: [
-        //     QrImageView(
-        //       data: widget.roomId,
-        //       backgroundColor: Colors.white,
-        //       size: 90,
-        //     ),
-        //     StreamBuilder(
-        //       stream: FirebaseDatabase.instance
-        //           .ref()
-        //           .child('rooms')
-        //           .child(widget.roomId)
-        //           .onValue,
-        //       builder: (context, snapshot) {
-        //         if (snapshot.hasData) {
-        //           Map<String, dynamic> roomData =
-        //               (snapshot.data!.snapshot.value as Map)
-        //                   .cast<String, dynamic>();
-        //           Room room = Room.fromJson(roomData);
-
-        //           return Center(
-        //             child: Column(
-        //               mainAxisAlignment: MainAxisAlignment.center,
-        //               children: [
-        //                 Text("Room name: ${room.name}"),
-        //                 Text("Partecipants: ${room.users.length}"),
-        //                 for (var user in room.users) Text(user.name),
-        //               ],
-        //             ),
-        //           );
-        //         } else {
-        //           return const Center(
-        //             child: CircularProgressIndicator(),
-        //           );
-        //         }
-        //       },
-        //     ),
-        //   ],
-        // ),
       ),
     );
   }
