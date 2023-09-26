@@ -8,6 +8,8 @@ import 'package:sushi_room/models/partecipant.dart';
 import 'package:sushi_room/services/internal_api.dart';
 import 'package:sushi_room/services/rooms_api.dart';
 import 'package:sushi_room/ui/components/hero_dialog.dart';
+import 'package:sushi_room/ui/pages/room/order.dart';
+import 'package:sushi_room/ui/pages/room/room_landing.dart';
 
 class RoomPage extends StatefulWidget {
   final String roomId;
@@ -284,43 +286,9 @@ class _RoomPageState extends State<RoomPage> {
         ),
         body: TabBarView(
           children: [
-            Column(
-              children: [
-                QrImageView(
-                  data: widget.roomId,
-                  backgroundColor: Colors.white,
-                  size: 90,
-                ),
-                StreamBuilder(
-                  stream: FirebaseDatabase.instance
-                      .ref()
-                      .child('rooms')
-                      .child(widget.roomId)
-                      .onValue,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      Map<String, dynamic> roomData =
-                          (snapshot.data!.snapshot.value as Map)
-                              .cast<String, dynamic>();
-                      Room room = Room.fromJson(roomData);
-
-                      return Column(
-                        children: [
-                          Text("Room name: ${room.name}"),
-                          Text("Partecipants: ${room.users.length}"),
-                          for (var user in room.users) Text(user.name),
-                        ],
-                      );
-                    } else {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                  },
-                ),
-              ],
-            ),
+            RoomLanding(roomId: widget.roomId),
             const Center(child: Text("La roba dei pesi")),
+            // OrderPage(room: room),
           ],
         ),
 
