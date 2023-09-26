@@ -48,8 +48,7 @@ class _RoomPageState extends State<RoomPage> {
   Future<void> checkPassword() async {
     Room room = await roomsAPI.getRoom(widget.roomId);
     setState(() {
-      passwordNeeded = room.password != null &&
-          room.creator != FirebaseAuth.instance.currentUser!.uid;
+      passwordNeeded = room.password != null && room.creator != FirebaseAuth.instance.currentUser!.uid;
     });
 
     if (passwordNeeded) {
@@ -166,9 +165,7 @@ class _RoomPageState extends State<RoomPage> {
                         ListTile(
                           leading: CircleAvatar(
                             child: Text(
-                              user.name.isNotEmpty
-                                  ? user.name.substring(0, 1).toUpperCase()
-                                  : "",
+                              user.name.isNotEmpty ? user.name.substring(0, 1).toUpperCase() : "",
                             ),
                           ),
                           title: user.name.isNotEmpty
@@ -191,16 +188,12 @@ class _RoomPageState extends State<RoomPage> {
                               currentUser = localUsers.indexOf(user);
                             });
                           },
-                          trailing: (user.uid != null &&
-                                  user.uid ==
-                                      FirebaseAuth.instance.currentUser?.uid)
+                          trailing: (user.uid != null && user.uid == FirebaseAuth.instance.currentUser?.uid)
                               ? null
                               : IconButton(
                                   onPressed: () {
-                                    if (user.name.isNotEmpty)
-                                      removeUser(widget.roomId, user.uid);
-                                    if (localUsers.indexOf(user) == currentUser)
-                                      currentUser = 0;
+                                    if (user.name.isNotEmpty) removeUser(widget.roomId, user.uid);
+                                    if (localUsers.indexOf(user) == currentUser) currentUser = 0;
 
                                     localSetState(() {
                                       localUsers.remove(user);
