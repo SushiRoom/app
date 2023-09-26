@@ -1,9 +1,9 @@
 class Partecipant {
-  final String uid;
-  final String name;
+  String? uid;
+  String name;
 
   Partecipant({
-    required this.uid,
+    this.uid,
     required this.name,
   });
 

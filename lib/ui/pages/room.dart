@@ -7,6 +7,8 @@ import 'package:sushi_room/models/room.dart';
 import 'package:sushi_room/models/partecipant.dart';
 import 'package:sushi_room/services/internal_api.dart';
 import 'package:sushi_room/services/rooms_api.dart';
+import 'package:sushi_room/services/routes.dart';
+import 'package:sushi_room/ui/components/hero_dialog.dart';
 
 class RoomPage extends StatefulWidget {
   final String roomId;
@@ -25,6 +27,9 @@ class _RoomPageState extends State<RoomPage> {
 
   bool passwordNeeded = true;
 
+  List<Partecipant> localUsers = [];
+  int currentUser = 0;
+
   @override
   void initState() {
     checkPassword();
@@ -34,10 +39,9 @@ class _RoomPageState extends State<RoomPage> {
   @override
   void dispose() {
     if (!passwordNeeded) {
-      removeUser(
-        widget.roomId,
-        FirebaseAuth.instance.currentUser!.uid,
-      );
+      for (var element in localUsers) {
+        removeUser(widget.roomId, element.uid);
+      }
     }
     super.dispose();
   }
@@ -97,6 +101,8 @@ class _RoomPageState extends State<RoomPage> {
         ),
         barrierDismissible: false,
       );
+    } else {
+      addCurrentUser(widget.roomId);
     }
   }
 
@@ -118,13 +124,128 @@ class _RoomPageState extends State<RoomPage> {
       name: name,
     );
 
+    localUsers.add(user);
     await roomsAPI.addUser(roomId, user);
+  }
+
+  Widget customDialog() {
+    return Hero(
+      tag: 'a',
+      child: StatefulBuilder(
+        builder: (context, localSetState) => AlertDialog(
+          title: const Text("Select user"),
+          scrollable: true,
+          content: Column(
+            children: [
+              SizedBox(
+                width: 400,
+                height: 150,
+                child: MediaQuery.removePadding(
+                  context: context,
+                  removeTop: true,
+                  child: ListView(
+                    children: [
+                      for (var user in localUsers)
+                        ListTile(
+                          leading: CircleAvatar(
+                            child: Text(
+                              user.name.isNotEmpty ? user.name.substring(0, 1).toUpperCase() : "",
+                            ),
+                          ),
+                          title: user.name.isNotEmpty
+                              ? Text(user.name)
+                              : TextField(
+                                  decoration: const InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: 'Name',
+                                  ),
+                                  onSubmitted: (value) {
+                                    localSetState(() {
+                                      user.name = value;
+                                    });
+                                    roomsAPI.addUser(widget.roomId, user);
+                                  },
+                                ),
+                          onTap: () {
+                            Get.back();
+                            setState(() {
+                              currentUser = localUsers.indexOf(user);
+                            });
+                          },
+                          trailing: (user.uid != null && user.uid == FirebaseAuth.instance.currentUser?.uid)
+                              ? null
+                              : IconButton(
+                                  onPressed: () {
+                                    if (user.name.isNotEmpty) removeUser(widget.roomId, user.uid);
+                                    localSetState(() {
+                                      localUsers.remove(user);
+                                    });
+                                  },
+                                  icon: const Icon(Icons.close_outlined),
+                                ),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+              FilledButton.tonal(
+                onPressed: localUsers.any((element) => element.name.isEmpty)
+                    ? null
+                    : () {
+                        Partecipant user = Partecipant(
+                          name: "",
+                        );
+
+                        localSetState(() {
+                          localUsers.add(user);
+                        });
+                      },
+                child: const Text("Add User"),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget circleUserAvatar() {
+    return InkWell(
+      borderRadius: BorderRadius.circular(20),
+      onTap: () {
+        Navigator.push(
+          context,
+          HeroDialogRoute(
+            builder: (context) {
+              return customDialog();
+            },
+          ),
+        );
+      },
+      child: Hero(
+        tag: 'a',
+        child: CircleAvatar(
+          child: Text(
+            localUsers[currentUser].name.substring(0, 1).toUpperCase(),
+          ),
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: !passwordNeeded
+            ? [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: circleUserAvatar(),
+                ),
+              ]
+            : null,
+      ),
       body: !passwordNeeded
           ? StreamBuilder(
               stream: FirebaseDatabase.instance.ref().child('rooms').child(widget.roomId).onValue,
@@ -145,6 +266,12 @@ class _RoomPageState extends State<RoomPage> {
                         Text("Room name: ${room.name}"),
                         Text("Partecipants: ${room.users.length}"),
                         for (var user in room.users) Text(user.name),
+                        ElevatedButton(
+                          onPressed: () {
+                            Get.toNamed(RouteGenerator.orderPageRoute, arguments: [room]);
+                          },
+                          child: const Text("Order"),
+                        )
                       ],
                     ),
                   );

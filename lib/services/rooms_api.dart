@@ -30,6 +30,8 @@ class RoomsAPI {
   }
 
   Future<void> addUser(String roomId, Partecipant user) async {
+    user.uid ??= _roomsRef.push().key;
+
     Room room = await getRoom(roomId);
     room.users.add(user);
 
