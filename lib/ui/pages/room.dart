@@ -19,23 +19,91 @@ class RoomPage extends StatefulWidget {
   State<RoomPage> createState() => _RoomPageState();
 }
 
-class _RoomPageState extends State<RoomPage> {
+class _RoomPageState extends State<RoomPage>
+    with AutomaticKeepAliveClientMixin {
   RoomsAPI roomsAPI = RoomsAPI();
   InternalAPI internalAPI = Get.find<InternalAPI>();
 
+  bool passwordNeeded = true;
+
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   void initState() {
-    addCurrentUser(widget.roomId);
+    checkPassword();
     super.initState();
   }
 
   @override
   void dispose() {
-    removeUser(
-      widget.roomId,
-      FirebaseAuth.instance.currentUser!.uid,
-    );
+    if (!passwordNeeded) {
+      removeUser(
+        widget.roomId,
+        FirebaseAuth.instance.currentUser!.uid,
+      );
+    }
+
     super.dispose();
+  }
+
+  Future<void> checkPassword() async {
+    Room room = await roomsAPI.getRoom(widget.roomId);
+    setState(() {
+      passwordNeeded = room.password != null &&
+          room.creator != FirebaseAuth.instance.currentUser!.uid;
+    });
+
+    if (passwordNeeded) {
+      String password = '';
+      Get.dialog(
+        AlertDialog(
+          title: const Text("Insert room password"),
+          content: TextField(
+            obscureText: true,
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Password',
+              isDense: true,
+            ),
+            onChanged: (value) {
+              password = value;
+            },
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Get.back(
+                  closeOverlays: true,
+                );
+              },
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () {
+                if (password == room.password) {
+                  Get.back();
+                  addCurrentUser(widget.roomId);
+                  setState(() {
+                    passwordNeeded = false;
+                  });
+                } else {
+                  if (!Get.isSnackbarOpen) {
+                    Get.snackbar(
+                      "Wrong password",
+                      "Please try again",
+                      snackPosition: SnackPosition.BOTTOM,
+                    );
+                  }
+                }
+              },
+              child: const Text("Confirm"),
+            ),
+          ],
+        ),
+        barrierDismissible: false,
+      );
+    }
   }
 
   removeUser(roomId, userId) async {
@@ -111,7 +179,7 @@ class _RoomPageState extends State<RoomPage> {
                 ),
               ],
             ),
-            Center(child: Text("La roba dei pesi")),
+            const Center(child: Text("La roba dei pesi")),
           ],
         ),
 

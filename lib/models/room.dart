@@ -23,7 +23,7 @@ class Room {
     this.plates = const [],
   });
 
-  factory Room.fromJson(Map<String, dynamic> json) {
+  factory Room.fromJson(Map<dynamic, dynamic> json) {
     return Room(
       id: json['id'],
       name: json['name'],
