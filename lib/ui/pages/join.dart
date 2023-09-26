@@ -6,6 +6,7 @@ import 'package:location/location.dart';
 import 'package:sushi_room/models/room.dart';
 import 'package:sushi_room/services/internal_api.dart';
 import 'package:animations/animations.dart';
+import 'package:sushi_room/services/routes.dart';
 import 'package:sushi_room/ui/pages/scan_code.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:sushi_room/utils/globals.dart' as globals;
@@ -204,7 +205,7 @@ class _JoinPageState extends State<JoinPage> {
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       child: ListTile(
         onTap: () {
-          Get.toNamed('/room', arguments: [room.id]);
+          Get.toNamed(RouteGenerator.roomPageRoute, arguments: [room.id]);
         },
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(

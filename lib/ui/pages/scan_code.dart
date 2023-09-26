@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:sushi_room/services/routes.dart';
 
 class ScanCodePage extends StatefulWidget {
   const ScanCodePage({super.key});
@@ -39,7 +40,7 @@ class _ScanCodePageState extends State<ScanCodePage> {
                       onPressed: () {
                         controller.stop();
                         Get.back();
-                        Get.offAndToNamed('/room', arguments: [element.rawValue]);
+                        Get.offAndToNamed(RouteGenerator.roomPageRoute, arguments: [element.rawValue]);
                       },
                       child: const Text("Join"),
                     ),
