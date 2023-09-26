@@ -5,6 +5,7 @@ import 'package:location/location.dart';
 import 'package:sushi_room/models/room.dart';
 import 'package:sushi_room/services/internal_api.dart';
 import 'package:sushi_room/services/rooms_api.dart';
+import 'package:sushi_room/services/routes.dart';
 
 class CreatePage extends StatefulWidget {
   const CreatePage({super.key});
@@ -57,7 +58,7 @@ class _CreatePageState extends State<CreatePage> {
     var roomId = await roomsAPI.createRoom(room);
     debugPrint('Room created with id: $roomId');
 
-    Get.offAndToNamed('/room', arguments: [roomId]);
+    Get.offAndToNamed(RouteGenerator.roomPageRoute, arguments: [roomId]);
   }
 
   requestSnackBar({

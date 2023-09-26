@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sushi_room/services/internal_api.dart';
+import 'package:sushi_room/services/routes.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -145,14 +146,14 @@ class _HomePageState extends State<HomePage> {
             children: [
               ElevatedButton(
                 onPressed: () {
-                  Get.toNamed("/join");
+                  Get.toNamed(RouteGenerator.joinPageRoute);
                 },
                 child: const Text("Join Room"),
               ),
               const SizedBox(width: 10),
               FilledButton(
                 onPressed: () {
-                  Get.toNamed("/create");
+                  Get.toNamed(RouteGenerator.createPageRoute);
                 },
                 child: const Text("Create Room"),
               ),
