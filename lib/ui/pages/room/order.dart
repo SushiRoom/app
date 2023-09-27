@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:sushi_room/models/room.dart';
+import 'package:sushi_room/models/partecipant.dart';
+import 'package:sushi_room/models/plate.dart';
 
 class OrderPage extends StatefulWidget {
-  final Room room;
+  final String roomId;
+  final Partecipant currentUser;
+
   const OrderPage({
     super.key,
-    required this.room,
+    required this.roomId,
+    required this.currentUser,
   });
 
   @override
@@ -16,9 +20,8 @@ class _OrderPageState extends State<OrderPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: const Center(
-        child: Text("Order Page"),
+      body: Center(
+        child: Text(widget.currentUser.name),
       ),
     );
   }

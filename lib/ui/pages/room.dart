@@ -6,6 +6,7 @@ import 'package:sushi_room/models/partecipant.dart';
 import 'package:sushi_room/services/internal_api.dart';
 import 'package:sushi_room/services/rooms_api.dart';
 import 'package:sushi_room/ui/components/hero_dialog.dart';
+import 'package:sushi_room/ui/pages/room/order.dart';
 import 'package:sushi_room/ui/pages/room/room_landing.dart';
 
 class RoomPage extends StatefulWidget {
@@ -277,13 +278,19 @@ class _RoomPageState extends State<RoomPage> {
                 ]
               : null,
         ),
-        body: TabBarView(
-          children: [
-            RoomLanding(roomId: widget.roomId),
-            const Center(child: Text("La roba dei pesi")),
-            // OrderPage(room: room),
-          ],
-        ),
+        body: !passwordNeeded
+            ? TabBarView(
+                children: [
+                  RoomLanding(
+                    roomId: widget.roomId,
+                  ),
+                  OrderPage(
+                    roomId: widget.roomId,
+                    currentUser: localUsers[currentUser],
+                  ),
+                ],
+              )
+            : null,
       ),
     );
   }
