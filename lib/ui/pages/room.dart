@@ -28,6 +28,8 @@ class _RoomPageState extends State<RoomPage> {
   List<Partecipant> localUsers = [];
   int currentUser = 0;
 
+  String roomName = 'Loading...';
+
   @override
   void initState() {
     checkPassword();
@@ -48,6 +50,7 @@ class _RoomPageState extends State<RoomPage> {
   Future<void> checkPassword() async {
     Room room = await roomsAPI.getRoom(widget.roomId);
     setState(() {
+      roomName = room.name;
       passwordNeeded = room.password != null && room.creator != FirebaseAuth.instance.currentUser!.uid;
     });
 
@@ -258,7 +261,7 @@ class _RoomPageState extends State<RoomPage> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Room"),
+          title: Text(roomName),
           bottom: const TabBar(
             tabs: [
               Tab(text: "Room"),
