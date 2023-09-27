@@ -89,7 +89,7 @@ class _CreatePageState extends State<CreatePage> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 70.0, vertical: 20.0),
-        child: Column(
+        child: ListView(
           children: [
             TextField(
               onChanged: (String value) {
