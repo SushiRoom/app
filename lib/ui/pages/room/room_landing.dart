@@ -11,7 +11,8 @@ class RoomLanding extends StatefulWidget {
   State<RoomLanding> createState() => _RoomLandingState();
 }
 
-class _RoomLandingState extends State<RoomLanding> with AutomaticKeepAliveClientMixin {
+class _RoomLandingState extends State<RoomLanding>
+    with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
@@ -27,17 +28,48 @@ class _RoomLandingState extends State<RoomLanding> with AutomaticKeepAliveClient
           size: 90,
         ),
         StreamBuilder(
-          stream: FirebaseDatabase.instance.ref().child('rooms').child(widget.roomId).onValue,
+          stream: FirebaseDatabase.instance
+              .ref()
+              .child('rooms')
+              .child(widget.roomId)
+              .onValue,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              Map<String, dynamic> roomData = (snapshot.data!.snapshot.value as Map).cast<String, dynamic>();
+              Map<String, dynamic> roomData =
+                  (snapshot.data!.snapshot.value as Map)
+                      .cast<String, dynamic>();
               Room room = Room.fromJson(roomData);
 
               return Column(
                 children: [
-                  Text("Room name: ${room.name}"),
-                  Text("Partecipants: ${room.users.length}"),
-                  for (var user in room.users) Text(user.name),
+                  Card(
+                    elevation: 1,
+                    child: SizedBox(
+                      height: 300,
+                      width: 350,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Column(
+                          children: [
+                            for (var user in room.users)
+                              ListTile(
+                                // add icon
+                                leading: const Icon(Icons.person),
+                                title: Text(user.name),
+                              ),
+                            TextButton.icon(
+                                icon: const Icon(Icons.add),
+                                onPressed: () => {},
+                                label: const Text("Add user"))
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  // Text("Room name: ${room.name}"),
+                  // Text("Partecipants: ${room.users.length}"),
+                  // for (var user in room.users) Text(user.name),
                 ],
               );
             } else {
