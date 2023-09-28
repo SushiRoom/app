@@ -40,39 +40,47 @@ class _FinalOrderPageState extends State<FinalOrderPage> with AutomaticKeepAlive
               }
             }
 
-            return ListView(
-              children: [
-                for (var plateNumber in plates.keys)
-                  OpenContainer(
-                    closedBuilder: (context, action) => Card(
-                      margin: const EdgeInsets.only(left: 15, right: 15, top: 10),
-                      child: ListTile(
-                        title: Text("$plateNumber x${plates[plateNumber]}"),
-                        trailing: const Icon(Icons.arrow_forward),
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView(
+                children: [
+                  for (var plateNumber in plates.keys)
+                    Padding(
+                      padding: const EdgeInsets.all(6.0),
+                      child: OpenContainer(
+                        closedShape: const RoundedRectangleBorder(),
+                        closedElevation: 0,
+                        closedBuilder: (context, action) => Card(
+                          margin: const EdgeInsets.only(left: 15, right: 15, top: 0),
+                          child: ListTile(
+                            title: Text("$plateNumber x${plates[plateNumber]}"),
+                            trailing: const Icon(Icons.arrow_forward),
+                          ),
+                        ),
+                        openBuilder: (context, action) => Scaffold(
+                          appBar: AppBar(
+                            title: const Text("Who ordered"),
+                          ),
+                          body: ListView(
+                            children: [
+                              for (var plate in room.plates.where((plate) => plate.number == plateNumber))
+                                Card(
+                                  margin: const EdgeInsets.only(left: 15, right: 15, top: 10),
+                                  child: ListTile(
+                                    title: Text(plate.orderedBy.name),
+                                    subtitle: Text("x${plate.quantity}"),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                        middleColor: Theme.of(context).colorScheme.background,
+                        closedColor: Theme.of(context).colorScheme.background,
+                        openColor: Theme.of(context).colorScheme.background,
                       ),
                     ),
-                    openBuilder: (context, action) => Scaffold(
-                      appBar: AppBar(
-                        title: const Text("Who ordered"),
-                      ),
-                      body: ListView(
-                        children: [
-                          for (var plate in room.plates.where((plate) => plate.number == plateNumber))
-                            Card(
-                              margin: const EdgeInsets.only(left: 15, right: 15, top: 10),
-                              child: ListTile(
-                                title: Text(plate.orderedBy.name),
-                                subtitle: Text("x${plate.quantity}"),
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
-                    middleColor: Theme.of(context).colorScheme.background,
-                    closedColor: Theme.of(context).colorScheme.background,
-                    openColor: Theme.of(context).colorScheme.background,
-                  ),
-              ],
+                ],
+              ),
             );
           } else {
             return const Center(
