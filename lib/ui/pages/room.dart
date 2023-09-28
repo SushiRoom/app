@@ -6,6 +6,7 @@ import 'package:sushi_room/models/partecipant.dart';
 import 'package:sushi_room/services/internal_api.dart';
 import 'package:sushi_room/services/rooms_api.dart';
 import 'package:sushi_room/ui/components/hero_dialog.dart';
+import 'package:sushi_room/ui/pages/room/final_order.dart';
 import 'package:sushi_room/ui/pages/room/order.dart';
 import 'package:sushi_room/ui/pages/room/room_landing.dart';
 
@@ -259,7 +260,7 @@ class _RoomPageState extends State<RoomPage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           title: Text(roomName),
@@ -267,6 +268,7 @@ class _RoomPageState extends State<RoomPage> {
             tabs: [
               Tab(text: "Room"),
               Tab(text: "Order"),
+              Tab(text: "Final Order"),
             ],
           ),
           actions: !passwordNeeded
@@ -285,6 +287,10 @@ class _RoomPageState extends State<RoomPage> {
                     roomId: widget.roomId,
                   ),
                   OrderPage(
+                    roomId: widget.roomId,
+                    currentUser: localUsers[currentUser],
+                  ),
+                  FinalOrderPage(
                     roomId: widget.roomId,
                     currentUser: localUsers[currentUser],
                   ),

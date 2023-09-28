@@ -1,5 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sushi_room/models/partecipant.dart';
 import 'package:sushi_room/models/plate.dart';
 import 'package:sushi_room/models/room.dart';
@@ -21,7 +22,7 @@ class OrderPage extends StatefulWidget {
 
 class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixin {
   RoomsAPI roomsAPI = RoomsAPI();
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   bool get wantKeepAlive => true;
@@ -37,6 +38,9 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
                 quantity: '',
               );
               roomsAPI.addPlate(room, plate);
+              _scrollController.jumpTo(
+                _scrollController.position.maxScrollExtent + 100,
+              );
             }
           : null,
       child: const Text("Add plate"),
@@ -67,7 +71,12 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
               hintText: "Plate number",
             ),
             onChanged: (value) {
-              plate.number = value;
+              plate.number = value.trim();
+            },
+            onSubmitted: (value) {
+              roomsAPI.updatePlate(room, plate);
+            },
+            onTapOutside: (value) {
               roomsAPI.updatePlate(room, plate);
             },
           ),
@@ -77,12 +86,20 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
             textAlign: TextAlign.center,
             textAlignVertical: TextAlignVertical.center,
             controller: TextEditingController(text: plate.quantity),
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+            ],
             decoration: const InputDecoration(
               border: InputBorder.none,
               hintText: "Quantity",
             ),
             onChanged: (value) {
-              plate.quantity = value;
+              plate.quantity = value.trim();
+            },
+            onSubmitted: (value) {
+              roomsAPI.updatePlate(room, plate);
+            },
+            onTapOutside: (value) {
               roomsAPI.updatePlate(room, plate);
             },
           ),
