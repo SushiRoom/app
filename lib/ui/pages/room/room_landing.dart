@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/services.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:sushi_room/models/room.dart';
 
@@ -11,8 +12,7 @@ class RoomLanding extends StatefulWidget {
   State<RoomLanding> createState() => _RoomLandingState();
 }
 
-class _RoomLandingState extends State<RoomLanding>
-    with AutomaticKeepAliveClientMixin {
+class _RoomLandingState extends State<RoomLanding> with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
@@ -27,17 +27,19 @@ class _RoomLandingState extends State<RoomLanding>
           backgroundColor: Colors.white,
           size: 90,
         ),
+        TextButton(
+          child: const Text("Copy room id"),
+          onPressed: () {
+            Clipboard.setData(
+              ClipboardData(text: widget.roomId),
+            );
+          },
+        ),
         StreamBuilder(
-          stream: FirebaseDatabase.instance
-              .ref()
-              .child('rooms')
-              .child(widget.roomId)
-              .onValue,
+          stream: FirebaseDatabase.instance.ref().child('rooms').child(widget.roomId).onValue,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              Map<String, dynamic> roomData =
-                  (snapshot.data!.snapshot.value as Map)
-                      .cast<String, dynamic>();
+              Map<String, dynamic> roomData = (snapshot.data!.snapshot.value as Map).cast<String, dynamic>();
               Room room = Room.fromJson(roomData);
 
               return Column(
@@ -58,9 +60,10 @@ class _RoomLandingState extends State<RoomLanding>
                                 title: Text(user.name),
                               ),
                             TextButton.icon(
-                                icon: const Icon(Icons.add),
-                                onPressed: () => {},
-                                label: const Text("Add user"))
+                              icon: const Icon(Icons.add),
+                              onPressed: () => {},
+                              label: const Text("Add user"),
+                            )
                           ],
                         ),
                       ),
