@@ -20,81 +20,72 @@ class OrderPage extends StatefulWidget {
 }
 
 class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixin {
-  TextEditingController quantityController = TextEditingController();
-  TextEditingController plateController = TextEditingController();
   RoomsAPI roomsAPI = RoomsAPI();
+  ScrollController _scrollController = ScrollController();
 
   @override
   bool get wantKeepAlive => true;
 
-  Widget addingWidget(Room room) {
-    return Row(
-      children: [
-        Flexible(
-          flex: 1,
-          child: TextField(
-            controller: quantityController,
-            onChanged: (value) => setState(() {}),
-            decoration: InputDecoration(
-              isDense: true,
-              contentPadding: EdgeInsets.all(12),
-              label: Text('Quantity'),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(
-          width: 8,
-        ),
-        Flexible(
-          flex: 2,
-          child: TextField(
-            controller: plateController,
-            onChanged: (value) => setState(() {}),
-            decoration: InputDecoration(
-              isDense: true,
-              contentPadding: EdgeInsets.all(12),
-              label: Text('Plate Number'),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-          ),
-        ),
-        IconButton(
-          icon: const Icon(Icons.check),
-          onPressed: (quantityController.text.isNotEmpty && plateController.text.isNotEmpty)
-              ? () {
-                  debugPrint(quantityController.text);
-                  debugPrint(plateController.text);
-                  roomsAPI.addPlate(
-                    room,
-                    Plate(
-                      arrived: false,
-                      quantity: quantityController.text,
-                      number: plateController.text,
-                      orderedBy: widget.currentUser,
-                    ),
-                  );
-                }
-              : null,
-        ),
-      ],
+  Widget addingWidget(Room room, bool active) {
+    return TextButton(
+      onPressed: active
+          ? () {
+              Plate plate = Plate(
+                arrived: false,
+                number: '',
+                orderedBy: widget.currentUser,
+                quantity: '',
+              );
+              roomsAPI.addPlate(room, plate);
+            }
+          : null,
+      child: const Text("Add plate"),
     );
   }
 
-  Widget plateWidget(Plate plate) {
-    return Card(
-      child: ListTile(
-        title: Text(plate.quantity),
-        subtitle: Text(plate.number),
-        trailing: IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.close_outlined),
+  Widget plateWidget(Room room, Plate plate) {
+    Widget field(Widget child) => Flexible(
+          child: AspectRatio(
+            aspectRatio: 3.5,
+            child: Card(
+              child: Center(
+                child: child,
+              ),
+            ),
+          ),
+        );
+
+    return Row(
+      children: [
+        field(
+          TextField(
+            textAlign: TextAlign.center,
+            controller: TextEditingController(text: plate.number),
+            decoration: const InputDecoration(
+              border: InputBorder.none,
+              hintText: "Plate number",
+            ),
+            onChanged: (value) {
+              plate.number = value;
+              roomsAPI.updatePlate(room, plate);
+            },
+          ),
         ),
-      ),
+        field(
+          TextField(
+            textAlign: TextAlign.center,
+            controller: TextEditingController(text: plate.quantity),
+            decoration: const InputDecoration(
+              border: InputBorder.none,
+              hintText: "Quantity",
+            ),
+            onChanged: (value) {
+              plate.quantity = value;
+              roomsAPI.updatePlate(room, plate);
+            },
+          ),
+        ),
+      ],
     );
   }
 
@@ -103,27 +94,38 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
     super.build(context);
 
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: StreamBuilder(
-          stream: FirebaseDatabase.instance.ref().child('rooms').child(widget.roomId).onValue,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              Map<String, dynamic> roomData = (snapshot.data!.snapshot.value as Map).cast<String, dynamic>();
-              Room room = Room.fromJson(roomData);
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: StreamBuilder(
+            stream: FirebaseDatabase.instance.ref().child('rooms').child(widget.roomId).onValue,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                Map<String, dynamic> roomData = (snapshot.data!.snapshot.value as Map).cast<String, dynamic>();
+                Room room = Room.fromJson(roomData);
 
-              return ListView(
-                children: [
-                  for (var plate in room.plates) plateWidget(plate),
-                  Card(child: addingWidget(room)),
-                ],
-              );
-            } else {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          },
+                List<Plate> userPlates = room.plates.where((plate) => plate.orderedBy.uid == widget.currentUser.uid).toList();
+
+                return ListView(
+                  controller: _scrollController,
+                  children: [
+                    for (Plate plate in userPlates) plateWidget(room, plate),
+                    addingWidget(
+                      room,
+                      !userPlates.any(
+                        (element) => element.number.isEmpty || element.quantity.isEmpty,
+                      ),
+                    ),
+                  ],
+                );
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
+          ),
         ),
       ),
     );
