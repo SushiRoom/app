@@ -265,6 +265,31 @@ class _RoomPageState extends State<RoomPage> {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
+          leading: BackButton(
+            onPressed: () {
+              Get.dialog(
+                AlertDialog(
+                  title: const Text("Leave room"),
+                  content: const Text("Are you sure you want to leave this room?"),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Get.back();
+                      },
+                      child: const Text("Cancel"),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Get.back();
+                        Get.back();
+                      },
+                      child: const Text("Confirm"),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
           title: Text(roomName),
           bottom: const TabBar(
             tabs: [
