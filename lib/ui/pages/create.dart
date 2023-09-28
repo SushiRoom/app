@@ -167,17 +167,18 @@ class _CreatePageState extends State<CreatePage> {
               title: const Text("Use location"),
             ),
             SwitchListTile(
-                value: usesPassword,
-                onChanged: (value) {
-                  setState(() {
-                    usesPassword = value;
-                    if (!usesPassword) {
-                      password = '';
-                    }
-                  });
-                },
-                secondary: usesPassword ? const Icon(Icons.lock_outline) : const Icon(Icons.lock_open_outlined),
-                title: const Text("Password")),
+              value: usesPassword,
+              onChanged: (value) {
+                setState(() {
+                  usesPassword = value;
+                  if (!usesPassword) {
+                    password = '';
+                  }
+                });
+              },
+              secondary: usesPassword ? const Icon(Icons.lock_outline) : const Icon(Icons.lock_open_outlined),
+              title: const Text("Password"),
+            ),
             usesPassword
                 ? TextField(
                     onChanged: (String value) {
