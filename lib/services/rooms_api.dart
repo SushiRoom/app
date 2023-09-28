@@ -50,7 +50,19 @@ class RoomsAPI {
   }
 
   Future<void> addPlate(Room room, Plate plate) async {
+    plate.id ??= _roomsRef.push().key;
+
     room.plates.add(plate);
+    await updateRoom(room);
+  }
+
+  Future<void> removePlate(Room room, Plate plate) async {
+    room.plates.removeWhere((p) => p.id == plate.id);
+    await updateRoom(room);
+  }
+
+  Future<void> updatePlate(Room room, Plate plate) async {
+    room.plates[room.plates.indexWhere((p) => p.id == plate.id)] = plate;
     await updateRoom(room);
   }
 }
