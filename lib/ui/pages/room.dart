@@ -111,6 +111,8 @@ class _RoomPageState extends State<RoomPage> {
                         "Wrong password",
                         "Please try again",
                         snackPosition: SnackPosition.BOTTOM,
+                        colorText: Theme.of(context).colorScheme.onError,
+                        backgroundColor: Theme.of(context).colorScheme.error,
                       );
                     }
                   }

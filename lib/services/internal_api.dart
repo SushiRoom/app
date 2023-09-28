@@ -17,7 +17,8 @@ class InternalAPI {
 
   bool get isDarkMode => prefs.getBool('isDarkMode') ?? false;
   bool get isDynamicTheme => prefs.getBool('isDynamicTheme') ?? false;
-  String get currentUserName => prefs.getString('currentUserName') ?? 'TOTTI';
+  String get currentUserName =>
+      (prefs.getString('currentUserName') != null && prefs.getString('currentUserName')!.isNotEmpty) ? prefs.getString('currentUserName')! : 'TOTTI';
 
   set isDarkMode(bool value) => prefs.setBool('isDarkMode', value);
   set isDynamicTheme(bool value) => prefs.setBool('isDynamicTheme', value);

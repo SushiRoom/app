@@ -74,10 +74,15 @@ class _CreatePageState extends State<CreatePage> {
       mainButton: TextButton(
         onPressed: onClick,
         child: Text(buttonText),
+        style: TextButton.styleFrom(
+          foregroundColor: Theme.of(context).colorScheme.onError,
+        ),
       ),
       snackPosition: SnackPosition.BOTTOM,
       overlayBlur: 0,
       isDismissible: true,
+      colorText: Theme.of(context).colorScheme.onError,
+      backgroundColor: Theme.of(context).colorScheme.error,
     );
   }
 
