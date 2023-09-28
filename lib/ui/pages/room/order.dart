@@ -46,7 +46,7 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
   Widget plateWidget(Room room, Plate plate) {
     Widget field(Widget child) => Flexible(
           child: AspectRatio(
-            aspectRatio: 3.5,
+            aspectRatio: 3.2,
             child: Card(
               child: Center(
                 child: child,
@@ -60,6 +60,7 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
         field(
           TextField(
             textAlign: TextAlign.center,
+            textAlignVertical: TextAlignVertical.center,
             controller: TextEditingController(text: plate.number),
             decoration: const InputDecoration(
               border: InputBorder.none,
@@ -74,6 +75,7 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
         field(
           TextField(
             textAlign: TextAlign.center,
+            textAlignVertical: TextAlignVertical.center,
             controller: TextEditingController(text: plate.quantity),
             decoration: const InputDecoration(
               border: InputBorder.none,
@@ -84,6 +86,10 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
               roomsAPI.updatePlate(room, plate);
             },
           ),
+        ),
+        IconButton(
+          onPressed: () => roomsAPI.removePlate(room, plate),
+          icon: const Icon(Icons.delete),
         ),
       ],
     );
