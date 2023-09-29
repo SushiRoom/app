@@ -1,20 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:sushi_room/models/partecipant.dart';
 import 'package:sushi_room/models/room.dart';
+import 'package:sushi_room/services/rooms_api.dart';
 
 class RoomLanding extends StatefulWidget {
   final String roomId;
-  const RoomLanding({super.key, required this.roomId});
+  final Partecipant currentUser;
+  const RoomLanding(
+      {super.key, required this.roomId, required this.currentUser});
 
   @override
   State<RoomLanding> createState() => _RoomLandingState();
 }
 
-class _RoomLandingState extends State<RoomLanding> with AutomaticKeepAliveClientMixin {
+class _RoomLandingState extends State<RoomLanding>
+    with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
+  final RoomsAPI _roomsAPI = RoomsAPI();
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +31,23 @@ class _RoomLandingState extends State<RoomLanding> with AutomaticKeepAliveClient
       body: Column(
         children: [
           StreamBuilder(
-            stream: FirebaseDatabase.instance.ref().child('rooms').child(widget.roomId).onValue,
+            stream: FirebaseDatabase.instance
+                .ref()
+                .child('rooms')
+                .child(widget.roomId)
+                .onValue,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                Map<String, dynamic> roomData = (snapshot.data!.snapshot.value as Map).cast<String, dynamic>();
+                Map<String, dynamic> roomData =
+                    (snapshot.data!.snapshot.value as Map)
+                        .cast<String, dynamic>();
                 Room room = Room.fromJson(roomData);
+                // if current user is not in list, kick him
+                if (!room.users
+                    .any((element) => element.uid == widget.currentUser.uid)) {
+                  Get.offAllNamed('/');
+                }
+
                 // Text("Table's plates: ${room.plates.length}"),
                 // Text("Password? ${room.password != null ? "Yes" : "No"}"),
                 // Text("Created by: ${room.users.firstWhere((element) => element.uid == room.creator).name}"),
@@ -40,11 +59,16 @@ class _RoomLandingState extends State<RoomLanding> with AutomaticKeepAliveClient
                           child: Column(
                             children: [
                               Padding(
-                                padding: const EdgeInsets.only(left: 10, right: 10, top: 5),
+                                padding: const EdgeInsets.only(
+                                    left: 10, right: 10, top: 5),
                                 child: ListTile(
-                                  leading: room.password == null ? const Icon(Icons.lock_open) : const Icon(Icons.lock_outlined),
-                                  title: Text("Owner: ${room.users.firstWhere((element) => element.uid == room.creator).name}"),
-                                  subtitle: Text("Table's plates: ${room.plates.length}"),
+                                  leading: room.password == null
+                                      ? const Icon(Icons.lock_open)
+                                      : const Icon(Icons.lock_outlined),
+                                  title: Text(
+                                      "Owner: ${room.users.firstWhere((element) => element.uid == room.creator).name}"),
+                                  subtitle: Text(
+                                      "Table's plates: ${room.plates.length}"),
                                   trailing: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
@@ -94,7 +118,17 @@ class _RoomLandingState extends State<RoomLanding> with AutomaticKeepAliveClient
                                       ? const Icon(
                                           Icons.star_rounded,
                                         )
-                                      : null,
+                                      : (user.uid != widget.currentUser.uid)
+                                          ? InkWell(
+                                              onTap: () {
+                                                _roomsAPI.removeUser(
+                                                  widget.roomId,
+                                                  user,
+                                                );
+                                              },
+                                              child: const Icon(Icons.close),
+                                            )
+                                          : null,
                                 ),
                             ],
                           ),
