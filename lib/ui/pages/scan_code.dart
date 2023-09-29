@@ -26,9 +26,11 @@ class _ScanCodePageState extends State<ScanCodePage> {
       AlertDialog(
         title: const Text('Room found!'),
         content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text("Room name: ${room.name}"),
-            Text("Password protected: ${room.password != null}"),
+            Text("Password protected: ${room.password != null ? "Yes" : "No"}"),
           ],
         ),
         actions: [
