@@ -3,6 +3,7 @@ import 'package:sushi_room/models/plate.dart';
 
 class Room {
   String? id;
+  String creator;
   List<Partecipant> users;
   List<Plate> plates;
 
@@ -10,7 +11,6 @@ class Room {
   final bool usesLocation;
   final List<String>? location;
   final String? password;
-  final String creator;
 
   Room({
     this.id,

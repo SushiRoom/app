@@ -37,34 +37,35 @@ class _RoomLandingState extends State<RoomLanding> with AutomaticKeepAliveClient
                     Row(
                       children: [
                         Flexible(
-                            child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 10, right: 10, top: 5),
-                              child: ListTile(
-                                leading: room.password == null ? const Icon(Icons.lock_open) : const Icon(Icons.lock_outlined),
-                                title: Text("Created by: ${room.users.firstWhere((element) => element.uid == room.creator).name}"),
-                                subtitle: Text("Table's plates: ${room.plates.length}"),
-                                trailing: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const Icon(
-                                      Icons.people,
-                                      size: 20,
-                                    ),
-                                    const SizedBox(width: 5),
-                                    Text(
-                                      room.users.length.toString(),
-                                      style: const TextStyle(
-                                        fontSize: 20,
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 10, right: 10, top: 5),
+                                child: ListTile(
+                                  leading: room.password == null ? const Icon(Icons.lock_open) : const Icon(Icons.lock_outlined),
+                                  title: Text("Owner: ${room.users.firstWhere((element) => element.uid == room.creator).name}"),
+                                  subtitle: Text("Table's plates: ${room.plates.length}"),
+                                  trailing: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Icon(
+                                        Icons.people,
+                                        size: 20,
                                       ),
-                                    ),
-                                  ],
+                                      const SizedBox(width: 5),
+                                      Text(
+                                        room.users.length.toString(),
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        )),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                     Card(
@@ -87,19 +88,14 @@ class _RoomLandingState extends State<RoomLanding> with AutomaticKeepAliveClient
                               ),
                               for (var user in room.users)
                                 ListTile(
-                                    // add icon
-                                    leading: const Icon(Icons.person),
-                                    title: Text(user.name),
-                                    trailing: user.uid == room.creator
-                                        ? const Icon(
-                                            Icons.star_rounded,
-                                          )
-                                        : null),
-                              // TextButton.icon(
-                              //   icon: const Icon(Icons.add),
-                              //   onPressed: () => {},
-                              //   label: const Text("Add user"),
-                              // )
+                                  leading: const Icon(Icons.person),
+                                  title: Text(user.name),
+                                  trailing: user.uid == room.creator
+                                      ? const Icon(
+                                          Icons.star_rounded,
+                                        )
+                                      : null,
+                                ),
                             ],
                           ),
                         ),

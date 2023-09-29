@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:sushi_room/models/plate.dart';
 import 'package:sushi_room/models/room.dart';
@@ -43,6 +45,9 @@ class RoomsAPI {
 
     if (room.users.length > 1) {
       room.users.removeWhere((u) => u.uid == user.uid);
+      if (user.uid == room.creator) room.creator = room.users[Random().nextInt(room.users.length)].uid.toString();
+      room.plates.removeWhere((p) => p.orderedBy.uid == user.uid);
+
       await updateRoom(room);
     } else {
       await deleteRoom(room.id!);
