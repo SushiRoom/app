@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -5,6 +7,7 @@ import 'package:sushi_room/models/partecipant.dart';
 import 'package:sushi_room/models/plate.dart';
 import 'package:sushi_room/models/room.dart';
 import 'package:sushi_room/services/rooms_api.dart';
+import 'package:sushi_room/utils/globals.dart' as globals;
 
 class OrderPage extends StatefulWidget {
   final String roomId;
@@ -38,9 +41,12 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
                 quantity: '',
               );
               roomsAPI.addPlate(room, plate);
-              _scrollController.jumpTo(
-                _scrollController.position.maxScrollExtent + 100,
-              );
+
+              if (room.plates.length > 1) {
+                _scrollController.jumpTo(
+                  _scrollController.position.maxScrollExtent + 100,
+                );
+              }
             }
           : null,
       child: const Text("Add plate"),
@@ -130,18 +136,40 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
 
                 List<Plate> userPlates = room.plates.where((plate) => plate.orderedBy.uid == widget.currentUser.uid).toList();
 
-                return ListView(
-                  controller: _scrollController,
-                  children: [
-                    for (Plate plate in userPlates) plateWidget(room, plate),
-                    addingWidget(
-                      room,
-                      !userPlates.any(
-                        (element) => element.number.isEmpty || element.quantity.isEmpty,
-                      ),
-                    ),
-                  ],
-                );
+                return userPlates.isEmpty
+                    ? Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              globals.errorFaces[Random().nextInt(globals.errorFaces.length)],
+                              style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                                    color: Theme.of(context).colorScheme.secondary,
+                                  ),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              "You have no plates yet",
+                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    color: Theme.of(context).colorScheme.secondary,
+                                  ),
+                            ),
+                            addingWidget(room, true)
+                          ],
+                        ),
+                      )
+                    : ListView(
+                        controller: _scrollController,
+                        children: [
+                          for (Plate plate in userPlates) plateWidget(room, plate),
+                          addingWidget(
+                            room,
+                            !userPlates.any(
+                              (element) => element.number.isEmpty || element.quantity.isEmpty,
+                            ),
+                          ),
+                        ],
+                      );
               } else {
                 return const Center(
                   child: CircularProgressIndicator(),
