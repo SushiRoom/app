@@ -135,7 +135,7 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            "Sushi Room",
+            "SushiRoom",
             style: Theme.of(context).textTheme.displayMedium?.copyWith(
                   fontFamily: GoogleFonts.manrope().fontFamily,
                   fontWeight: FontWeight.w700,
