@@ -78,7 +78,15 @@ class _FinalOrderPageState extends State<FinalOrderPage> with AutomaticKeepAlive
                                 margin: const EdgeInsets.only(left: 15, right: 15, top: 0),
                                 child: ListTile(
                                   title: Text("$plateNumber x${plates[plateNumber]}"),
-                                  trailing: const Icon(Icons.arrow_forward),
+                                  trailing: Wrap(
+                                    spacing: -17,
+                                    children: [
+                                      for (var plate in room.plates.where((plate) => plate.number == plateNumber).take(2))
+                                        CircleAvatar(
+                                          child: Text(plate.orderedBy.name[0]),
+                                        ),
+                                    ],
+                                  ),
                                 ),
                               ),
                               openBuilder: (context, action) => Scaffold(
