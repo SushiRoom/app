@@ -31,7 +31,7 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
   bool get wantKeepAlive => true;
 
   Widget addingWidget(Room room, bool active) {
-    return TextButton(
+    return FilledButton.tonal(
       onPressed: active
           ? () {
               Plate plate = Plate(
@@ -54,6 +54,9 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
   }
 
   Widget plateWidget(Room room, Plate plate) {
+    TextEditingController qtyController = TextEditingController(text: plate.quantity);
+    TextEditingController numController = TextEditingController(text: plate.number);
+
     Widget field(Widget child) => Flexible(
           child: AspectRatio(
             aspectRatio: 3.2,
@@ -71,7 +74,7 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
           TextField(
             textAlign: TextAlign.center,
             textAlignVertical: TextAlignVertical.center,
-            controller: TextEditingController(text: plate.number),
+            controller: numController,
             decoration: const InputDecoration(
               border: InputBorder.none,
               hintText: "Plate number",
@@ -91,7 +94,7 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
           TextField(
             textAlign: TextAlign.center,
             textAlignVertical: TextAlignVertical.center,
-            controller: TextEditingController(text: plate.quantity),
+            controller: qtyController,
             inputFormatters: [
               FilteringTextInputFormatter.digitsOnly,
             ],
@@ -154,6 +157,7 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
                                     color: Theme.of(context).colorScheme.secondary,
                                   ),
                             ),
+                            const SizedBox(height: 20),
                             addingWidget(room, true)
                           ],
                         ),
