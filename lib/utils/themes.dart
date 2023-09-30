@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-var ilColore = Color(0xff6c2f);
+var ilColore = const Color(0x00ff6c2f);
 
 var lightCustomColorScheme = ColorScheme.fromSeed(
   seedColor: ilColore,
