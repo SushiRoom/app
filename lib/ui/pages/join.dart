@@ -182,6 +182,23 @@ class _JoinPageState extends State<JoinPage> {
                               color: Theme.of(context).colorScheme.secondary,
                             ),
                       ),
+                      const SizedBox(height: 20),
+                      FilledButton.tonal(
+                        onPressed: () {
+                          Get.toNamed(RouteGenerator.createPageRoute);
+                        },
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.add,
+                              size: 20,
+                            ),
+                            SizedBox(width: 5),
+                            Text("Create a room"),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 );
