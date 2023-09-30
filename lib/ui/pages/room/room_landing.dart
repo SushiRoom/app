@@ -75,12 +75,12 @@ class _RoomLandingState extends State<RoomLanding> with AutomaticKeepAliveClient
                         width: 350,
                         child: Padding(
                           padding: const EdgeInsets.all(10),
-                          child: Column(
+                          child: ListView(
                             children: [
                               const Padding(
                                 padding: EdgeInsets.all(5.0),
                                 child: Text(
-                                  "Table",
+                                  "Users",
                                   style: TextStyle(
                                     fontSize: 15,
                                   ),
