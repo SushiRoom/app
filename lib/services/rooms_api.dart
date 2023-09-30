@@ -28,7 +28,11 @@ class RoomsAPI {
     DataSnapshot snapshot = await _roomsRef.child(roomId).get();
     Map<String, dynamic> roomData = (snapshot.value as Map).cast<String, dynamic>();
 
-    return Room.fromJson(roomData);
+    try {
+      return Room.fromJson(roomData);
+    } catch (e) {
+      return Room.fromJson(roomData[roomId]);
+    }
   }
 
   Future<void> addUser(String roomId, Partecipant user) async {

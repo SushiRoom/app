@@ -31,7 +31,7 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
   bool get wantKeepAlive => true;
 
   Widget addingWidget(Room room, bool active) {
-    return TextButton(
+    return FilledButton.tonal(
       onPressed: active
           ? () {
               Plate plate = Plate(
@@ -71,18 +71,13 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
           TextField(
             textAlign: TextAlign.center,
             textAlignVertical: TextAlignVertical.center,
-            controller: TextEditingController(text: plate.number),
             decoration: const InputDecoration(
               border: InputBorder.none,
               hintText: "Plate number",
             ),
-            onChanged: (value) {
-              plate.number = value.trim();
-            },
-            onSubmitted: (value) {
-              roomsAPI.updatePlate(room, plate);
-            },
-            onTapOutside: (value) {
+            maxLines: 1,
+            onChanged: (text) {
+              plate.number = text;
               roomsAPI.updatePlate(room, plate);
             },
           ),
@@ -91,7 +86,6 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
           TextField(
             textAlign: TextAlign.center,
             textAlignVertical: TextAlignVertical.center,
-            controller: TextEditingController(text: plate.quantity),
             inputFormatters: [
               FilteringTextInputFormatter.digitsOnly,
             ],
@@ -99,13 +93,9 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
               border: InputBorder.none,
               hintText: "Quantity",
             ),
-            onChanged: (value) {
-              plate.quantity = value.trim();
-            },
-            onSubmitted: (value) {
-              roomsAPI.updatePlate(room, plate);
-            },
-            onTapOutside: (value) {
+            maxLines: 1,
+            onChanged: (text) {
+              plate.quantity = text;
               roomsAPI.updatePlate(room, plate);
             },
           ),
@@ -154,6 +144,7 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
                                     color: Theme.of(context).colorScheme.secondary,
                                   ),
                             ),
+                            const SizedBox(height: 20),
                             addingWidget(room, true)
                           ],
                         ),

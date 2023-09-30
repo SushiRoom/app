@@ -185,37 +185,44 @@ class _RoomPageState extends State<RoomPage> {
                                     border: InputBorder.none,
                                     hintText: 'Name',
                                   ),
-                                  onSubmitted: (value) {
-                                    localSetState(() {
-                                      user.name = value;
-                                    });
-                                    roomsAPI.addUser(widget.roomId, user);
+                                  onChanged: (text) {
+                                    user.name = text;
                                   },
                                 ),
-                          onTap: () {
-                            Get.back();
-                            setState(() {
-                              currentUser = localUsers.indexOf(user);
-                            });
-                          },
+                          onTap: user.name.isNotEmpty
+                              ? () {
+                                  Get.back();
+                                  setState(() {
+                                    currentUser = localUsers.indexOf(user);
+                                  });
+                                }
+                              : null,
                           trailing: (user.uid != null &&
                                   user.uid ==
                                       FirebaseAuth.instance.currentUser?.uid)
                               ? null
-                              : IconButton(
-                                  onPressed: () {
-                                    if (user.name.isNotEmpty)
-                                      removeUser(widget.roomId, user.uid);
-                                    if (localUsers.indexOf(user) == currentUser)
-                                      currentUser = 0;
+                              : user.name.isEmpty
+                                  ? IconButton(
+                                      onPressed: () {
+                                        roomsAPI.addUser(widget.roomId, user);
+                                        localSetState(() {});
+                                      },
+                                      icon: const Icon(Icons.check_outlined),
+                                    )
+                                  : IconButton(
+                                      onPressed: () {
+                                        if (user.name.isNotEmpty)
+                                          removeUser(widget.roomId, user.uid);
+                                        if (localUsers.indexOf(user) ==
+                                            currentUser) currentUser = 0;
 
-                                    localSetState(() {
-                                      localUsers.remove(user);
-                                    });
-                                    setState(() {});
-                                  },
-                                  icon: const Icon(Icons.close_outlined),
-                                ),
+                                        localSetState(() {
+                                          localUsers.remove(user);
+                                        });
+                                        setState(() {});
+                                      },
+                                      icon: const Icon(Icons.close_outlined),
+                                    ),
                         ),
                     ],
                   ),
