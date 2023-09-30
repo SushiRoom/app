@@ -54,9 +54,6 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
   }
 
   Widget plateWidget(Room room, Plate plate) {
-    TextEditingController qtyController = TextEditingController(text: plate.quantity);
-    TextEditingController numController = TextEditingController(text: plate.number);
-
     Widget field(Widget child) => Flexible(
           child: AspectRatio(
             aspectRatio: 3.2,
@@ -74,18 +71,13 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
           TextField(
             textAlign: TextAlign.center,
             textAlignVertical: TextAlignVertical.center,
-            controller: numController,
             decoration: const InputDecoration(
               border: InputBorder.none,
               hintText: "Plate number",
             ),
-            onChanged: (value) {
-              plate.number = value.trim();
-            },
-            onSubmitted: (value) {
-              roomsAPI.updatePlate(room, plate);
-            },
-            onTapOutside: (value) {
+            maxLines: 1,
+            onChanged: (text) {
+              plate.number = text;
               roomsAPI.updatePlate(room, plate);
             },
           ),
@@ -94,7 +86,6 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
           TextField(
             textAlign: TextAlign.center,
             textAlignVertical: TextAlignVertical.center,
-            controller: qtyController,
             inputFormatters: [
               FilteringTextInputFormatter.digitsOnly,
             ],
@@ -102,13 +93,9 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
               border: InputBorder.none,
               hintText: "Quantity",
             ),
-            onChanged: (value) {
-              plate.quantity = value.trim();
-            },
-            onSubmitted: (value) {
-              roomsAPI.updatePlate(room, plate);
-            },
-            onTapOutside: (value) {
+            maxLines: 1,
+            onChanged: (text) {
+              plate.quantity = text;
               roomsAPI.updatePlate(room, plate);
             },
           ),
