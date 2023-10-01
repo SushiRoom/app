@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sushi_room/models/room.dart';
@@ -315,21 +316,35 @@ class _RoomPageState extends State<RoomPage> {
               : null,
         ),
         body: !passwordNeeded
-            ? TabBarView(
-                children: [
-                  RoomLanding(
-                    roomId: widget.roomId,
-                    currentUser: localUsers[currentUser],
-                  ),
-                  OrderPage(
-                    roomId: widget.roomId,
-                    currentUser: localUsers[currentUser],
-                  ),
-                  FinalOrderPage(
-                    roomId: widget.roomId,
-                    currentUser: localUsers[currentUser],
-                  ),
-                ],
+            ? StreamBuilder(
+                stream: FirebaseDatabase.instance.ref().child('rooms').child(widget.roomId).onValue,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    Map<String, dynamic> roomData = (snapshot.data!.snapshot.value as Map).cast<String, dynamic>();
+                    Room room = Room.fromJson(roomData);
+
+                    return TabBarView(
+                      children: [
+                        RoomLanding(
+                          room: room,
+                          currentUser: localUsers[currentUser],
+                        ),
+                        OrderPage(
+                          room: room,
+                          currentUser: localUsers[currentUser],
+                        ),
+                        FinalOrderPage(
+                          room: room,
+                          currentUser: localUsers[currentUser],
+                        ),
+                      ],
+                    );
+                  } else {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                },
               )
             : null,
       ),
