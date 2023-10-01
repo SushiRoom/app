@@ -5,6 +5,8 @@
 SushiRoom is a simple app made for ordering sushi easier. \
 It takes your orders and then merge them into one order.
 
+### You can watch a _very cool_ video demo [here](https://www.youtube.com/watch?v=GmlHmPUcxDw).
+
 # Screenshots
 
 <details>
@@ -57,6 +59,7 @@ Yeah `flutter pub get` isn't really necessary, since it gets executed by `flutte
 2. Open xcode and add a team account
 3. Connect your iPhone to your Mac
 4. Do some magic that will make app at least run (I'd write what to do, but it changes every time fr)
+
 ```
 flutter run --release
 ```
