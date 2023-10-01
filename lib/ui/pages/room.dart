@@ -288,8 +288,7 @@ class _RoomPageState extends State<RoomPage> {
                     ),
                     TextButton(
                       onPressed: () {
-                        Get.back();
-                        Get.back();
+                        Get.back(closeOverlays: true);
                       },
                       child: const Text("Confirm"),
                     ),
@@ -322,6 +321,12 @@ class _RoomPageState extends State<RoomPage> {
                   if (snapshot.hasData) {
                     Map<String, dynamic> roomData = (snapshot.data!.snapshot.value as Map).cast<String, dynamic>();
                     Room room = Room.fromJson(roomData);
+
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (!room.users.any((element) => element.uid == FirebaseAuth.instance.currentUser!.uid)) {
+                        Get.back();
+                      }
+                    });
 
                     return TabBarView(
                       children: [
