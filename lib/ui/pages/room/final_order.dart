@@ -84,7 +84,7 @@ class _FinalOrderPageState extends State<FinalOrderPage> with AutomaticKeepAlive
                         ),
                         openBuilder: (context, action) => Scaffold(
                           appBar: AppBar(
-                            title: const Text("Who ordered"),
+                            title: Text("Who ordered $plateNumber?"),
                           ),
                           body: ListView(
                             children: [
