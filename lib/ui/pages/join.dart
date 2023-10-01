@@ -231,6 +231,7 @@ class _JoinPageState extends State<JoinPage> {
         ),
         contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         title: Text(room.name),
+        subtitle: Text("Created by ${room.users.firstWhere((element) => element.uid == room.creator).name}"),
         leading: room.password != null
             ? const Icon(
                 Icons.lock,
