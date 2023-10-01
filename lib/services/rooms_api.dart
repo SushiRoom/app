@@ -47,6 +47,7 @@ class RoomsAPI {
   Future<void> removeUser(String roomId, Partecipant user) async {
     Room room = await getRoom(roomId);
 
+    if (!room.users.any((element) => element.uid == user.uid)) return;
     if (room.users.length > 1) {
       room.users.removeWhere((u) => u.uid == user.uid);
       if (user.uid == room.creator) room.creator = room.users[Random().nextInt(room.users.length)].uid.toString();
