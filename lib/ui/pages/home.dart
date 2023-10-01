@@ -1,6 +1,7 @@
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sushi_room/models/partecipant.dart';
@@ -45,9 +46,19 @@ class _HomePageState extends State<HomePage> {
     return Drawer(
       child: SafeArea(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
+              padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+              child: Text(
+                "Change name",
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
                   Text("Hi, ", style: Theme.of(context).textTheme.titleLarge),
@@ -68,22 +79,36 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            const Spacer(),
             FutureBuilder(
               future: internalAPI.isDynamicThemeSupported(),
               builder: (context, snapshot) {
                 if (snapshot.hasData && snapshot.data!) {
-                  return ListTile(
-                    subtitle: const Text("Use colors based on your phone"),
-                    title: const Text("Dynamic Theme"),
-                    trailing: ThemeSwitcher(
-                      builder: (ctx) => Switch(
-                        value: internalAPI.isDynamicTheme,
-                        onChanged: (value) {
-                          internalAPI.setDynamicMode(value, ctx);
-                        },
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 20),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+                        child: Text(
+                          "Theme",
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                        ),
                       ),
-                    ),
+                      ListTile(
+                        subtitle: const Text("Use colors based on your phone"),
+                        title: const Text("Dynamic Theme"),
+                        trailing: ThemeSwitcher(
+                          builder: (ctx) => Switch(
+                            value: internalAPI.isDynamicTheme,
+                            onChanged: (value) {
+                              internalAPI.setDynamicMode(value, ctx);
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
                   );
                 } else {
                   return const SizedBox.shrink();
@@ -101,48 +126,53 @@ class _HomePageState extends State<HomePage> {
       title: const Text('Home'),
       actions: [
         ThemeSwitcher(
-          builder: (ctx) => IconButton(
-            icon: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 300),
-              transitionBuilder: (child, anim) {
-                final offsetAnimation = Tween<Offset>(
-                  begin: const Offset(0.0, 1.0),
-                  end: const Offset(0.0, 0.0),
-                ).animate(anim);
+          builder: (ctx) => InkWell(
+            child: IconButton(
+              icon: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                transitionBuilder: (child, anim) {
+                  final offsetAnimation = Tween<Offset>(
+                    begin: const Offset(0.0, 1.0),
+                    end: const Offset(0.0, 0.0),
+                  ).animate(anim);
 
-                final bounceAnimation = Tween<double>(
-                  begin: 0.0,
-                  end: 1.0,
-                ).animate(anim);
+                  final bounceAnimation = Tween<double>(
+                    begin: 0.0,
+                    end: 1.0,
+                  ).animate(anim);
 
-                final fadeAnimation = Tween<double>(
-                  begin: 0.0,
-                  end: 1.0,
-                ).animate(anim);
+                  final fadeAnimation = Tween<double>(
+                    begin: 0.0,
+                    end: 1.0,
+                  ).animate(anim);
 
-                return SlideTransition(
-                  position: offsetAnimation,
-                  child: ScaleTransition(
-                    scale: bounceAnimation,
-                    child: FadeTransition(
-                      opacity: fadeAnimation,
-                      child: child,
+                  return SlideTransition(
+                    position: offsetAnimation,
+                    child: ScaleTransition(
+                      scale: bounceAnimation,
+                      child: FadeTransition(
+                        opacity: fadeAnimation,
+                        child: child,
+                      ),
                     ),
-                  ),
-                );
+                  );
+                },
+                child: !internalAPI.isDarkMode
+                    ? const Icon(
+                        Icons.dark_mode,
+                        key: ValueKey('dark'), // <-- senza key nva
+                      )
+                    : const Icon(
+                        Icons.light_mode,
+                        key: ValueKey('light'),
+                      ),
+              ),
+              onPressed: () {
+                internalAPI.setDarkMode(!internalAPI.isDarkMode, ctx);
               },
-              child: !internalAPI.isDarkMode
-                  ? const Icon(
-                      Icons.dark_mode,
-                      key: ValueKey('dark'), // <-- senza key nva
-                    )
-                  : const Icon(
-                      Icons.light_mode,
-                      key: ValueKey('light'),
-                    ),
             ),
-            onPressed: () {
-              internalAPI.setDarkMode(!internalAPI.isDarkMode, ctx);
+            onLongPress: () {
+              Fluttertoast.showToast(msg: "#STAY FROG");
             },
           ),
         )
