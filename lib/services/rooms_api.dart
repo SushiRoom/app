@@ -35,6 +35,22 @@ class RoomsAPI {
     }
   }
 
+  Future<List<Room>> getRooms() async {
+    DataSnapshot snapshot = await _roomsRef.get();
+    Map<String, dynamic> roomsData = (snapshot.value as Map).cast<String, dynamic>();
+
+    List<Room> rooms = [];
+    roomsData.forEach((key, value) {
+      try {
+        rooms.add(Room.fromJson(value));
+      } catch (e) {
+        rooms.add(Room.fromJson(value[key]));
+      }
+    });
+
+    return rooms;
+  }
+
   Future<Partecipant> addUser(String roomId, Partecipant user) async {
     user.uid ??= _roomsRef.push().key;
 

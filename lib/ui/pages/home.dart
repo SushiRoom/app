@@ -1,8 +1,12 @@
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sushi_room/models/partecipant.dart';
+import 'package:sushi_room/models/room.dart';
 import 'package:sushi_room/services/internal_api.dart';
+import 'package:sushi_room/services/rooms_api.dart';
 import 'package:sushi_room/services/routes.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,9 +18,26 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   InternalAPI internalAPI = Get.find<InternalAPI>();
+  RoomsAPI roomsAPI = RoomsAPI();
+
+  leaveAnyLeftRoom() async {
+    List<Room> rooms = await roomsAPI.getRooms();
+    String currentUserId = FirebaseAuth.instance.currentUser!.uid;
+    Partecipant currentUser = Partecipant(
+      uid: currentUserId,
+      name: internalAPI.currentUserName,
+    );
+
+    for (var room in rooms) {
+      if (room.users.any((u) => u.uid == currentUserId)) {
+        await roomsAPI.removeUser(room.id!, currentUser);
+      }
+    }
+  }
 
   @override
   void initState() {
+    leaveAnyLeftRoom();
     super.initState();
   }
 
