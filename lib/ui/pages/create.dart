@@ -67,10 +67,14 @@ class _CreatePageState extends State<CreatePage> {
     required String subtitle,
     required String buttonText,
   }) {
+    if (Get.isSnackbarOpen) {
+      return;
+    }
+
     Get.snackbar(
       title,
       subtitle,
-      onTap: (_) => onClick(),
+      onTap: (_) => onClick,
       mainButton: TextButton(
         onPressed: onClick,
         style: TextButton.styleFrom(
@@ -94,43 +98,64 @@ class _CreatePageState extends State<CreatePage> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 70.0, vertical: 20.0),
-        child: ListView(
-          children: [
-            TextField(
-              onChanged: (String value) {
-                setState(() {
-                  roomName = value;
-                });
-              },
-              // show me all possibles decoration objects
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                isDense: true,
-                labelText: 'Room name',
-                prefixIcon: Padding(padding: EdgeInsets.all(15), child: Icon(Icons.abc)),
+        child: Container(
+          height: double.infinity,
+          width: double.infinity,
+          alignment: Alignment.center,
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              TextField(
+                onChanged: (String value) {
+                  setState(() {
+                    roomName = value;
+                  });
+                },
+                // show me all possibles decoration objects
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  isDense: true,
+                  labelText: 'Room name',
+                  prefixIcon: Padding(padding: EdgeInsets.all(15), child: Icon(Icons.abc)),
+                ),
               ),
-            ),
-            SwitchListTile(
-              value: usesLocation,
-              onChanged: (value) async {
-                if (hasLocationPermissions!) {
-                  if (isLocationOn!) {
-                    setState(() {
-                      usesLocation = value;
-                      isLoading = true;
-                    });
-                    var locationData = await _location.getLocation();
-                    location = [locationData.latitude.toString(), locationData.longitude.toString()];
-                    setState(() {
-                      isLoading = false;
-                    });
+              SwitchListTile(
+                value: usesLocation,
+                onChanged: (value) async {
+                  if (hasLocationPermissions!) {
+                    if (isLocationOn!) {
+                      setState(() {
+                        usesLocation = value;
+                        isLoading = true;
+                      });
+                      var locationData = await _location.getLocation();
+                      location = [locationData.latitude.toString(), locationData.longitude.toString()];
+                      setState(() {
+                        isLoading = false;
+                      });
+                    } else {
+                      requestSnackBar(
+                        title: "You need to turn on location",
+                        subtitle: "Click to turn on location",
+                        buttonText: "Turn on",
+                        onClick: () async {
+                          bool res = await _location.requestService();
+                          if (res) {
+                            initLocationStuff();
+                            setState(() {
+                              usesLocation = hasLocationPermissions! && isLocationOn!;
+                            });
+                          }
+                        },
+                      );
+                    }
                   } else {
                     requestSnackBar(
-                      title: "You need to turn on location",
-                      subtitle: "Click to turn on location",
-                      buttonText: "Turn on",
+                      title: "You need location permissions",
+                      subtitle: "Click to ask permissions",
+                      buttonText: "Ask",
                       onClick: () async {
-                        bool res = await _location.requestService();
+                        bool res = await internalAPI.requestLocation();
                         if (res) {
                           initLocationStuff();
                           setState(() {
@@ -140,75 +165,60 @@ class _CreatePageState extends State<CreatePage> {
                       },
                     );
                   }
-                } else {
-                  requestSnackBar(
-                    title: "You need location permissions",
-                    subtitle: "Click to ask permissions",
-                    buttonText: "Ask",
-                    onClick: () async {
-                      bool res = await internalAPI.requestLocation();
-                      if (res) {
-                        initLocationStuff();
+                },
+                secondary: usesLocation
+                    ? isLoading
+                        ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : const Icon(Icons.location_on_outlined)
+                    : const Icon(Icons.location_off_outlined),
+                //
+                title: const Text("Use location"),
+              ),
+              SwitchListTile(
+                value: usesPassword,
+                onChanged: (value) {
+                  setState(() {
+                    usesPassword = value;
+                    if (!usesPassword) {
+                      password = '';
+                    }
+                  });
+                },
+                secondary: usesPassword ? const Icon(Icons.lock_outline) : const Icon(Icons.lock_open_outlined),
+                title: const Text("Password"),
+              ),
+              usesPassword
+                  ? TextField(
+                      onChanged: (String value) {
                         setState(() {
-                          usesLocation = hasLocationPermissions! && isLocationOn!;
+                          password = value;
                         });
-                      }
-                    },
-                  );
-                }
-              },
-              secondary: usesLocation
-                  ? isLoading
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                          ),
-                        )
-                      : const Icon(Icons.location_on_outlined)
-                  : const Icon(Icons.location_off_outlined),
-              //
-              title: const Text("Use location"),
-            ),
-            SwitchListTile(
-              value: usesPassword,
-              onChanged: (value) {
-                setState(() {
-                  usesPassword = value;
-                  if (!usesPassword) {
-                    password = '';
-                  }
-                });
-              },
-              secondary: usesPassword ? const Icon(Icons.lock_outline) : const Icon(Icons.lock_open_outlined),
-              title: const Text("Password"),
-            ),
-            usesPassword
-                ? TextField(
-                    onChanged: (String value) {
-                      setState(() {
-                        password = value;
-                      });
-                    },
-                    decoration: const InputDecoration(
-                      labelText: 'Password',
-                      border: OutlineInputBorder(),
-                      isDense: true,
-                      prefixIcon: Padding(padding: EdgeInsets.all(15), child: Icon(Icons.password)),
-                    ),
-                  )
-                : const SizedBox.shrink(),
-            const SizedBox(height: 20),
-            FilledButton(
-              onPressed: roomName.isNotEmpty &&
-                      ((usesPassword && password.isNotEmpty) || (!usesPassword)) &&
-                      ((usesLocation && !isLoading) || (!usesLocation))
-                  ? createNewRoom
-                  : null,
-              child: const Text('Create'),
-            ),
-          ],
+                      },
+                      decoration: const InputDecoration(
+                        labelText: 'Password',
+                        border: OutlineInputBorder(),
+                        isDense: true,
+                        prefixIcon: Padding(padding: EdgeInsets.all(15), child: Icon(Icons.password)),
+                      ),
+                    )
+                  : const SizedBox.shrink(),
+              const SizedBox(height: 20),
+              FilledButton(
+                onPressed: roomName.isNotEmpty &&
+                        ((usesPassword && password.isNotEmpty) || (!usesPassword)) &&
+                        ((usesLocation && !isLoading) || (!usesLocation))
+                    ? createNewRoom
+                    : null,
+                child: const Text('Create'),
+              ),
+            ],
+          ),
         ),
       ),
     );
