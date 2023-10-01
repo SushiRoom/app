@@ -35,13 +35,14 @@ class RoomsAPI {
     }
   }
 
-  Future<void> addUser(String roomId, Partecipant user) async {
+  Future<Partecipant> addUser(String roomId, Partecipant user) async {
     user.uid ??= _roomsRef.push().key;
 
     Room room = await getRoom(roomId);
     room.users.add(user);
 
     await updateRoom(room);
+    return user;
   }
 
   Future<void> removeUser(String roomId, Partecipant user) async {
@@ -57,6 +58,13 @@ class RoomsAPI {
     } else {
       await deleteRoom(room.id!);
     }
+  }
+
+  Future<void> updateUser(String roomId, Partecipant user) async {
+    Room room = await getRoom(roomId);
+
+    room.users[room.users.indexWhere((u) => u.uid == user.uid)] = user;
+    await updateRoom(room);
   }
 
   Future<void> addPlate(Room room, Plate plate) async {

@@ -169,54 +169,50 @@ class _RoomPageState extends State<RoomPage> {
                   removeTop: true,
                   child: ListView(
                     children: [
-                      for (var user in localUsers)
+                      for (Partecipant user in localUsers)
                         ListTile(
+                          selected: localUsers.indexOf(user) == currentUser,
+                          selectedTileColor: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                           leading: CircleAvatar(
                             child: Text(
                               user.name.isNotEmpty ? user.name.substring(0, 1).toUpperCase() : "",
                             ),
                           ),
-                          title: user.name.isNotEmpty
-                              ? Text(user.name)
-                              : TextField(
-                                  decoration: const InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: 'Name',
-                                  ),
-                                  onChanged: (text) {
-                                    user.name = text;
-                                  },
-                                ),
+                          title: TextFormField(
+                            initialValue: user.name,
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              labelText: 'Name',
+                              isDense: true,
+                            ),
+                            readOnly: user.uid == FirebaseAuth.instance.currentUser!.uid,
+                            onChanged: (value) {
+                              user.name = value;
+                              roomsAPI.updateUser(widget.roomId, user);
+                              localSetState(() {});
+                            },
+                          ),
+                          trailing: IconButton(
+                            onPressed: () {
+                              if (user.uid != FirebaseAuth.instance.currentUser!.uid) {
+                                removeUser(widget.roomId, user.uid);
+                                localUsers.remove(user);
+                                localSetState(() {});
+                              }
+                            },
+                            icon: user.uid != FirebaseAuth.instance.currentUser!.uid ? const Icon(Icons.close) : const SizedBox.shrink(),
+                          ),
                           onTap: user.name.isNotEmpty
                               ? () {
+                                  currentUser = localUsers.indexOf(user);
+                                  localSetState(() {});
+                                  setState(() {});
                                   Get.back();
-                                  setState(() {
-                                    currentUser = localUsers.indexOf(user);
-                                  });
                                 }
                               : null,
-                          trailing: (user.uid != null && user.uid == FirebaseAuth.instance.currentUser?.uid)
-                              ? null
-                              : user.name.isEmpty
-                                  ? IconButton(
-                                      onPressed: () {
-                                        roomsAPI.addUser(widget.roomId, user);
-                                        localSetState(() {});
-                                      },
-                                      icon: const Icon(Icons.check_outlined),
-                                    )
-                                  : IconButton(
-                                      onPressed: () {
-                                        if (user.name.isNotEmpty) removeUser(widget.roomId, user.uid);
-                                        if (localUsers.indexOf(user) == currentUser) currentUser = 0;
-
-                                        localSetState(() {
-                                          localUsers.remove(user);
-                                        });
-                                        setState(() {});
-                                      },
-                                      icon: const Icon(Icons.close_outlined),
-                                    ),
                         ),
                     ],
                   ),
@@ -226,13 +222,10 @@ class _RoomPageState extends State<RoomPage> {
                 onPressed: localUsers.any((element) => element.name.isEmpty)
                     ? null
                     : () {
-                        Partecipant user = Partecipant(
-                          name: "",
-                        );
-
-                        localSetState(() {
-                          localUsers.add(user);
-                        });
+                        Partecipant newUser = Partecipant(name: "");
+                        localUsers.add(newUser);
+                        roomsAPI.addUser(widget.roomId, newUser);
+                        localSetState(() {});
                       },
                 child: const Text("Add User"),
               )
