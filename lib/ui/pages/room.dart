@@ -6,6 +6,7 @@ import 'package:sushi_room/models/room.dart';
 import 'package:sushi_room/models/partecipant.dart';
 import 'package:sushi_room/services/internal_api.dart';
 import 'package:sushi_room/services/rooms_api.dart';
+import 'package:sushi_room/services/routes.dart';
 import 'package:sushi_room/ui/components/hero_dialog.dart';
 import 'package:sushi_room/ui/pages/room/final_order.dart';
 import 'package:sushi_room/ui/pages/room/order.dart';
@@ -154,7 +155,7 @@ class _RoomPageState extends State<RoomPage> {
 
   Widget customDialog() {
     return Hero(
-      tag: 'a',
+      tag: 'userAvatar',
       child: StatefulBuilder(
         builder: (context, localSetState) => AlertDialog(
           title: const Text("Select user"),
@@ -253,7 +254,7 @@ class _RoomPageState extends State<RoomPage> {
         );
       },
       child: Hero(
-        tag: 'a',
+        tag: 'userAvatar',
         child: CircleAvatar(
           child: Text(
             localUsers[currentUser].name.substring(0, 1).toUpperCase(),
@@ -320,7 +321,16 @@ class _RoomPageState extends State<RoomPage> {
 
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       if (!room.users.any((element) => element.uid == FirebaseAuth.instance.currentUser!.uid)) {
-                        Get.back();
+                        Get.offAllNamed(RouteGenerator.homePageRoute);
+                        Get.snackbar(
+                          "Kicked",
+                          "You have been kicked from this room",
+                          snackPosition: SnackPosition.BOTTOM,
+                          overlayBlur: 0,
+                          isDismissible: true,
+                          colorText: Theme.of(context).colorScheme.onError,
+                          backgroundColor: Theme.of(context).colorScheme.error,
+                        );
                       }
                     });
 
