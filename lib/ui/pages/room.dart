@@ -198,6 +198,9 @@ class _RoomPageState extends State<RoomPage> {
                           trailing: IconButton(
                             onPressed: () {
                               if (user.uid != FirebaseAuth.instance.currentUser!.uid) {
+                                if (user.uid == localUsers[currentUser].uid) {
+                                  currentUser = 0;
+                                }
                                 removeUser(widget.roomId, user.uid);
                                 localUsers.remove(user);
                                 localSetState(() {});
