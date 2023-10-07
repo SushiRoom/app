@@ -25,6 +25,7 @@ class OrderPage extends StatefulWidget {
 class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixin {
   RoomsAPI roomsAPI = RoomsAPI();
   final ScrollController _scrollController = ScrollController();
+  List<FocusNode> _focusNodes = [];
 
   @override
   bool get wantKeepAlive => true;
@@ -46,13 +47,21 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
                   _scrollController.position.maxScrollExtent + 100,
                 );
               }
+
+              setState(() {
+                _focusNodes.add(FocusNode());
+              });
+              _focusNodes.last.requestFocus();
             }
           : null,
       child: const Text("Add plate"),
     );
   }
 
-  Widget plateWidget(Room room, Plate plate) {
+  Widget plateWidget({
+    required Room room,
+    required Plate plate,
+  }) {
     Widget field(Widget child) => Flexible(
           child: AspectRatio(
             aspectRatio: 3.2,
@@ -67,7 +76,10 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
     return Row(
       children: [
         field(
-          TextField(
+          TextFormField(
+            focusNode: _focusNodes[room.plates.indexOf(plate)],
+            textInputAction: TextInputAction.next,
+            initialValue: plate.number,
             textAlign: TextAlign.center,
             textAlignVertical: TextAlignVertical.center,
             decoration: const InputDecoration(
@@ -82,7 +94,9 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
           ),
         ),
         field(
-          TextField(
+          TextFormField(
+            keyboardType: TextInputType.number,
+            initialValue: plate.quantity,
             textAlign: TextAlign.center,
             textAlignVertical: TextAlignVertical.center,
             inputFormatters: [
@@ -143,9 +157,14 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
                   ),
                 )
               : ListView(
+                  key: Key(widget.currentUser.name),
                   controller: _scrollController,
                   children: [
-                    for (Plate plate in userPlates) plateWidget(room, plate),
+                    for (Plate plate in userPlates)
+                      plateWidget(
+                        room: room,
+                        plate: plate,
+                      ),
                     addingWidget(
                       room,
                       !userPlates.any(
