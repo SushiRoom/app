@@ -5,7 +5,7 @@
 SushiRoom is a simple app made for ordering sushi easier. \
 It takes your orders and then merge them into one order.
 
-### You can watch a _very cool_ video demo [here](https://www.youtube.com/watch?v=GmlHmPUcxDw).
+### You can watch a _very cool_ video demo [here](https://youtu.be/9jg8NkpziHs?si=x2oHx-JdfPrlWH1P).
 
 # Screenshots
 
