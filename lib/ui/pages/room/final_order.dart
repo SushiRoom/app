@@ -34,6 +34,7 @@ class _FinalOrderPageState extends State<FinalOrderPage> with AutomaticKeepAlive
         plates[plate.number] = (plates[plate.number] ?? 0) + int.parse(plate.quantity);
       }
     }
+    plates = Map.fromEntries(plates.entries.toList()..sort((a, b) => a.key.compareTo(b.key)));
 
     return Scaffold(
       body: plates.isEmpty
