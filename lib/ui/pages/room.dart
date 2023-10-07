@@ -33,6 +33,7 @@ class _RoomPageState extends State<RoomPage> {
   int currentUser = 0;
 
   String roomName = 'Loading...';
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -164,14 +165,19 @@ class _RoomPageState extends State<RoomPage> {
             children: [
               SizedBox(
                 width: 400,
-                height: 150,
+                height: 300,
                 child: MediaQuery.removePadding(
                   context: context,
                   removeTop: true,
-                  child: ListView(
-                    children: [
-                      for (Partecipant user in localUsers)
-                        ListTile(
+                  child: ListView.builder(
+                    controller: _scrollController,
+                    itemCount: localUsers.length,
+                    itemBuilder: (context, index) {
+                      Partecipant user = localUsers[index];
+                      return Card(
+                        elevation: 0,
+                        color: Colors.transparent,
+                        child: ListTile(
                           selected: localUsers.indexOf(user) == currentUser,
                           selectedTileColor: Theme.of(context).colorScheme.primary.withOpacity(0.2),
                           shape: RoundedRectangleBorder(
@@ -189,6 +195,7 @@ class _RoomPageState extends State<RoomPage> {
                               labelText: 'Name',
                               isDense: true,
                             ),
+                            focusNode: (index == localUsers.length - 1 && user.name.isEmpty) ? (FocusNode()..requestFocus()) : null,
                             readOnly: user.uid == FirebaseAuth.instance.currentUser!.uid,
                             onChanged: (value) {
                               user.name = value;
@@ -218,7 +225,8 @@ class _RoomPageState extends State<RoomPage> {
                                 }
                               : null,
                         ),
-                    ],
+                      );
+                    },
                   ),
                 ),
               ),
@@ -230,6 +238,7 @@ class _RoomPageState extends State<RoomPage> {
                         localUsers.add(newUser);
                         roomsAPI.addUser(widget.roomId, newUser);
                         localSetState(() {});
+                        _scrollController.jumpTo(_scrollController.position.maxScrollExtent + 200);
                       },
                 child: const Text("Add User"),
               )
