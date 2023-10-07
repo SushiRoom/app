@@ -25,7 +25,7 @@ class OrderPage extends StatefulWidget {
 class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixin {
   RoomsAPI roomsAPI = RoomsAPI();
   final ScrollController _scrollController = ScrollController();
-  List<FocusNode> _focusNodes = [];
+  final List<FocusNode> _focusNodes = [];
 
   @override
   bool get wantKeepAlive => true;
