@@ -38,8 +38,6 @@ class _DynamicThemeBuilderState extends State<DynamicThemeBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    const Locale locale = Locale('en', 'US');
-
     return DynamicColorBuilder(
       builder: (lightDynamic, darkDynamic) {
         final ThemeData lightDynamicTheme = ThemeData(
@@ -69,15 +67,19 @@ class _DynamicThemeBuilderState extends State<DynamicThemeBuilder> {
                       translationLoader: FileTranslationLoader(
                         basePath: 'assets/i18n',
                         fallbackFile: 'en_US',
-                        useCountryCode: false,
-                        forcedLocale: locale,
+                        useCountryCode: true,
                       ),
                       missingTranslationHandler: (key, locale) {
                         debugPrint("--- Missing Key: $key, languageCode: ${locale?.languageCode}");
                       },
                     ),
                     ...GlobalMaterialLocalizations.delegates,
+                    GlobalMaterialLocalizations.delegate,
                     GlobalWidgetsLocalizations.delegate,
+                  ],
+                  supportedLocales: const [
+                    Locale('en', 'US'),
+                    Locale('it', 'IT'),
                   ],
                 ),
               )
