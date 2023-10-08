@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:get/get.dart';
 import 'package:sushi_room/models/room.dart';
 import 'package:sushi_room/models/partecipant.dart';
@@ -32,7 +33,7 @@ class _RoomPageState extends State<RoomPage> {
   List<Partecipant> localUsers = [];
   int currentUser = 0;
 
-  String roomName = 'Loading...';
+  String roomName = '';
   final ScrollController _scrollController = ScrollController();
 
   @override
@@ -65,15 +66,15 @@ class _RoomPageState extends State<RoomPage> {
       Get.dialog(
         StatefulBuilder(
           builder: (context, localSetState) => AlertDialog(
-            title: const Text("Insert room password"),
+            title: I18nText("roomView.pwdDialogTitle"),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextField(
                   obscureText: !showText,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Password',
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    labelText: FlutterI18n.translate(context, 'roomView.pwdDialogWrongPwdTitle'),
                     isDense: true,
                   ),
                   onChanged: (value) {
@@ -81,7 +82,7 @@ class _RoomPageState extends State<RoomPage> {
                   },
                 ),
                 CheckboxListTile(
-                  title: const Text("Show password"),
+                  title: I18nText("roomView.pwdDialogShowPwdLabel"),
                   value: showText,
                   onChanged: (value) {
                     localSetState(() {
@@ -98,7 +99,7 @@ class _RoomPageState extends State<RoomPage> {
                     closeOverlays: true,
                   );
                 },
-                child: const Text("Cancel"),
+                child: I18nText('cancel'),
               ),
               TextButton(
                 onPressed: () {
@@ -111,8 +112,8 @@ class _RoomPageState extends State<RoomPage> {
                   } else {
                     if (!Get.isSnackbarOpen) {
                       Get.snackbar(
-                        "Wrong password",
-                        "Please try again",
+                        FlutterI18n.translate(context, 'roomView.pwdDialogWrongPwdTitle'),
+                        FlutterI18n.translate(context, 'roomView.pwdDialogWrongPwdMessage'),
                         snackPosition: SnackPosition.BOTTOM,
                         colorText: Theme.of(context).colorScheme.onError,
                         backgroundColor: Theme.of(context).colorScheme.error,
@@ -120,7 +121,7 @@ class _RoomPageState extends State<RoomPage> {
                     }
                   }
                 },
-                child: const Text("Confirm"),
+                child: I18nText('confirm'),
               ),
             ],
           ),
@@ -159,7 +160,7 @@ class _RoomPageState extends State<RoomPage> {
       tag: 'userAvatar',
       child: StatefulBuilder(
         builder: (context, localSetState) => AlertDialog(
-          title: const Text("Select user"),
+          title: I18nText('roomView.userDialogTitle'),
           scrollable: true,
           content: Column(
             children: [
@@ -190,9 +191,9 @@ class _RoomPageState extends State<RoomPage> {
                           ),
                           title: TextFormField(
                             initialValue: user.name,
-                            decoration: const InputDecoration(
+                            decoration: InputDecoration(
                               border: InputBorder.none,
-                              labelText: 'Name',
+                              labelText: FlutterI18n.translate(context, 'roomView.userDialogUserNameLabel'),
                               isDense: true,
                             ),
                             focusNode: (index == localUsers.length - 1 && user.name.isEmpty) ? (FocusNode()..requestFocus()) : null,
@@ -240,7 +241,7 @@ class _RoomPageState extends State<RoomPage> {
                         localSetState(() {});
                         _scrollController.jumpTo(_scrollController.position.maxScrollExtent + 200);
                       },
-                child: const Text("Add User"),
+                child: I18nText('roomView.userDialogAddUserBtn'),
               )
             ],
           ),
@@ -283,20 +284,20 @@ class _RoomPageState extends State<RoomPage> {
             onPressed: () {
               Get.dialog(
                 AlertDialog(
-                  title: const Text("Leave room"),
-                  content: const Text("Are you sure you want to leave this room?"),
+                  title: I18nText("roomLeaveDialog.title"),
+                  content: I18nText("roomLeaveDialog.message"),
                   actions: [
                     TextButton(
                       onPressed: () {
                         Get.back();
                       },
-                      child: const Text("Cancel"),
+                      child: I18nText("cancel"),
                     ),
                     TextButton(
                       onPressed: () {
                         Get.back(closeOverlays: true);
                       },
-                      child: const Text("Confirm"),
+                      child: I18nText("confirm"),
                     ),
                   ],
                 ),
@@ -304,11 +305,11 @@ class _RoomPageState extends State<RoomPage> {
             },
           ),
           title: Text(roomName),
-          bottom: const TabBar(
+          bottom: TabBar(
             tabs: [
-              Tab(text: "Room"),
-              Tab(text: "Order"),
-              Tab(text: "Final Order"),
+              Tab(text: FlutterI18n.translate(context, 'roomView.roomTabLabel')),
+              Tab(text: FlutterI18n.translate(context, 'roomView.orderTabLabel')),
+              Tab(text: FlutterI18n.translate(context, 'roomView.finalOrderTabLabel')),
             ],
           ),
           actions: !passwordNeeded
@@ -332,8 +333,8 @@ class _RoomPageState extends State<RoomPage> {
                       if (!room.users.any((element) => element.uid == FirebaseAuth.instance.currentUser!.uid)) {
                         Get.offAllNamed(RouteGenerator.homePageRoute);
                         Get.snackbar(
-                          "Kicked",
-                          "You have been kicked from this room",
+                          FlutterI18n.translate(context, 'roomView.kickedFromRoomTitle'),
+                          FlutterI18n.translate(context, 'roomView.kickedFromRoomMessage'),
                           snackPosition: SnackPosition.BOTTOM,
                           overlayBlur: 0,
                           isDismissible: true,

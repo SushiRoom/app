@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:sushi_room/models/partecipant.dart';
 import 'package:sushi_room/models/room.dart';
 import 'package:sushi_room/utils/globals.dart' as globals;
@@ -49,11 +50,14 @@ class _FinalOrderPageState extends State<FinalOrderPage> with AutomaticKeepAlive
                         ),
                   ),
                   const SizedBox(height: 10),
-                  Text(
-                    "No order yet",
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: Theme.of(context).colorScheme.secondary,
-                        ),
+                  I18nText(
+                    'roomView.noOrderYet',
+                    child: Text(
+                      "",
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                    ),
                   ),
                 ],
               ),
@@ -85,7 +89,12 @@ class _FinalOrderPageState extends State<FinalOrderPage> with AutomaticKeepAlive
                         ),
                         openBuilder: (context, action) => Scaffold(
                           appBar: AppBar(
-                            title: Text("Who ordered $plateNumber?"),
+                            title: I18nText(
+                              "roomView.whoOrderedTitle",
+                              translationParams: {
+                                "number": plateNumber,
+                              },
+                            ),
                           ),
                           body: ListView(
                             children: [

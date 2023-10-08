@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:sushi_room/models/partecipant.dart';
 import 'package:sushi_room/models/plate.dart';
 import 'package:sushi_room/models/room.dart';
@@ -54,7 +55,7 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
               _focusNodes.last.requestFocus();
             }
           : null,
-      child: const Text("Add plate"),
+      child: I18nText("roomView.addPlateBtn"),
     );
   }
 
@@ -82,9 +83,12 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
             initialValue: plate.number,
             textAlign: TextAlign.center,
             textAlignVertical: TextAlignVertical.center,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               border: InputBorder.none,
-              hintText: "Plate number",
+              hintText: FlutterI18n.translate(
+                context,
+                "roomView.plateNumberHint",
+              ),
             ),
             maxLines: 1,
             onChanged: (text) {
@@ -102,9 +106,12 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
             inputFormatters: [
               FilteringTextInputFormatter.digitsOnly,
             ],
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               border: InputBorder.none,
-              hintText: "Quantity",
+              hintText: FlutterI18n.translate(
+                context,
+                "roomView.plateQtyHint",
+              ),
             ),
             maxLines: 1,
             onChanged: (text) {
@@ -145,11 +152,14 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
                             ),
                       ),
                       const SizedBox(height: 10),
-                      Text(
-                        "You have no plates yet",
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
+                      I18nText(
+                        'roomView.noPlatesYet',
+                        child: Text(
+                          "",
+                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                        ),
                       ),
                       const SizedBox(height: 20),
                       addingWidget(room, true)

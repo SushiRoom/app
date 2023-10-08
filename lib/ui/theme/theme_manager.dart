@@ -1,6 +1,7 @@
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:sushi_room/services/internal_api.dart';
@@ -37,6 +38,8 @@ class _DynamicThemeBuilderState extends State<DynamicThemeBuilder> {
 
   @override
   Widget build(BuildContext context) {
+    const Locale locale = Locale('en', 'US');
+
     return DynamicColorBuilder(
       builder: (lightDynamic, darkDynamic) {
         final ThemeData lightDynamicTheme = ThemeData(
@@ -61,12 +64,20 @@ class _DynamicThemeBuilderState extends State<DynamicThemeBuilder> {
                   initialRoute: RouteGenerator.homePageRoute,
                   onGenerateRoute: RouteGenerator.generateRoute,
                   debugShowCheckedModeBanner: false,
-                  localizationsDelegates: const [
+                  localizationsDelegates: [
+                    FlutterI18nDelegate(
+                      translationLoader: FileTranslationLoader(
+                        basePath: 'assets/i18n',
+                        fallbackFile: 'en_US',
+                        useCountryCode: false,
+                        forcedLocale: locale,
+                      ),
+                      missingTranslationHandler: (key, locale) {
+                        debugPrint("--- Missing Key: $key, languageCode: ${locale?.languageCode}");
+                      },
+                    ),
                     ...GlobalMaterialLocalizations.delegates,
                     GlobalWidgetsLocalizations.delegate,
-                  ],
-                  supportedLocales: const [
-                    Locale('it'),
                   ],
                 ),
               )

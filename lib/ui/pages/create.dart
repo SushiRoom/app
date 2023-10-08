@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:get/get.dart';
 import 'package:location/location.dart';
 import 'package:sushi_room/models/room.dart';
@@ -94,7 +95,7 @@ class _CreatePageState extends State<CreatePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create new Room'),
+        title: I18nText('createRoomView.title'),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 70.0, vertical: 20.0),
@@ -111,12 +112,11 @@ class _CreatePageState extends State<CreatePage> {
                     roomName = value;
                   });
                 },
-                // show me all possibles decoration objects
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
                   isDense: true,
-                  labelText: 'Room name',
-                  prefixIcon: Padding(padding: EdgeInsets.all(15), child: Icon(Icons.abc)),
+                  labelText: FlutterI18n.translate(context, 'createRoomView.roomFormNameLabel'),
+                  prefixIcon: const Padding(padding: EdgeInsets.all(15), child: Icon(Icons.abc)),
                 ),
               ),
               SwitchListTile(
@@ -135,9 +135,9 @@ class _CreatePageState extends State<CreatePage> {
                       });
                     } else {
                       requestSnackBar(
-                        title: "You need to turn on location",
-                        subtitle: "Click to turn on location",
-                        buttonText: "Turn on",
+                        title: FlutterI18n.translate(context, 'createRoomView.locationOffErrorTitle'),
+                        subtitle: FlutterI18n.translate(context, 'createRoomView.locationOffErrorDescription'),
+                        buttonText: FlutterI18n.translate(context, 'createRoomView.locationOffErrorBtnText'),
                         onClick: () async {
                           bool res = await _location.requestService();
                           if (res) {
@@ -151,9 +151,9 @@ class _CreatePageState extends State<CreatePage> {
                     }
                   } else {
                     requestSnackBar(
-                      title: "You need location permissions",
-                      subtitle: "Click to ask permissions",
-                      buttonText: "Ask",
+                      title: FlutterI18n.translate(context, 'createRoomView.locationPermissionErrorTitle'),
+                      subtitle: FlutterI18n.translate(context, 'createRoomView.locationPermissionErrorDescription'),
+                      buttonText: FlutterI18n.translate(context, 'createRoomView.locationPermissionErrorBtnText'),
                       onClick: () async {
                         bool res = await internalAPI.requestLocation();
                         if (res) {
@@ -178,7 +178,7 @@ class _CreatePageState extends State<CreatePage> {
                         : const Icon(Icons.location_on_outlined)
                     : const Icon(Icons.location_off_outlined),
                 //
-                title: const Text("Use location"),
+                title: I18nText("createRoomView.roomFormLocationSwitch"),
               ),
               SwitchListTile(
                 value: usesPassword,
@@ -191,7 +191,7 @@ class _CreatePageState extends State<CreatePage> {
                   });
                 },
                 secondary: usesPassword ? const Icon(Icons.lock_outline) : const Icon(Icons.lock_open_outlined),
-                title: const Text("Password"),
+                title: I18nText("createRoomView.roomFormPwdSwitch"),
               ),
               usesPassword
                   ? TextField(
@@ -200,11 +200,11 @@ class _CreatePageState extends State<CreatePage> {
                           password = value;
                         });
                       },
-                      decoration: const InputDecoration(
-                        labelText: 'Password',
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: FlutterI18n.translate(context, 'createRoomView.roomFormPwdLabel'),
+                        border: const OutlineInputBorder(),
                         isDense: true,
-                        prefixIcon: Padding(padding: EdgeInsets.all(15), child: Icon(Icons.password)),
+                        prefixIcon: const Padding(padding: EdgeInsets.all(15), child: Icon(Icons.password)),
                       ),
                     )
                   : const SizedBox.shrink(),
@@ -215,7 +215,7 @@ class _CreatePageState extends State<CreatePage> {
                         ((usesLocation && !isLoading) || (!usesLocation))
                     ? createNewRoom
                     : null,
-                child: const Text('Create'),
+                child: I18nText("createRoomView.roomFormCreateBtn"),
               ),
             ],
           ),

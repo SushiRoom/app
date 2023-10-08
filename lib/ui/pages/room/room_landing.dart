@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:sushi_room/models/partecipant.dart';
 import 'package:sushi_room/models/room.dart';
@@ -42,8 +43,18 @@ class _RoomLandingState extends State<RoomLanding> with AutomaticKeepAliveClient
                           padding: const EdgeInsets.only(left: 10, right: 10, top: 5),
                           child: ListTile(
                             leading: room.password == null ? const Icon(Icons.lock_open) : const Icon(Icons.lock_outlined),
-                            title: Text("Owner: ${room.users.firstWhere((element) => element.uid == room.creator).name}"),
-                            subtitle: Text("Table's plates: ${room.plates.length}"),
+                            title: I18nText(
+                              "roomView.roomOwner",
+                              translationParams: {
+                                "user": room.users.firstWhere((element) => element.uid == room.creator).name,
+                              },
+                            ),
+                            subtitle: I18nText(
+                              "roomView.roomOwner",
+                              translationParams: {
+                                "count": room.plates.length.toString(),
+                              },
+                            ),
                             trailing: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -76,12 +87,15 @@ class _RoomLandingState extends State<RoomLanding> with AutomaticKeepAliveClient
                     padding: const EdgeInsets.all(10),
                     child: ListView(
                       children: [
-                        const Padding(
-                          padding: EdgeInsets.all(5.0),
-                          child: Text(
-                            "Users",
-                            style: TextStyle(
-                              fontSize: 15,
+                        Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: I18nText(
+                            'roomView.usersCardLabel',
+                            child: const Text(
+                              "",
+                              style: TextStyle(
+                                fontSize: 15,
+                              ),
                             ),
                           ),
                         ),
@@ -117,21 +131,24 @@ class _RoomLandingState extends State<RoomLanding> with AutomaticKeepAliveClient
       floatingActionButton: FloatingActionButton(
         onPressed: () => {
           showModalBottomSheet<void>(
-              context: context,
-              builder: (BuildContext context) {
-                return SizedBox(
-                  height: 300,
-                  child: Center(
-                      child: Column(
+            context: context,
+            builder: (BuildContext context) {
+              return SizedBox(
+                height: 300,
+                child: Center(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: 20.0),
-                        child: Text(
-                          "Scan to join the room",
-                          style: TextStyle(
-                            fontSize: 15,
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 20.0),
+                        child: I18nText(
+                          'roomView.QRCodeShareLabel',
+                          child: const Text(
+                            "",
+                            style: TextStyle(
+                              fontSize: 15,
+                            ),
                           ),
                         ),
                       ),
@@ -141,7 +158,7 @@ class _RoomLandingState extends State<RoomLanding> with AutomaticKeepAliveClient
                         size: 120,
                       ),
                       TextButton(
-                        child: const Text("Copy room id"),
+                        child: I18nText("roomView.QRCodeShareCopyId"),
                         onPressed: () {
                           Clipboard.setData(
                             ClipboardData(text: widget.room.id!),
@@ -149,9 +166,11 @@ class _RoomLandingState extends State<RoomLanding> with AutomaticKeepAliveClient
                         },
                       ),
                     ],
-                  )),
-                );
-              })
+                  ),
+                ),
+              );
+            },
+          )
         },
         child: const Icon(Icons.share),
       ),

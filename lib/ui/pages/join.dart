@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:get/get.dart';
 import 'package:location/location.dart';
 import 'package:sushi_room/models/room.dart';
@@ -103,8 +104,8 @@ class _JoinPageState extends State<JoinPage> {
     if (hasLocationPermissions == PermissionStatus.denied || hasLocationPermissions == PermissionStatus.deniedForever) {
       errors.add(
         somethingIsMissingWidget(
-          title: "We need location permissions to let you see rooms around you",
-          buttonText: "Ask permissions",
+          title: FlutterI18n.translate(context, "joinRoomView.locationPermissionErrorTitle"),
+          buttonText: FlutterI18n.translate(context, "joinRoomView.locationPermissionErrorBtnText"),
           onPressed: () async {
             bool res = await internalAPI.requestLocation();
             if (res) {
@@ -121,8 +122,8 @@ class _JoinPageState extends State<JoinPage> {
     if (!isLocationOn!) {
       errors.add(
         somethingIsMissingWidget(
-          title: "To see rooms around you, we need your location to be turned on",
-          buttonText: "Turn on",
+          title: FlutterI18n.translate(context, "joinRoomView.locationOffErrorTitle"),
+          buttonText: FlutterI18n.translate(context, "joinRoomView.locationOffErrorBtnText"),
           onPressed: () async {
             bool res = await location.requestService();
             if (res) {
@@ -176,26 +177,29 @@ class _JoinPageState extends State<JoinPage> {
                             ),
                       ),
                       const SizedBox(height: 10),
-                      Text(
-                        "No rooms found nearby",
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
+                      I18nText(
+                        'joinRoomView.noNearbyRooms',
+                        child: Text(
+                          "",
+                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                        ),
                       ),
                       const SizedBox(height: 20),
                       FilledButton.tonal(
                         onPressed: () {
                           Get.toNamed(RouteGenerator.createPageRoute);
                         },
-                        child: const Row(
+                        child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.add,
                               size: 20,
                             ),
-                            SizedBox(width: 5),
-                            Text("Create a room"),
+                            const SizedBox(width: 5),
+                            I18nText("joinRoomView.createRoomBtn"),
                           ],
                         ),
                       ),
@@ -231,7 +235,12 @@ class _JoinPageState extends State<JoinPage> {
         ),
         contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         title: Text(room.name),
-        subtitle: Text("Created by ${room.users.firstWhere((element) => element.uid == room.creator).name}"),
+        subtitle: I18nText(
+          "createdBy",
+          translationParams: {
+            "user": room.users.firstWhere((element) => element.uid == room.creator).name,
+          },
+        ),
         leading: room.password != null
             ? const Icon(
                 Icons.lock,
@@ -288,7 +297,7 @@ class _JoinPageState extends State<JoinPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Join a Room'),
+        title: I18nText('joinRoomView.title'),
       ),
       body: body(),
       floatingActionButton: fab(),

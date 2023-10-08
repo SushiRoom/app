@@ -1,6 +1,7 @@
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -50,23 +51,32 @@ class _HomePageState extends State<HomePage> {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-              child: Text(
-                "Change name",
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
+              child: I18nText(
+                'drawer.changeNameLabel',
+                child: Text(
+                  "",
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                ),
               ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
-                  Text("Hi, ", style: Theme.of(context).textTheme.titleLarge),
+                  I18nText(
+                    'drawer.greeting',
+                    child: Text(
+                      "",
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                  ),
                   Expanded(
                     child: TextField(
-                      decoration: const InputDecoration(
-                        hintText: "Name",
-                        suffixIcon: Icon(Icons.edit),
+                      decoration: InputDecoration(
+                        hintText: FlutterI18n.translate(context, 'drawer.nameLabel'),
+                        suffixIcon: const Icon(Icons.edit),
                         border: InputBorder.none,
                       ),
                       style: Theme.of(context).textTheme.titleLarge,
@@ -89,16 +99,19 @@ class _HomePageState extends State<HomePage> {
                       const SizedBox(height: 20),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-                        child: Text(
-                          "Theme",
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                color: Theme.of(context).colorScheme.secondary,
-                              ),
+                        child: I18nText(
+                          'drawer.themeLabel',
+                          child: Text(
+                            "",
+                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  color: Theme.of(context).colorScheme.secondary,
+                                ),
+                          ),
                         ),
                       ),
                       ListTile(
-                        subtitle: const Text("Use colors based on your phone"),
-                        title: const Text("Dynamic Theme"),
+                        title: I18nText('drawer.dynamicThemeTitle'),
+                        subtitle: I18nText('drawer.dynamicThemeDescription'),
                         trailing: ThemeSwitcher(
                           builder: (ctx) => Switch(
                             value: internalAPI.isDynamicTheme,
@@ -123,7 +136,7 @@ class _HomePageState extends State<HomePage> {
 
   PreferredSizeWidget appBar() {
     return AppBar(
-      title: const Text('Home'),
+      title: I18nText('home'),
       actions: [
         ThemeSwitcher(
           builder: (ctx) => InkWell(
@@ -199,14 +212,14 @@ class _HomePageState extends State<HomePage> {
                 onPressed: () {
                   Get.toNamed(RouteGenerator.joinPageRoute);
                 },
-                child: const Text("Join Room"),
+                child: I18nText("joinRoomLabel"),
               ),
               const SizedBox(width: 10),
               FilledButton(
                 onPressed: () {
                   Get.toNamed(RouteGenerator.createPageRoute);
                 },
-                child: const Text("Create Room"),
+                child: I18nText("createRoomLabel"),
               ),
             ],
           ),

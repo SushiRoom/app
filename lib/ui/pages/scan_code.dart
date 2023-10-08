@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:get/get.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:sushi_room/models/room.dart';
@@ -24,13 +25,13 @@ class _ScanCodePageState extends State<ScanCodePage> {
   showDialog(Room room) {
     Get.dialog(
       AlertDialog(
-        title: const Text('Room found!'),
+        title: I18nText('qrScan.roomFound'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Room name: ${room.name}"),
-            Text("Password protected: ${room.password != null ? "Yes" : "No"}"),
+            I18nText("qrScan.roomName", translationParams: {"name": room.name}),
+            I18nText("qrScan.pwdProtected", translationParams: {"yes-no": room.password != null ? "Yes" : "No"}),
           ],
         ),
         actions: [
@@ -38,7 +39,7 @@ class _ScanCodePageState extends State<ScanCodePage> {
             onPressed: () {
               Get.back();
             },
-            child: const Text("Retry"),
+            child: I18nText("qrScan.retryBtn"),
           ),
           FilledButton(
             onPressed: () {
@@ -46,7 +47,7 @@ class _ScanCodePageState extends State<ScanCodePage> {
               Get.back();
               Get.offAndToNamed(RouteGenerator.roomPageRoute, arguments: [room.id]);
             },
-            child: const Text("Join"),
+            child: I18nText("qrScan.joinBtn"),
           ),
         ],
       ),
@@ -103,9 +104,9 @@ class _ScanCodePageState extends State<ScanCodePage> {
                     width: 200,
                     child: TextField(
                       controller: textEditingController,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Room code',
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        labelText: FlutterI18n.translate(context, "qrScan.roomCodeIdLabel"),
                         isDense: true,
                       ),
                     ),
@@ -119,8 +120,8 @@ class _ScanCodePageState extends State<ScanCodePage> {
                       } catch (e) {
                         if (!Get.isSnackbarOpen) {
                           Get.snackbar(
-                            "Error",
-                            "Room not found",
+                            FlutterI18n.translate(context, "qrScan.roomNotFoundErrorTitle"),
+                            FlutterI18n.translate(context, "qrScan.roomNotFoundErrorMsg"),
                             snackPosition: SnackPosition.BOTTOM,
                             backgroundColor: Theme.of(context).colorScheme.error,
                             colorText: Theme.of(context).colorScheme.onError,
@@ -131,7 +132,7 @@ class _ScanCodePageState extends State<ScanCodePage> {
 
                       showDialog(room);
                     },
-                    child: const Text("Join"),
+                    child: I18nText("qrScan.joinBtn"),
                   ),
                 ],
               ),
