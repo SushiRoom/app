@@ -1,0 +1,80 @@
+{
+  "createRoomLabel": "Crea Stanza",
+  "joinRoomLabel": "Entra nella Stanza",
+  "home": "Home",
+  "createdBy": "Creata da {user}",
+  "cancel": "Annulla",
+  "confirm": "Conferma",
+  "loading": "Caricamento...",
+  "qrScan": {
+    "roomFound": "Stanza trovata!",
+    "roomName": "Nome stanza: {name}",
+    "pwdProtected": "Protetto da password {yes-no}",
+    "retryBtn": "Riprova",
+    "roomCodeIdLabel": "Codice Stanza",
+    "joinBtn": "Unisciti",
+    "roomNotFoundErrorTitle": "Errore",
+    "roomNotFoundErrorMsg": "Stanza non trovata"
+  },
+  "drawer": {
+    "changeNameLabel": "Cambia nome",
+    "greeting": "Ciao, ",
+    "nameLabel": "Nome",
+    "themeLabel": "Tema",
+    "dynamicThemeTitle": "Tema dinamico",
+    "dynamicThemeDescription": "Usa colori basati sul tuo telefono"
+  },
+  "joinRoomView": {
+    "title": "Entra In Una Stanza",
+    "noNearbyRooms": "Nessuna stanza trovata nelle vicinanze",
+    "createRoomBtn": "Crea una stanza",
+    "locationOffErrorTitle": "Per vedere le stanze intorno a te, abbiamo bisogno che la localizzazione sia attiva",
+    "locationOffErrorBtnText": "Attiva",
+    "locationPermissionErrorTitle": "Abbiamo bisogno di permessi di localizzazione per farti vedere le stanze intorno a te",
+    "locationPermissionErrorBtnText": "Chiedi i permessi"
+  },
+  "roomLeaveDialog": {
+    "title": "Esci dalla stanza",
+    "message": "Vuoi davvero uscire dalla stanza?"
+  },
+  "roomView": {
+    "roomTabLabel": "Stanza",
+    "orderTabLabel": "Ordine",
+    "finalOrderTabLabel": "Ordine Finale",
+    "roomOwner": "Proprietario: {user}",
+    "roomPlatesCount": "Piatti del tavolo: {count}",
+    "usersCardLabel": "Utenti",
+    "QRCodeShareLabel": "Scansiona per unirti!",
+    "QRCodeShareCopyId": "Copia ID stanza",
+    "noPlatesYet": "Non hai nessun piatto",
+    "addPlateBtn": "Aggiungi piatto",
+    "plateNumberHint": "Numero piatto",
+    "plateQtyHint": "Quantità",
+    "noOrderYet": "Nessun ordine",
+    "whoOrderedTitle": "Chi ha ordinato {number}?",
+    "userDialogTitle": "Seleziona utente",
+    "userDialogUserNameLabel": "Nome",
+    "userDialogAddUserBtn": "Aggiungi utente",
+    "pwdDialogTitle": "Inserisci la password della stanza",
+    "pwdDialogPwdLabel": "Password",
+    "pwdDialogShowPwdLabel": "Mostra password",
+    "pwdDialogWrongPwdTitle": "Password errata",
+    "pwdDialogWrongPwdMessage": "Riprova",
+    "kickedFromRoomTitle": "Cacciato",
+    "kickedFromRoomMessage": "Sei stato cacciato dalla stanza"
+  },
+  "createRoomView": {
+    "title": "Crea una nuova stanza",
+    "locationOffErrorTitle": "Devi attivare la localizzazione",
+    "locationOffErrorDescription": "Clicca per attivare la localizzazione",
+    "locationOffErrorBtnText": "Attiva",
+    "locationPermissionErrorTitle": "Hai bisogno dei permessi di localizzazione",
+    "locationPermissionErrorDescription": "Clicca per chiedere i permessi",
+    "locationPermissionErrorBtnText": "Chiedi",
+    "roomFormNameLabel": "Nome stanza",
+    "roomFormLocationSwitch": "Utilizza localizzazione",
+    "roomFormPwdSwitch": "Password",
+    "roomFormPwdLabel": "Password",
+    "roomFormCreateBtn": "Crea"
+  }
+}
