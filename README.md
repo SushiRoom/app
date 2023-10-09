@@ -1,8 +1,8 @@
 # SushiRoom
 
-[![Crowdin](https://badges.crowdin.net/sushi-room/localized.svg)](https://crowdin.com/project/sushi-room)
-
 <img width=200 src="mockup/logo.png" />
+
+[![Crowdin](https://badges.crowdin.net/sushi-room/localized.svg)](https://crowdin.com/project/sushi-room)
 
 SushiRoom is a simple app made for ordering sushi easier. \
 It takes your orders and then merge them into one order.
