@@ -3,7 +3,7 @@ name: Build n Release
 on:
   push:
     branches:
-      - test-web
+      - releases
     tags:
       - "*"
 
