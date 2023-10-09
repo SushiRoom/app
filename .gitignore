@@ -26,6 +26,7 @@ migrate_working_dir/
 **/ios/Flutter/.last_build_id
 .dart_tool/
 .flutter-plugins
+.metadata
 .flutter-plugins-dependencies
 .packages
 .pub-cache/
@@ -50,3 +51,6 @@ app.*.map.json
 
 # Certs
 /certs/
+
+# Vs Code
+.vscode/
