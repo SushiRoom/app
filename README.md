@@ -1,5 +1,7 @@
 # SushiRoom
 
+[![Crowdin](https://badges.crowdin.net/sushi-room/localized.svg)](https://crowdin.com/project/sushi-room)
+
 <img width=200 src="mockup/logo.png" />
 
 SushiRoom is a simple app made for ordering sushi easier. \
@@ -33,6 +35,7 @@ It takes your orders and then merge them into one order.
 - ❓ You can see who ordered what
 - 👥 You can have multiple user on a single device
 - 🎨 Material You design (dynamic colors, themed icon on A12+)
+- 🌐 Multi-language support
 
 # Building from source
 
@@ -66,6 +69,12 @@ flutter run --release
 
 By doing so you will have the app on your phone for free, without having to pay for an Apple Developer account, but it will only last for 7 days.
 You will have to repeat the process every 7 days.
+
+### Web
+
+```
+flutter build web --release --web-renderer canvaskit --base-href /./
+```
 
 # Installing
 
