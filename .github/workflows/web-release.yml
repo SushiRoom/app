@@ -38,7 +38,7 @@ jobs:
         run: |
           flutter clean
           flutter pub get
-          flutter build web --release --web-renderer canvaskit --base-href /SushiRoom-App/
+          flutter build web --release --web-renderer canvaskit --base-href /${{ github.event.repository.name }}/
 
       - name: Publish to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
