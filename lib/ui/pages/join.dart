@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:get/get.dart';
@@ -101,7 +102,7 @@ class _JoinPageState extends State<JoinPage> {
     }
 
     List<Widget> errors = [];
-    if (hasLocationPermissions == PermissionStatus.denied || hasLocationPermissions == PermissionStatus.deniedForever) {
+    if ((hasLocationPermissions == PermissionStatus.denied || hasLocationPermissions == PermissionStatus.deniedForever) && !kIsWeb) {
       errors.add(
         somethingIsMissingWidget(
           title: FlutterI18n.translate(context, "joinRoomView.locationPermissionErrorTitle"),

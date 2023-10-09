@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:get/get.dart';
@@ -122,7 +123,7 @@ class _CreatePageState extends State<CreatePage> {
               SwitchListTile(
                 value: usesLocation,
                 onChanged: (value) async {
-                  if (hasLocationPermissions!) {
+                  if (hasLocationPermissions! || kIsWeb) {
                     if (isLocationOn!) {
                       setState(() {
                         usesLocation = value;
