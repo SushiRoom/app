@@ -1,0 +1,47 @@
+name: Build n Release
+
+on:
+  push:
+    branches:
+      - test-web
+    tags:
+      - "*"
+
+jobs:
+  build:
+    environment: env
+    env:
+      FIREBASE_OPTIONS: ${{ secrets.FIREBASE_OPTIONS }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Setting up firebase
+        run: |
+          echo "${{ env.FIREBASE_OPTIONS }}"    | base64 --decode > lib/firebase_options.dart
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: "12.x"
+          distribution: "zulu"
+          cache: gradle
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+          cache: false
+
+      - name: Build Web
+        run: |
+          flutter clean
+          flutter pub get
+          flutter build web --release --web-renderer canvaskit --base-href /./
+
+      - name: Publish to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build/web
