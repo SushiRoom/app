@@ -120,17 +120,24 @@ class _JoinPageState extends State<JoinPage> {
       );
     }
 
-    if (!isLocationOn!) {
+    if (!isLocationOn! || (kIsWeb && locationData == null)) {
       errors.add(
         somethingIsMissingWidget(
           title: FlutterI18n.translate(context, "joinRoomView.locationOffErrorTitle"),
           buttonText: FlutterI18n.translate(context, "joinRoomView.locationOffErrorBtnText"),
           onPressed: () async {
-            bool res = await location.requestService();
-            if (res) {
-              initLocationStuff();
+            if (!kIsWeb) {
+              bool res = await location.requestService();
+              if (res) {
+                initLocationStuff();
+                setState(() {
+                  isLoading = true;
+                });
+              }
+            } else {
+              var data = await location.getLocation();
               setState(() {
-                isLoading = true;
+                locationData = data;
               });
             }
           },
