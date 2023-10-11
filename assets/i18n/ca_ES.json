@@ -46,7 +46,7 @@
     "roomPlatesCount": "Plats de la taula: {count}",
     "usersCardLabel": "Usuaris",
     "QRCodeShareLabel": "Escaneja per unir-t'hi!",
-    "QRCodeShareCopyId": "Copiar ID de la sala",
+    "QRCodeShareCopyId": "Copy ID",
     "QRCodeShareShowPwd": "Show password",
     "QRCodeShareCopyIdSuccess": "ID copied to clipboard",
     "noPlatesYet": "No tens cap plat encara",
