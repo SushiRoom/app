@@ -6,6 +6,7 @@
   "cancel": "Cancelar",
   "confirm": "Confirmar",
   "loading": "Cargando...",
+  "ok": "Ok",
   "qrScan": {
     "roomFound": "¡Sala encontrada!",
     "roomName": "Nombre de la sala: {name}",
@@ -46,6 +47,8 @@
     "usersCardLabel": "Usuarios",
     "QRCodeShareLabel": "¡Escanea para unirte!",
     "QRCodeShareCopyId": "Copiar ID de sala",
+    "QRCodeShareShowPwd": "Show password",
+    "QRCodeShareCopyIdSuccess": "ID copied to clipboard",
     "noPlatesYet": "Aún no tienes platos",
     "addPlateBtn": "Añadir plato",
     "plateNumberHint": "Número de plato",
