@@ -250,6 +250,21 @@ class _RoomPageState extends State<RoomPage> {
     );
   }
 
+  void checkKickUser(Room room) {
+    if (!room.users.any((element) => element.uid == FirebaseAuth.instance.currentUser!.uid)) {
+      Get.offAllNamed(RouteGenerator.homePageRoute);
+      Get.snackbar(
+        FlutterI18n.translate(context, 'roomView.kickedFromRoomTitle'),
+        FlutterI18n.translate(context, 'roomView.kickedFromRoomMessage'),
+        snackPosition: SnackPosition.BOTTOM,
+        overlayBlur: 0,
+        isDismissible: true,
+        colorText: Theme.of(context).colorScheme.onError,
+        backgroundColor: Theme.of(context).colorScheme.error,
+      );
+    }
+  }
+
   Widget circleUserAvatar() {
     return InkWell(
       borderRadius: BorderRadius.circular(20),
@@ -330,18 +345,10 @@ class _RoomPageState extends State<RoomPage> {
                     Room room = Room.fromJson(roomData);
 
                     WidgetsBinding.instance.addPostFrameCallback((_) {
-                      if (!room.users.any((element) => element.uid == FirebaseAuth.instance.currentUser!.uid)) {
-                        Get.offAllNamed(RouteGenerator.homePageRoute);
-                        Get.snackbar(
-                          FlutterI18n.translate(context, 'roomView.kickedFromRoomTitle'),
-                          FlutterI18n.translate(context, 'roomView.kickedFromRoomMessage'),
-                          snackPosition: SnackPosition.BOTTOM,
-                          overlayBlur: 0,
-                          isDismissible: true,
-                          colorText: Theme.of(context).colorScheme.onError,
-                          backgroundColor: Theme.of(context).colorScheme.error,
-                        );
+                      if (room.creator == FirebaseAuth.instance.currentUser!.uid) {
+                        return;
                       }
+                      checkKickUser(room);
                     });
 
                     return TabBarView(

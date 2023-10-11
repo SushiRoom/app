@@ -46,7 +46,7 @@ class _RoomLandingState extends State<RoomLanding> with AutomaticKeepAliveClient
                             title: I18nText(
                               "roomView.roomOwner",
                               translationParams: {
-                                "user": room.users.firstWhere((element) => element.uid == room.creator).name,
+                                "user": room.users.firstWhere((element) => element.uid == room.creator, orElse: () => Partecipant(name: '')).name,
                               },
                             ),
                             subtitle: I18nText(
