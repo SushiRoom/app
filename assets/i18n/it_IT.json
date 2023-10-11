@@ -1,6 +1,6 @@
 {
-  "createRoomLabel": "Crea stanza",
-  "joinRoomLabel": "Trova stanza",
+  "createRoomLabel": "Crea Stanza",
+  "joinRoomLabel": "Trova Stanza",
   "home": "Home",
   "createdBy": "Creata da {user}",
   "cancel": "Annulla",
