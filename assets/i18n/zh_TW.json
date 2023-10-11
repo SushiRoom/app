@@ -46,7 +46,7 @@
     "roomPlatesCount": "Table's plates: {count}",
     "usersCardLabel": "Users",
     "QRCodeShareLabel": "Scan to join!",
-    "QRCodeShareCopyId": "Copy room ID",
+    "QRCodeShareCopyId": "Copy ID",
     "QRCodeShareShowPwd": "Show password",
     "QRCodeShareCopyIdSuccess": "ID copied to clipboard",
     "noPlatesYet": "You have no plates yet",
