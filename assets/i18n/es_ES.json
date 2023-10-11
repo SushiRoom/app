@@ -46,7 +46,7 @@
     "roomPlatesCount": "Platos de la mesa: {count}",
     "usersCardLabel": "Usuarios",
     "QRCodeShareLabel": "¡Escanea para unirte!",
-    "QRCodeShareCopyId": "Copiar ID de sala",
+    "QRCodeShareCopyId": "Copy ID",
     "QRCodeShareShowPwd": "Show password",
     "QRCodeShareCopyIdSuccess": "ID copied to clipboard",
     "noPlatesYet": "Aún no tienes platos",
