@@ -6,6 +6,7 @@
   "cancel": "Annulla",
   "confirm": "Conferma",
   "loading": "Caricamento...",
+  "ok": "Ok",
   "qrScan": {
     "roomFound": "Stanza trovata!",
     "roomName": "Nome stanza: {name}",
@@ -45,7 +46,9 @@
     "roomPlatesCount": "Piatti del tavolo: {count}",
     "usersCardLabel": "Utenti",
     "QRCodeShareLabel": "Scansiona per unirti!",
-    "QRCodeShareCopyId": "Copia ID stanza",
+    "QRCodeShareCopyId": "Copia ID",
+    "QRCodeShareShowPwd": "Mostra password",
+    "QRCodeShareCopyIdSuccess": "ID copiato negli appunti",
     "noPlatesYet": "Non hai nessun piatto",
     "addPlateBtn": "Aggiungi piatto",
     "plateNumberHint": "Numero piatto",

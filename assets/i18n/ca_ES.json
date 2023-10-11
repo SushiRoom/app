@@ -6,6 +6,7 @@
   "cancel": "Cancel·lar",
   "confirm": "Confirmar",
   "loading": "Carregant...",
+  "ok": "Ok",
   "qrScan": {
     "roomFound": "Sala trobada!",
     "roomName": "Nom de la sala: {name}",
@@ -45,7 +46,9 @@
     "roomPlatesCount": "Plats de la taula: {count}",
     "usersCardLabel": "Usuaris",
     "QRCodeShareLabel": "Escaneja per unir-t'hi!",
-    "QRCodeShareCopyId": "Copiar ID de la sala",
+    "QRCodeShareCopyId": "Copy ID",
+    "QRCodeShareShowPwd": "Show password",
+    "QRCodeShareCopyIdSuccess": "ID copied to clipboard",
     "noPlatesYet": "No tens cap plat encara",
     "addPlateBtn": "Afegir plat",
     "plateNumberHint": "Número de plat",
