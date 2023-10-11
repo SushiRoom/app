@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:get/get.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:sushi_room/models/partecipant.dart';
 import 'package:sushi_room/models/room.dart';
@@ -135,38 +136,84 @@ class _RoomLandingState extends State<RoomLanding> with AutomaticKeepAliveClient
             builder: (BuildContext context) {
               return SizedBox(
                 height: 300,
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 20.0),
-                        child: I18nText(
-                          'roomView.QRCodeShareLabel',
-                          child: const Text(
-                            "",
-                            style: TextStyle(
-                              fontSize: 15,
-                            ),
-                          ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    I18nText(
+                      "roomView.QRCodeShareLabel",
+                      child: const Text(
+                        "",
+                        style: TextStyle(
+                          fontSize: 20,
                         ),
                       ),
-                      QrImageView(
-                        data: widget.room.id!,
-                        backgroundColor: Colors.white,
-                        size: 120,
+                    ),
+                    const SizedBox(height: 20),
+                    QrImageView(
+                      data: widget.room.id!,
+                      backgroundColor: Colors.white,
+                      size: 120,
+                    ),
+                    const SizedBox(height: 20),
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 10.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            widget.room.password != null
+                                ? OutlinedButton(
+                                    onPressed: () {
+                                      Get.back();
+                                      Get.dialog(
+                                        AlertDialog(
+                                          title: I18nText('roomView.QRCodeShareShowPwd'),
+                                          content: Text(widget.room.password!),
+                                          actions: [
+                                            OutlinedButton(
+                                              onPressed: () {
+                                                Get.back();
+                                              },
+                                              child: I18nText('ok'),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                    child: I18nText('roomView.QRCodeShareShowPwd'),
+                                  )
+                                : const SizedBox(),
+                            const SizedBox(width: 10),
+                            FilledButton(
+                              onPressed: () {
+                                Clipboard.setData(
+                                  ClipboardData(text: widget.room.id!),
+                                );
+                                Get.back();
+                                if (Get.isSnackbarOpen) {
+                                  return;
+                                }
+
+                                Get.snackbar(
+                                  FlutterI18n.translate(context, 'roomView.QRCodeShareCopyId'),
+                                  FlutterI18n.translate(context, 'roomView.QRCodeShareCopyIdSuccess'),
+                                  snackPosition: SnackPosition.BOTTOM,
+                                  overlayBlur: 0,
+                                  isDismissible: true,
+                                  colorText: Theme.of(context).colorScheme.onPrimaryContainer,
+                                  backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                                );
+                              },
+                              child: I18nText("roomView.QRCodeShareCopyId"),
+                            ),
+                          ],
+                        ),
                       ),
-                      TextButton(
-                        child: I18nText("roomView.QRCodeShareCopyId"),
-                        onPressed: () {
-                          Clipboard.setData(
-                            ClipboardData(text: widget.room.id!),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
+                    )
+                  ],
                 ),
               );
             },

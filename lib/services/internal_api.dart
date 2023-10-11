@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:universal_io/io.dart';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -65,5 +66,35 @@ class InternalAPI {
       res = await Permission.location.request();
     }
     return res.isGranted;
+  }
+
+  requestSnackBar({
+    required String title,
+    required void Function() onClick,
+    required String subtitle,
+    required String buttonText,
+    required BuildContext context,
+  }) {
+    if (Get.isSnackbarOpen) {
+      return;
+    }
+
+    Get.snackbar(
+      title,
+      subtitle,
+      onTap: (_) => onClick,
+      mainButton: TextButton(
+        onPressed: onClick,
+        style: TextButton.styleFrom(
+          foregroundColor: Theme.of(context).colorScheme.onError,
+        ),
+        child: Text(buttonText),
+      ),
+      snackPosition: SnackPosition.BOTTOM,
+      overlayBlur: 0,
+      isDismissible: true,
+      colorText: Theme.of(context).colorScheme.onError,
+      backgroundColor: Theme.of(context).colorScheme.error,
+    );
   }
 }

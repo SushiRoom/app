@@ -63,35 +63,6 @@ class _CreatePageState extends State<CreatePage> {
     Get.offAndToNamed(RouteGenerator.roomPageRoute, arguments: [roomId]);
   }
 
-  requestSnackBar({
-    required String title,
-    required void Function() onClick,
-    required String subtitle,
-    required String buttonText,
-  }) {
-    if (Get.isSnackbarOpen) {
-      return;
-    }
-
-    Get.snackbar(
-      title,
-      subtitle,
-      onTap: (_) => onClick,
-      mainButton: TextButton(
-        onPressed: onClick,
-        style: TextButton.styleFrom(
-          foregroundColor: Theme.of(context).colorScheme.onError,
-        ),
-        child: Text(buttonText),
-      ),
-      snackPosition: SnackPosition.BOTTOM,
-      overlayBlur: 0,
-      isDismissible: true,
-      colorText: Theme.of(context).colorScheme.onError,
-      backgroundColor: Theme.of(context).colorScheme.error,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -135,10 +106,11 @@ class _CreatePageState extends State<CreatePage> {
                         isLoading = false;
                       });
                     } else {
-                      requestSnackBar(
+                      internalAPI.requestSnackBar(
                         title: FlutterI18n.translate(context, 'createRoomView.locationOffErrorTitle'),
                         subtitle: FlutterI18n.translate(context, 'createRoomView.locationOffErrorDescription'),
                         buttonText: FlutterI18n.translate(context, 'createRoomView.locationOffErrorBtnText'),
+                        context: context,
                         onClick: () async {
                           bool res = await _location.requestService();
                           if (res) {
@@ -151,10 +123,11 @@ class _CreatePageState extends State<CreatePage> {
                       );
                     }
                   } else {
-                    requestSnackBar(
+                    internalAPI.requestSnackBar(
                       title: FlutterI18n.translate(context, 'createRoomView.locationPermissionErrorTitle'),
                       subtitle: FlutterI18n.translate(context, 'createRoomView.locationPermissionErrorDescription'),
                       buttonText: FlutterI18n.translate(context, 'createRoomView.locationPermissionErrorBtnText'),
+                      context: context,
                       onClick: () async {
                         bool res = await internalAPI.requestLocation();
                         if (res) {

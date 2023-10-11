@@ -79,7 +79,7 @@ class _DynamicThemeBuilderState extends State<DynamicThemeBuilder> {
                   ],
                   supportedLocales: const [
                     Locale('en', 'US'),
-                    Locale('it', 'IT'),
+                    // Locale('it', 'IT'),
                   ],
                 ),
               )
