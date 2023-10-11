@@ -6,6 +6,7 @@
   "cancel": "Cancel",
   "confirm": "Confirm",
   "loading": "Loading...",
+  "ok": "Ok",
   "qrScan": {
     "roomFound": "Room found!",
     "roomName": "Room name: {name}",
@@ -46,6 +47,8 @@
     "usersCardLabel": "Users",
     "QRCodeShareLabel": "Scan to join!",
     "QRCodeShareCopyId": "Copy room ID",
+    "QRCodeShareShowPwd": "Show password",
+    "QRCodeShareCopyIdSuccess": "ID copied to clipboard",
     "noPlatesYet": "You have no plates yet",
     "addPlateBtn": "Add plate",
     "plateNumberHint": "Plate number",
