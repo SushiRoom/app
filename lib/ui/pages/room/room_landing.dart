@@ -50,7 +50,7 @@ class _RoomLandingState extends State<RoomLanding> with AutomaticKeepAliveClient
                               },
                             ),
                             subtitle: I18nText(
-                              "roomView.roomOwner",
+                              "roomView.roomPlatesCount",
                               translationParams: {
                                 "count": room.plates.length.toString(),
                               },
