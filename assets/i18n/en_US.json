@@ -60,8 +60,10 @@
 
     "QRCodeShareLabel": "Scan to join!",
     "QRCodeShareCopyId": "Copy ID",
-    "QRCodeShareShowPwd": "Show password",
     "QRCodeShareCopyIdSuccess": "ID copied to clipboard",
+    "QRCodeShareShowPwd": "Show password",
+    "QRCodeShareCopyPwd": "Copy password",
+    "QRCodeShareCopyPwdSuccess": "Password copied to clipboard",
 
     "noPlatesYet": "You have no plates yet",
     "addPlateBtn": "Add plate",
