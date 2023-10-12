@@ -1,5 +1,6 @@
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -10,6 +11,7 @@ import 'package:sushi_room/models/room.dart';
 import 'package:sushi_room/services/internal_api.dart';
 import 'package:sushi_room/services/rooms_api.dart';
 import 'package:sushi_room/services/routes.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -197,37 +199,83 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget body() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            "SushiRoom",
-            style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                  fontFamily: GoogleFonts.manrope().fontFamily,
-                  fontWeight: FontWeight.w700,
-                ),
-          ),
-          Row(
+    return Stack(
+      children: [
+        Center(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ElevatedButton(
-                onPressed: () {
-                  Get.toNamed(RouteGenerator.joinPageRoute);
-                },
-                child: I18nText("joinRoomLabel"),
+              Text(
+                "SushiRoom",
+                style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                      fontFamily: GoogleFonts.manrope().fontFamily,
+                      fontWeight: FontWeight.w700,
+                    ),
               ),
-              const SizedBox(width: 10),
-              FilledButton(
-                onPressed: () {
-                  Get.toNamed(RouteGenerator.createPageRoute);
-                },
-                child: I18nText("createRoomLabel"),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Get.toNamed(RouteGenerator.joinPageRoute);
+                    },
+                    child: I18nText("joinRoomLabel"),
+                  ),
+                  const SizedBox(width: 10),
+                  FilledButton(
+                    onPressed: () {
+                      Get.toNamed(RouteGenerator.createPageRoute);
+                    },
+                    child: I18nText("createRoomLabel"),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
-      ),
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: "Made with ❤️ by ",
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      fontFamily: GoogleFonts.manrope().fontFamily,
+                      fontWeight: FontWeight.w700,
+                      fontFamilyFallback: [
+                        'Apple Color Emoji',
+                        'Noto Color Emoji',
+                      ],
+                    ),
+                  ),
+                  TextSpan(
+                    text: "SushiRoom team",
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          fontFamily: GoogleFonts.manrope().fontFamily,
+                          fontWeight: FontWeight.w700,
+                          fontFamilyFallback: [
+                            'Apple Color Emoji',
+                            'Noto Color Emoji',
+                          ],
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        launchUrl(
+                          Uri.parse("https://github.com/SushiRoom"),
+                          mode: LaunchMode.externalApplication,
+                        );
+                      },
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
