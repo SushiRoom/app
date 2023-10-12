@@ -64,12 +64,9 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
     required Plate plate,
   }) {
     Widget field(Widget child) => Flexible(
-          child: AspectRatio(
-            aspectRatio: 3.2,
-            child: Card(
-              child: Center(
-                child: child,
-              ),
+          child: Card(
+            child: Center(
+              child: child,
             ),
           ),
         );
@@ -85,6 +82,7 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
             textAlignVertical: TextAlignVertical.center,
             decoration: InputDecoration(
               border: InputBorder.none,
+              isDense: true,
               hintText: FlutterI18n.translate(
                 context,
                 "roomView.plateNumberHint",
@@ -108,6 +106,7 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
             ],
             decoration: InputDecoration(
               border: InputBorder.none,
+              isDense: true,
               hintText: FlutterI18n.translate(
                 context,
                 "roomView.plateQtyHint",
