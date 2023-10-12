@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:universal_io/io.dart';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
@@ -25,7 +26,7 @@ class InternalAPI {
   set currentUserName(String value) => prefs.setString('currentUserName', value);
 
   Future<bool> isDynamicThemeSupported() async {
-    if (Platform.isAndroid) {
+    if (Platform.isAndroid && !kIsWeb) {
       final AndroidDeviceInfo androidInfo = await DeviceInfoPlugin().androidInfo;
       return androidInfo.version.sdkInt >= 31;
     }
