@@ -9,6 +9,10 @@ It takes your orders and then merge them into one order.
 
 ### You can watch a _very cool_ video demo [here](https://youtu.be/9jg8NkpziHs?si=x2oHx-JdfPrlWH1P).
 
+### Download the [android app](https://github.com/SushiRoom/app/releases) or try the [web app](https://sushiroom.github.io/app/)
+
+(for some reasons while visiting the site on iOS, you might need to request desktop site)
+
 # Screenshots
 
 <details>
@@ -75,7 +79,3 @@ You will have to repeat the process every 7 days.
 ```
 flutter build web --release --web-renderer canvaskit --base-href /./
 ```
-
-# Installing
-
-Soon we will add releases.
