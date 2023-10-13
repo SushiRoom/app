@@ -9,7 +9,7 @@ import 'package:sushi_room/services/internal_api.dart';
 import 'package:sushi_room/services/rooms_api.dart';
 import 'package:sushi_room/services/routes.dart';
 import 'package:sushi_room/ui/components/hero_dialog.dart';
-import 'package:sushi_room/ui/pages/room/final_order.dart';
+import 'package:sushi_room/ui/pages/room/menu.dart';
 import 'package:sushi_room/ui/pages/room/order.dart';
 import 'package:sushi_room/ui/pages/room/room_landing.dart';
 
@@ -161,7 +161,7 @@ class _RoomPageState extends State<RoomPage> {
 
   Widget customDialog() {
     return Hero(
-      tag: 'userAvatar',
+      tag: 'a',
       child: StatefulBuilder(
         builder: (context, localSetState) => AlertDialog(
           title: I18nText('roomView.userDialogTitle'),
@@ -283,7 +283,7 @@ class _RoomPageState extends State<RoomPage> {
         );
       },
       child: Hero(
-        tag: 'userAvatar',
+        tag: 'a',
         child: CircleAvatar(
           child: Text(
             localUsers[currentUser].name.substring(0, 1).toUpperCase(),
@@ -365,10 +365,7 @@ class _RoomPageState extends State<RoomPage> {
                           room: room,
                           currentUser: localUsers[currentUser],
                         ),
-                        FinalOrderPage(
-                          room: room,
-                          currentUser: localUsers[currentUser],
-                        ),
+                        const MenuPage(),
                       ],
                     );
                   } else {
