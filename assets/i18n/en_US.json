@@ -8,6 +8,13 @@
   "loading": "Loading...",
   "ok": "Ok",
 
+  "rejoinRoomDialog": {
+    "title": "Rejoin Room",
+    "content": "Seems like you are in a room already, do you want to rejoin it?",
+    "leave": "Leave",
+    "ok": "Ok"
+  },
+
   "qrScan": {
     "roomFound": "Room found!",
     "roomName": "Room name: {name}",
