@@ -46,8 +46,8 @@
   },
   "roomView": {
     "roomTabLabel": "Cameră",
-    "orderTabLabel": "Ordine",
-    "finalOrderTabLabel": "Ordinea finală",
+    "orderTabLabel": "Comandă",
+    "finalOrderTabLabel": "Comandă finală",
     "roomOwner": "Proprietar: {user}",
     "roomPlatesCount": "Farfurii: {count}",
     "usersCardLabel": "Utilizatori",
