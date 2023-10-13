@@ -7,6 +7,12 @@
   "confirm": "Confirmar",
   "loading": "Cargando...",
   "ok": "Ok",
+  "rejoinRoomDialog": {
+    "title": "Rejoin Room",
+    "content": "Seems like you are in a room already, do you want to rejoin it?",
+    "leave": "Leave",
+    "ok": "Ok"
+  },
   "qrScan": {
     "roomFound": "¡Sala encontrada!",
     "roomName": "Nombre de la sala: {name}",
