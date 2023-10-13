@@ -7,6 +7,12 @@
   "confirm": "Conferma",
   "loading": "Caricamento...",
   "ok": "Ok",
+  "rejoinRoomDialog": {
+    "title": "Rientra nella stanza",
+    "content": "Sembra che tu fossi già in una stanza, vuoi rientrarci?",
+    "leave": "Esci",
+    "ok": "Entra"
+  },
   "qrScan": {
     "roomFound": "Stanza trovata!",
     "roomName": "Nome stanza: {name}",
