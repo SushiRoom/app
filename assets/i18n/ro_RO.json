@@ -13,6 +13,10 @@
     "leave": "Părăsire",
     "ok": "Ok"
   },
+  "menuView": {
+    "title": "Menu",
+    "noMenu": "No menu loaded yet"
+  },
   "qrScan": {
     "roomFound": "Cameră găsită!",
     "roomName": "Numele camerei: {name}",
