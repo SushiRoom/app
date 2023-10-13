@@ -13,6 +13,10 @@
     "leave": "Esci",
     "ok": "Entra"
   },
+  "menuView": {
+    "title": "Menu",
+    "noMenu": "No menu loaded yet"
+  },
   "qrScan": {
     "roomFound": "Stanza trovata!",
     "roomName": "Nome stanza: {name}",
