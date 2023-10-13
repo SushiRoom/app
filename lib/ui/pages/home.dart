@@ -94,6 +94,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
+            const Spacer(),
             FutureBuilder(
               future: internalAPI.isDynamicThemeSupported(),
               builder: (context, snapshot) {
@@ -236,30 +237,37 @@ class _HomePageState extends State<HomePage> {
         Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.only(bottom: 30.0),
             child: RichText(
               text: TextSpan(
                 children: [
                   TextSpan(
-                    text: "Made with ❤️ by ",
+                    text: "Made with",
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      fontFamily: GoogleFonts.manrope().fontFamily,
-                      fontWeight: FontWeight.w700,
-                      fontFamilyFallback: [
-                        'Apple Color Emoji',
-                        'Noto Color Emoji',
-                      ],
-                    ),
+                          fontFamily: GoogleFonts.manrope().fontFamily,
+                          fontWeight: FontWeight.w700,
+                        ),
+                  ),
+                  TextSpan(
+                    text: " ❤️ ",
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          fontFamily: GoogleFonts.manrope().fontFamily,
+                          fontWeight: FontWeight.w700,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                  ),
+                  TextSpan(
+                    text: "by ",
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          fontFamily: GoogleFonts.manrope().fontFamily,
+                          fontWeight: FontWeight.w700,
+                        ),
                   ),
                   TextSpan(
                     text: "SushiRoom team",
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           fontFamily: GoogleFonts.manrope().fontFamily,
                           fontWeight: FontWeight.w700,
-                          fontFamilyFallback: [
-                            'Apple Color Emoji',
-                            'Noto Color Emoji',
-                          ],
                           color: Theme.of(context).colorScheme.secondary,
                         ),
                     recognizer: TapGestureRecognizer()
