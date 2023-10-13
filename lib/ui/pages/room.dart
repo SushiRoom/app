@@ -55,9 +55,10 @@ class _RoomPageState extends State<RoomPage> {
 
   Future<void> checkPassword() async {
     Room room = await roomsAPI.getRoom(widget.roomId);
+    bool wasAlreadyIn = room.users.any((element) => element.uid == FirebaseAuth.instance.currentUser!.uid);
     setState(() {
       roomName = room.name;
-      passwordNeeded = room.password != null && room.creator != FirebaseAuth.instance.currentUser!.uid;
+      passwordNeeded = room.password != null && room.creator != FirebaseAuth.instance.currentUser!.uid && !wasAlreadyIn;
     });
 
     if (passwordNeeded) {
@@ -129,7 +130,7 @@ class _RoomPageState extends State<RoomPage> {
         barrierDismissible: false,
       );
     } else {
-      addCurrentUser(widget.roomId);
+      addCurrentUser(widget.roomId, wasAlreadyIn: wasAlreadyIn);
     }
   }
 
@@ -142,7 +143,10 @@ class _RoomPageState extends State<RoomPage> {
     await roomsAPI.removeUser(roomId, user);
   }
 
-  addCurrentUser(roomId) async {
+  addCurrentUser(
+    roomId, {
+    bool wasAlreadyIn = false,
+  }) async {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     String name = internalAPI.currentUserName;
 
@@ -152,7 +156,7 @@ class _RoomPageState extends State<RoomPage> {
     );
 
     localUsers.add(user);
-    await roomsAPI.addUser(roomId, user);
+    if (!wasAlreadyIn) await roomsAPI.addUser(roomId, user);
   }
 
   Widget customDialog() {

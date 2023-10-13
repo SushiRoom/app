@@ -133,6 +133,11 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
 
     Room room = widget.room;
     List<Plate> userPlates = room.plates.where((element) => element.orderedBy.uid == widget.currentUser.uid).toList();
+    if (userPlates.length > _focusNodes.length) {
+      for (int i = _focusNodes.length; i < userPlates.length; i++) {
+        _focusNodes.add(FocusNode());
+      }
+    }
 
     return Scaffold(
       body: GestureDetector(

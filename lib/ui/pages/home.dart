@@ -24,24 +24,57 @@ class _HomePageState extends State<HomePage> {
   InternalAPI internalAPI = Get.find<InternalAPI>();
   RoomsAPI roomsAPI = RoomsAPI();
 
-  leaveAnyLeftRoom() async {
-    List<Room> rooms = await roomsAPI.getRooms();
+  checkAnyLeftRoom() async {
+    List<Room> rooms;
+    try {
+      rooms = await roomsAPI.getRooms();
+    } catch (e) {
+      // no rooms
+      return;
+    }
+
     String currentUserId = FirebaseAuth.instance.currentUser!.uid;
-    Partecipant currentUser = Partecipant(
-      uid: currentUserId,
-      name: internalAPI.currentUserName,
-    );
 
     for (var room in rooms) {
       if (room.users.any((u) => u.uid == currentUserId)) {
-        await roomsAPI.removeUser(room.id!, currentUser);
+        Get.dialog(
+          AlertDialog(
+            title: I18nText('rejoinRoomDialog.title'),
+            content: I18nText('rejoinRoomDialog.content'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                  roomsAPI.removeUser(
+                    room.id!,
+                    Partecipant(
+                      uid: currentUserId,
+                      name: internalAPI.currentUserName,
+                    ),
+                  );
+                },
+                child: I18nText('rejoinRoomDialog.leave'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                  Get.toNamed(
+                    RouteGenerator.roomPageRoute,
+                    arguments: [room.id],
+                  );
+                },
+                child: I18nText('rejoinRoomDialog.ok'),
+              ),
+            ],
+          ),
+        );
       }
     }
   }
 
   @override
   void initState() {
-    // leaveAnyLeftRoom();
+    checkAnyLeftRoom();
     super.initState();
   }
 
