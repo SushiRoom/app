@@ -13,6 +13,10 @@
     "leave": "Leave",
     "ok": "Ok"
   },
+  "menuView": {
+    "title": "Menu",
+    "noMenu": "No menu loaded yet"
+  },
   "qrScan": {
     "roomFound": "Room found!",
     "roomName": "Room name: {name}",
