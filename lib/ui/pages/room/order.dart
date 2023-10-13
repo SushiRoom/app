@@ -3,10 +3,13 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:sushi_room/models/partecipant.dart';
 import 'package:sushi_room/models/plate.dart';
 import 'package:sushi_room/models/room.dart';
 import 'package:sushi_room/services/rooms_api.dart';
+import 'package:sushi_room/ui/pages/room/final_order.dart';
 import 'package:sushi_room/utils/globals.dart' as globals;
 
 class OrderPage extends StatefulWidget {
@@ -120,8 +123,58 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
           ),
         ),
         IconButton(
-          onPressed: () => roomsAPI.removePlate(room, plate),
+          onPressed: () => {
+            _focusNodes.removeAt(room.plates.indexOf(plate)),
+            roomsAPI.removePlate(room, plate),
+          },
           icon: const Icon(Icons.delete),
+        ),
+      ],
+    );
+  }
+
+  Widget panel(Room room) {
+    return Column(
+      children: [
+        const SizedBox(
+          height: 12.0,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              width: 30,
+              height: 5,
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.12),
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(12.0),
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 18.0,
+        ),
+        I18nText(
+          "roomView.finalOrderTabLabel",
+          child: const Text(
+            "",
+            style: TextStyle(
+              fontWeight: FontWeight.normal,
+              fontSize: 24.0,
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 18.0,
+        ),
+        Expanded(
+          child: FinalOrderPage(
+            room: room,
+            currentUser: widget.currentUser,
+          ),
         ),
       ],
     );
@@ -140,54 +193,82 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
     }
 
     return Scaffold(
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: userPlates.isEmpty
-              ? Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        globals.errorFaces[Random().nextInt(globals.errorFaces.length)],
-                        style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                              color: Theme.of(context).colorScheme.secondary,
+      body: Stack(
+        children: [
+          GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: userPlates.isEmpty
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            globals.errorFaces[Random().nextInt(globals.errorFaces.length)],
+                            style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                                  color: Theme.of(context).colorScheme.secondary,
+                                ),
+                          ),
+                          const SizedBox(height: 10),
+                          I18nText(
+                            'roomView.noPlatesYet',
+                            child: Text(
+                              "",
+                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    color: Theme.of(context).colorScheme.secondary,
+                                  ),
                             ),
+                          ),
+                          const SizedBox(height: 20),
+                          addingWidget(room, true)
+                        ],
                       ),
-                      const SizedBox(height: 10),
-                      I18nText(
-                        'roomView.noPlatesYet',
-                        child: Text(
-                          "",
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                color: Theme.of(context).colorScheme.secondary,
-                              ),
+                    )
+                  : ListView(
+                      key: Key(widget.currentUser.name),
+                      controller: _scrollController,
+                      children: [
+                        for (Plate plate in userPlates)
+                          plateWidget(
+                            room: room,
+                            plate: plate,
+                          ),
+                        addingWidget(
+                          room,
+                          !userPlates.any(
+                            (element) => element.number.isEmpty || element.quantity.isEmpty,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 20),
-                      addingWidget(room, true)
-                    ],
-                  ),
-                )
-              : ListView(
-                  key: Key(widget.currentUser.name),
-                  controller: _scrollController,
-                  children: [
-                    for (Plate plate in userPlates)
-                      plateWidget(
-                        room: room,
-                        plate: plate,
-                      ),
-                    addingWidget(
-                      room,
-                      !userPlates.any(
-                        (element) => element.number.isEmpty || element.quantity.isEmpty,
-                      ),
+                        const SizedBox(
+                          height: 70,
+                        )
+                      ],
                     ),
-                  ],
+            ),
+          ),
+          KeyboardVisibilityBuilder(
+            builder: (context, isKeyboardOpen) {
+              return SlidingUpPanel(
+                color: Theme.of(context).colorScheme.surface,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
                 ),
-        ),
+                maxHeight: MediaQuery.of(context).size.height * 0.8,
+                boxShadow: [
+                  BoxShadow(
+                    color: Theme.of(context).colorScheme.shadow.withOpacity(0.2),
+                    blurRadius: 10,
+                    offset: const Offset(0, -2),
+                  ),
+                ],
+                minHeight: isKeyboardOpen ? 0 : 90,
+                panel: panel(room),
+              );
+            },
+          ),
+        ],
       ),
     );
   }
