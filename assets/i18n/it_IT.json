@@ -14,8 +14,8 @@
     "ok": "Entra"
   },
   "menuView": {
-    "title": "Menu",
-    "noMenu": "No menu loaded yet"
+    "title": "Menù",
+    "noMenu": "Nessun menù caricato"
   },
   "qrScan": {
     "roomFound": "Stanza trovata!",
