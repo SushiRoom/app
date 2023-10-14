@@ -15,7 +15,9 @@
   },
   "menuView": {
     "title": "Menu",
-    "noMenu": "No menu loaded yet"
+    "noMenu": "No menu loaded yet",
+    "urlHint": "Page url",
+    "urlTitle": "Insert menu url"
   },
   "qrScan": {
     "roomFound": "Sala trobada!",
