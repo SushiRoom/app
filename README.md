@@ -40,6 +40,7 @@ It takes your orders and then merge them into one order.
 - 👥 You can have multiple user on a single device
 - 🎨 Material You design (dynamic colors, themed icon on A12+)
 - 🌐 Multi-language support
+- 🔖 Menu view in-app
 
 # Building from source
 
