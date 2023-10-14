@@ -74,11 +74,13 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
           ),
         );
 
+    List<Plate> userPlates = room.plates.where((element) => element.orderedBy.uid == widget.currentUser.uid).toList();
+
     return Row(
       children: [
         field(
           TextFormField(
-            focusNode: _focusNodes[room.plates.indexOf(plate)],
+            focusNode: _focusNodes[userPlates.indexWhere((element) => element.id == plate.id)],
             textInputAction: TextInputAction.next,
             initialValue: plate.number,
             textAlign: TextAlign.center,
@@ -124,7 +126,7 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
         ),
         IconButton(
           onPressed: () => {
-            _focusNodes.removeAt(room.plates.indexOf(plate)),
+            _focusNodes.removeAt(userPlates.indexOf(plate)),
             roomsAPI.removePlate(room, plate),
           },
           icon: const Icon(Icons.delete),
