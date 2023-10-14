@@ -36,7 +36,9 @@ dependencies:
   sliding_up_panel: ^2.0.0+1
   flutter_keyboard_visibility: ^5.4.1
   file_picker: ^6.0.0
-  syncfusion_flutter_pdfviewer: ^23.1.40
+  syncfusion_flutter_pdfviewer: ^23.1.39
+  webview_universal: ^0.0.5
+  webview_flutter: ^4.4.1
 
 dev_dependencies:
   flutter_test:
