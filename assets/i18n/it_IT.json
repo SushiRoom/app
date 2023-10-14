@@ -15,7 +15,9 @@
   },
   "menuView": {
     "title": "Menù",
-    "noMenu": "Nessun menù caricato"
+    "noMenu": "Nessun menù caricato",
+    "urlHint": "Page url",
+    "urlTitle": "Insert menu url"
   },
   "qrScan": {
     "roomFound": "Stanza trovata!",
