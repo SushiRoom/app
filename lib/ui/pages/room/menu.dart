@@ -3,8 +3,8 @@ import 'dart:math';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:sushi_room/ui/components/extended_fab.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:universal_io/io.dart';
 import 'package:sushi_room/utils/globals.dart' as globals;
 
@@ -22,6 +22,9 @@ class _MenuPageState extends State<MenuPage> with AutomaticKeepAliveClientMixin 
   bool get wantKeepAlive => true;
 
   File? menu;
+
+  bool isUrl = false;
+  String url = '';
 
   @override
   Widget build(BuildContext context) {
@@ -51,12 +54,13 @@ class _MenuPageState extends State<MenuPage> with AutomaticKeepAliveClientMixin 
                 ],
               ),
             )
-          : PDFView(
-              filePath: menu!.path,
-              enableSwipe: true,
-              autoSpacing: false,
-              pageFling: true,
-            ),
+          : !isUrl
+              ? SfPdfViewer.file(
+                  menu!,
+                )
+              : SfPdfViewer.network(
+                  menu!.path,
+                ),
       floatingActionButton: menu == null
           ? ExpandableFab(
               distance: 80,

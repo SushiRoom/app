@@ -328,7 +328,7 @@ class _RoomPageState extends State<RoomPage> {
             tabs: [
               Tab(text: FlutterI18n.translate(context, 'roomView.roomTabLabel')),
               Tab(text: FlutterI18n.translate(context, 'roomView.orderTabLabel')),
-              Tab(text: FlutterI18n.translate(context, 'Menu')),
+              Tab(text: FlutterI18n.translate(context, 'menuView.title')),
             ],
           ),
           actions: !passwordNeeded
