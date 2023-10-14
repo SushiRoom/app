@@ -7,6 +7,18 @@
   "confirm": "Confirmar",
   "loading": "Carregant...",
   "ok": "Ok",
+  "rejoinRoomDialog": {
+    "title": "Rejoin Room",
+    "content": "Seems like you are in a room already, do you want to rejoin it?",
+    "leave": "Leave",
+    "ok": "Ok"
+  },
+  "menuView": {
+    "title": "Menu",
+    "noMenu": "No menu loaded yet",
+    "urlHint": "Page url",
+    "urlTitle": "Insert menu url"
+  },
   "qrScan": {
     "roomFound": "Sala trobada!",
     "roomName": "Nom de la sala: {name}",
