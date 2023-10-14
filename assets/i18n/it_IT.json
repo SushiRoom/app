@@ -13,6 +13,12 @@
     "leave": "Esci",
     "ok": "Entra"
   },
+  "menuView": {
+    "title": "Menù",
+    "noMenu": "Nessun menù caricato",
+    "urlHint": "Url pagina",
+    "urlTitle": "Inserisci l'url del menù"
+  },
   "qrScan": {
     "roomFound": "Stanza trovata!",
     "roomName": "Nome stanza: {name}",
