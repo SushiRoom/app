@@ -1,3 +1,5 @@
+// https://docs.flutter.dev/cookbook/effects/expandable-fab
+
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -131,6 +133,7 @@ class _ExpandableFabState extends State<ExpandableFab> with SingleTickerProvider
           curve: const Interval(0.25, 1.0, curve: Curves.easeInOut),
           duration: const Duration(milliseconds: 250),
           child: FloatingActionButton(
+            heroTag: UniqueKey(),
             onPressed: _toggle,
             child: const Icon(Icons.add),
           ),

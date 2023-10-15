@@ -283,6 +283,7 @@ class _JoinPageState extends State<JoinPage> {
       useRootNavigator: true,
       closedBuilder: (context, openContainer) {
         return FloatingActionButton(
+          heroTag: UniqueKey(),
           onPressed: openContainer,
           child: const Icon(Icons.qr_code_rounded),
         );

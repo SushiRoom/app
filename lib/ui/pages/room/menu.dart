@@ -212,6 +212,7 @@ class _MenuPageState extends State<MenuPage> with AutomaticKeepAliveClientMixin 
               ],
             )
           : FloatingActionButton(
+              heroTag: UniqueKey(),
               onPressed: () {
                 menu = null;
                 isUrl = false;

@@ -189,6 +189,7 @@ class _RoomLandingState extends State<RoomLanding> with AutomaticKeepAliveClient
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: UniqueKey(),
         onPressed: () => {
           showModalBottomSheet<void>(
             context: context,

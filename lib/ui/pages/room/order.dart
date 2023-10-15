@@ -75,7 +75,6 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
         );
 
     List<Plate> userPlates = room.plates.where((element) => element.orderedBy.uid == widget.currentUser.uid).toList();
-
     return Row(
       children: [
         field(
@@ -125,9 +124,9 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
           ),
         ),
         IconButton(
-          onPressed: () => {
-            _focusNodes.removeAt(userPlates.indexOf(plate)),
-            roomsAPI.removePlate(room, plate),
+          onPressed: () {
+            _focusNodes.removeLast();
+            roomsAPI.removePlate(room, plate);
           },
           icon: const Icon(Icons.delete),
         ),
@@ -254,17 +253,18 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
               return SlidingUpPanel(
                 color: Theme.of(context).colorScheme.surface,
                 borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
+                  topLeft: Radius.circular(40),
+                  topRight: Radius.circular(40),
                 ),
-                maxHeight: MediaQuery.of(context).size.height * 0.8,
                 boxShadow: [
                   BoxShadow(
-                    color: Theme.of(context).colorScheme.shadow.withOpacity(0.2),
-                    blurRadius: 10,
-                    offset: const Offset(0, -2),
+                    color: Theme.of(context).colorScheme.shadow.withOpacity(0.15),
+                    blurRadius: 15.0,
+                    spreadRadius: 6.0,
+                    offset: const Offset(0.0, -10.0),
                   ),
                 ],
+                maxHeight: MediaQuery.of(context).size.height * 0.9,
                 minHeight: isKeyboardOpen ? 0 : 90,
                 panel: panel(room),
               );
