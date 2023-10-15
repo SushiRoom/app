@@ -293,6 +293,28 @@ class _RoomPageState extends State<RoomPage> {
     );
   }
 
+// added bar with icon, but it sucks so I commented it out, maybe we can use it later
+  // Widget customTab(String text, Widget icon) {
+  //   return Padding(
+  //     padding: const EdgeInsets.only(bottom: 8.0),
+  //     child: Row(
+  //       mainAxisSize: MainAxisSize.min,
+  //       mainAxisAlignment: MainAxisAlignment.start,
+  //       children: [
+  //         icon,
+  //         const SizedBox(width: 5),
+  //         Text(
+  //           text,
+  //           style: const TextStyle(
+  //             fontWeight: FontWeight.normal,
+  //             fontSize: 16,
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
