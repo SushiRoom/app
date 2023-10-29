@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
@@ -167,7 +168,9 @@ class _RoomLandingState extends State<RoomLanding> with AutomaticKeepAliveClient
                                 ? const Icon(
                                     Icons.star_rounded,
                                   )
-                                : (user.uid != widget.currentUser.uid)
+                                : user.uid != FirebaseAuth.instance.currentUser!.uid &&
+                                        room.creator == FirebaseAuth.instance.currentUser!.uid &&
+                                        user.parent == null
                                     ? InkWell(
                                         onTap: () {
                                           _roomsAPI.removeUser(
