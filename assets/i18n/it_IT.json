@@ -89,7 +89,7 @@
     "locationPermissionErrorDescription": "Clicca per chiedere i permessi",
     "locationPermissionErrorBtnText": "Chiedi",
     "roomFormNameLabel": "Nome stanza",
-    "roomFormLocationSwitch": "Utilizza localizzazione",
+    "roomFormLocationSwitch": "Localizzazione",
     "roomFormPwdSwitch": "Password",
     "roomFormPwdLabel": "Password",
     "roomFormCreateBtn": "Crea"
