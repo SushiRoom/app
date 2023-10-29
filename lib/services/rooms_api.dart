@@ -65,10 +65,10 @@ class RoomsAPI {
     Room room = await getRoom(roomId);
 
     if (!room.users.any((element) => element.uid == user.uid)) return;
-    if (room.users.length > 1) {
-      room.users.removeWhere((u) => u.uid == user.uid);
+    if (room.users.where((e) => e.parent == null).length > 1) {
+      room.users.removeWhere((u) => u.uid == user.uid || u.parent?.uid == user.uid);
       if (user.uid == room.creator) room.creator = room.users[Random().nextInt(room.users.length)].uid.toString();
-      room.plates.removeWhere((p) => p.orderedBy.uid == user.uid);
+      room.plates.removeWhere((p) => p.orderedBy.uid == user.uid || p.orderedBy.parent?.uid == user.uid);
 
       await updateRoom(room);
     } else {
