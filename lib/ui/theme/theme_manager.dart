@@ -78,8 +78,10 @@ class _DynamicThemeBuilderState extends State<DynamicThemeBuilder> {
                     GlobalWidgetsLocalizations.delegate,
                   ],
                   supportedLocales: const [
-                    Locale('en', 'US'),
-                    Locale('it', 'IT'),
+                    Locale('en', 'US'), // 🇺🇸
+                    Locale('it', 'IT'), // 🇮🇹
+                    Locale('ru', 'RU'), // 🇷🇺
+                    Locale('ro', 'RO'), // 🇷🇴
                   ],
                 ),
               )
