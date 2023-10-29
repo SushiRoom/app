@@ -67,8 +67,12 @@ class RoomsAPI {
     if (!room.users.any((element) => element.uid == user.uid)) return;
     if (room.users.where((e) => e.parent == null).length > 1) {
       room.users.removeWhere((u) => u.uid == user.uid || u.parent?.uid == user.uid);
-      if (user.uid == room.creator) room.creator = room.users[Random().nextInt(room.users.length)].uid.toString();
       room.plates.removeWhere((p) => p.orderedBy.uid == user.uid || p.orderedBy.parent?.uid == user.uid);
+
+      if (user.uid == room.creator) {
+        var noChildUser = room.users.where((u) => u.parent == null).toList();
+        room.creator = noChildUser[Random().nextInt(noChildUser.length)].uid!;
+      }
 
       await updateRoom(room);
     } else {
