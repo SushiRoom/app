@@ -14,8 +14,8 @@
     "ok": "Ok"
   },
   "menuView": {
-    "title": "Menu",
-    "noMenu": "No menu loaded yet",
+    "title": "Meniu",
+    "noMenu": "Nici un meniu încărcat încă",
     "urlHint": "Page url",
     "urlTitle": "Insert menu url"
   },
