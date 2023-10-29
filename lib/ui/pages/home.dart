@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
@@ -26,7 +28,7 @@ class _HomePageState extends State<HomePage> {
   RoomsAPI roomsAPI = RoomsAPI();
 
   bool isOffline = true;
-  var listener;
+  late StreamSubscription<InternetStatus> listener;
 
   checkAnyLeftRoom() async {
     List<Room> rooms;
