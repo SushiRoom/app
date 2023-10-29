@@ -1,12 +1,23 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_fancy_tree_view/flutter_fancy_tree_view.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:get/get.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:sushi_room/models/partecipant.dart';
 import 'package:sushi_room/models/room.dart';
 import 'package:sushi_room/services/rooms_api.dart';
+
+class UserList {
+  const UserList({
+    required this.user,
+    this.children = const <UserList>[],
+  });
+
+  final Partecipant user;
+  final List<UserList> children;
+}
 
 class RoomLanding extends StatefulWidget {
   final Partecipant currentUser;
@@ -82,6 +93,26 @@ class _RoomLandingState extends State<RoomLanding> with AutomaticKeepAliveClient
     super.build(context);
     Room room = widget.room;
 
+    List<UserList> users = room.users
+        .where((element) => element.parent == null)
+        .map(
+          (e) => UserList(
+            user: e,
+            children: room.users
+                .where((user) => user.parent?.uid == e.uid)
+                .map(
+                  (u) => UserList(user: u),
+                )
+                .toList(),
+          ),
+        )
+        .toList();
+
+    var treeController = TreeController<UserList>(
+      roots: users,
+      childrenProvider: (UserList node) => node.children,
+    )..expandAll();
+
     return Scaffold(
       body: Column(
         children: [
@@ -142,11 +173,11 @@ class _RoomLandingState extends State<RoomLanding> with AutomaticKeepAliveClient
               Card(
                 elevation: 1,
                 child: SizedBox(
-                  height: 300,
-                  width: 350,
+                  height: MediaQuery.of(context).size.height / 1.8,
+                  width: MediaQuery.of(context).size.width / 1.1,
                   child: Padding(
                     padding: const EdgeInsets.all(10),
-                    child: ListView(
+                    child: Column(
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(5.0),
@@ -160,28 +191,38 @@ class _RoomLandingState extends State<RoomLanding> with AutomaticKeepAliveClient
                             ),
                           ),
                         ),
-                        for (var user in room.users)
-                          ListTile(
-                            leading: const Icon(Icons.person),
-                            title: Text(user.name),
-                            trailing: user.uid == room.creator
-                                ? const Icon(
-                                    Icons.star_rounded,
-                                  )
-                                : user.uid != FirebaseAuth.instance.currentUser!.uid &&
-                                        room.creator == FirebaseAuth.instance.currentUser!.uid &&
-                                        user.parent == null
-                                    ? InkWell(
-                                        onTap: () {
-                                          _roomsAPI.removeUser(
-                                            widget.room.id!,
-                                            user,
-                                          );
-                                        },
-                                        child: const Icon(Icons.close),
-                                      )
-                                    : null,
+                        Expanded(
+                          child: TreeView(
+                            treeController: treeController,
+                            nodeBuilder: (BuildContext context, TreeEntry<UserList> entry) {
+                              return TreeIndentation(
+                                entry: entry,
+                                guide: const IndentGuide.connectingLines(indent: 50),
+                                child: ListTile(
+                                  leading: const Icon(Icons.person),
+                                  title: Text(entry.node.user.name),
+                                  trailing: entry.node.user.uid == room.creator
+                                      ? const Icon(
+                                          Icons.star_rounded,
+                                        )
+                                      : entry.node.user.uid != FirebaseAuth.instance.currentUser!.uid &&
+                                              room.creator == FirebaseAuth.instance.currentUser!.uid &&
+                                              entry.node.user.parent == null
+                                          ? InkWell(
+                                              onTap: () {
+                                                _roomsAPI.removeUser(
+                                                  widget.room.id!,
+                                                  entry.node.user,
+                                                );
+                                              },
+                                              child: const Icon(Icons.close),
+                                            )
+                                          : null,
+                                ),
+                              );
+                            },
                           ),
+                        )
                       ],
                     ),
                   ),
