@@ -106,7 +106,7 @@ class _RoomPageState extends State<RoomPage> {
                 onPressed: () {
                   if (password == room.password) {
                     Get.back();
-                    addCurrentUser(widget.roomId);
+                    addCurrentUser(room);
                     setState(() {
                       passwordNeeded = false;
                     });
@@ -130,7 +130,7 @@ class _RoomPageState extends State<RoomPage> {
         barrierDismissible: false,
       );
     } else {
-      addCurrentUser(widget.roomId, wasAlreadyIn: wasAlreadyIn);
+      addCurrentUser(room, wasAlreadyIn: wasAlreadyIn);
     }
   }
 
@@ -144,7 +144,7 @@ class _RoomPageState extends State<RoomPage> {
   }
 
   addCurrentUser(
-    roomId, {
+    Room room, {
     bool wasAlreadyIn = false,
   }) async {
     String uid = FirebaseAuth.instance.currentUser!.uid;
@@ -156,7 +156,11 @@ class _RoomPageState extends State<RoomPage> {
     );
 
     localUsers.add(user);
-    if (!wasAlreadyIn) await roomsAPI.addUser(roomId, user);
+    if (wasAlreadyIn) {
+      localUsers.addAll(room.users.where((element) => element.parent?.uid == uid));
+    } else {
+      await roomsAPI.addUser(room.id!, user);
+    }
   }
 
   Widget customDialog() {
@@ -239,7 +243,7 @@ class _RoomPageState extends State<RoomPage> {
                 onPressed: localUsers.any((element) => element.name.isEmpty)
                     ? null
                     : () {
-                        Partecipant newUser = Partecipant(name: "");
+                        Partecipant newUser = Partecipant(name: "", parent: localUsers.first);
                         localUsers.add(newUser);
                         roomsAPI.addUser(widget.roomId, newUser);
                         localSetState(() {});
