@@ -14,10 +14,10 @@
     "ok": "Ок"
   },
   "menuView": {
-    "title": "Menu",
-    "noMenu": "No menu loaded yet",
-    "urlHint": "Page url",
-    "urlTitle": "Insert menu url"
+    "title": "Меню",
+    "noMenu": "Меню еще не загружено",
+    "urlHint": "Url страницы",
+    "urlTitle": "Вставить url меню"
   },
   "qrScan": {
     "roomFound": "Комната найдена!",
