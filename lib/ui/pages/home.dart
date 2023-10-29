@@ -6,6 +6,7 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:sushi_room/models/partecipant.dart';
 import 'package:sushi_room/models/room.dart';
 import 'package:sushi_room/services/internal_api.dart';
@@ -23,6 +24,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   InternalAPI internalAPI = Get.find<InternalAPI>();
   RoomsAPI roomsAPI = RoomsAPI();
+
+  bool isOffline = true;
+  var listener;
 
   checkAnyLeftRoom() async {
     List<Room> rooms;
@@ -72,10 +76,32 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  setUpListener() {
+    listener = InternetConnection().onStatusChange.listen((InternetStatus status) {
+      switch (status) {
+        case InternetStatus.connected:
+          isOffline = false;
+          break;
+        case InternetStatus.disconnected:
+          isOffline = true;
+          break;
+      }
+      setState(() {});
+    });
+  }
+
   @override
   void initState() {
+    setUpListener();
+
     checkAnyLeftRoom();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    listener.cancel();
+    super.dispose();
   }
 
   Widget drawer() {
@@ -250,16 +276,20 @@ class _HomePageState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
-                    onPressed: () {
-                      Get.toNamed(RouteGenerator.joinPageRoute);
-                    },
+                    onPressed: !isOffline
+                        ? () {
+                            Get.toNamed(RouteGenerator.joinPageRoute);
+                          }
+                        : null,
                     child: I18nText("joinRoomLabel"),
                   ),
                   const SizedBox(width: 10),
                   FilledButton(
-                    onPressed: () {
-                      Get.toNamed(RouteGenerator.createPageRoute);
-                    },
+                    onPressed: !isOffline
+                        ? () {
+                            Get.toNamed(RouteGenerator.createPageRoute);
+                          }
+                        : null,
                     child: I18nText("createRoomLabel"),
                   ),
                 ],

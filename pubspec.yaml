@@ -28,6 +28,7 @@ dependencies:
   fluttertoast: ^8.2.2
   get: ^4.6.6
   google_fonts: ^6.0.0
+  internet_connection_checker_plus: ^2.1.0
   location: ^5.0.3
   mobile_scanner: ^3.4.1
   permission_handler: ^11.0.0
