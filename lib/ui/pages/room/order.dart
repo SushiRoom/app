@@ -256,15 +256,7 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
                   topLeft: Radius.circular(40),
                   topRight: Radius.circular(40),
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Theme.of(context).colorScheme.shadow.withOpacity(0.15),
-                    blurRadius: 15.0,
-                    spreadRadius: 6.0,
-                    offset: const Offset(0.0, -10.0),
-                  ),
-                ],
-                maxHeight: MediaQuery.of(context).size.height * 0.9,
+                maxHeight: MediaQuery.of(context).size.height * 0.815,
                 minHeight: isKeyboardOpen ? 0 : 90,
                 panel: panel(room),
               );
