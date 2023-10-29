@@ -80,7 +80,7 @@ class _FinalOrderPageState extends State<FinalOrderPage> with AutomaticKeepAlive
                             children: [
                               for (var plate in room.plates.where((plate) => plate.number == plateNumber).take(2))
                                 CircleAvatar(
-                                  child: Text(plate.orderedBy.name[0]),
+                                  child: Text(plate.orderedBy.name[0].toUpperCase()),
                                 ),
                             ],
                           ),
