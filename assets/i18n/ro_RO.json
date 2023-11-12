@@ -16,7 +16,7 @@
   "menuView": {
     "title": "Meniu",
     "noMenu": "Nici un meniu încărcat încă",
-    "urlHint": "Page url",
+    "urlHint": "Url-ul paginii",
     "urlTitle": "Insert menu url"
   },
   "qrScan": {
@@ -93,5 +93,10 @@
     "roomFormPwdSwitch": "Parolă",
     "roomFormPwdLabel": "Parolă",
     "roomFormCreateBtn": "Creează"
+  },
+  "updateDialog": {
+    "title": "New update available!",
+    "downloadingUpdate": "Downloading...",
+    "updateBtn": "Update"
   }
 }

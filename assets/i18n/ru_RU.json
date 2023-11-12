@@ -93,5 +93,10 @@
     "roomFormPwdSwitch": "Пароль",
     "roomFormPwdLabel": "Пароль",
     "roomFormCreateBtn": "Создать"
+  },
+  "updateDialog": {
+    "title": "New update available!",
+    "downloadingUpdate": "Downloading...",
+    "updateBtn": "Update"
   }
 }
