@@ -95,8 +95,8 @@
     "roomFormCreateBtn": "Crea"
   },
   "updateDialog": {
-    "title": "New update available!",
-    "downloadingUpdate": "Downloading...",
-    "updateBtn": "Update"
+    "title": "Nuovo aggiornamento disponibile!",
+    "downloadingUpdate": "Download in corso...",
+    "updateBtn": "Aggiorna"
   }
 }
