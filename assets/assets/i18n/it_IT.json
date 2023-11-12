@@ -89,9 +89,14 @@
     "locationPermissionErrorDescription": "Clicca per chiedere i permessi",
     "locationPermissionErrorBtnText": "Chiedi",
     "roomFormNameLabel": "Nome stanza",
-    "roomFormLocationSwitch": "Utilizza localizzazione",
+    "roomFormLocationSwitch": "Localizzazione",
     "roomFormPwdSwitch": "Password",
     "roomFormPwdLabel": "Password",
     "roomFormCreateBtn": "Crea"
+  },
+  "updateDialog": {
+    "title": "Nuovo aggiornamento disponibile!",
+    "downloadingUpdate": "Download in corso...",
+    "updateBtn": "Aggiorna"
   }
 }
