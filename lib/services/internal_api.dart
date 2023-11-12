@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:universal_io/io.dart';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -8,9 +9,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sushi_room/utils/globals.dart' as globals;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:app_settings/app_settings.dart';
+import 'package:http/http.dart' as http;
+import 'package:html/parser.dart';
 
 class InternalAPI {
   late SharedPreferences prefs;
+  static String repoLink = "https://github.com/SushiRoom/app";
 
   Future<void> init() async {
     prefs = await SharedPreferences.getInstance();
@@ -97,5 +101,34 @@ class InternalAPI {
       colorText: Theme.of(context).colorScheme.onError,
       backgroundColor: Theme.of(context).colorScheme.error,
     );
+  }
+
+  Future<String> getVersion() async {
+    final PackageInfo info = await PackageInfo.fromPlatform();
+    return info.version;
+  }
+
+  Future<String> getLatestVersion() async {
+    var url = Uri.parse(
+      "$repoLink/releases/latest",
+    );
+
+    try {
+      var response = await http.get(url);
+      var document = parse(response.body);
+      var release = document.getElementsByTagName('h1').firstWhere((element) => element.text.startsWith("Release"));
+      var version = release.text.replaceAll("Release ", "");
+
+      return version;
+    } catch (e) {
+      return "";
+    }
+  }
+
+  Future<String> getLatestVersionUrl() async {
+    String version = await getLatestVersion();
+    String url = "$repoLink/releases/download/$version/app-release.apk";
+
+    return url;
   }
 }

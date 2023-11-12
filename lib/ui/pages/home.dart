@@ -14,6 +14,8 @@ import 'package:sushi_room/models/room.dart';
 import 'package:sushi_room/services/internal_api.dart';
 import 'package:sushi_room/services/rooms_api.dart';
 import 'package:sushi_room/services/routes.dart';
+import 'package:sushi_room/ui/components/update.dart';
+import 'package:universal_io/io.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
@@ -92,11 +94,33 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  checkForUpdate(_) async {
+    if (!Platform.isAndroid) return;
+
+    String latest = await internalAPI.getLatestVersion();
+    String current = await internalAPI.getVersion();
+
+    debugPrint("$latest $current");
+    if (latest != "" && latest != current) {
+      // ignore: use_build_context_synchronously
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => OtaSheet(
+            version: latest,
+          ),
+          fullscreenDialog: true,
+        ),
+      );
+    }
+  }
+
   @override
   void initState() {
     setUpListener();
 
     checkAnyLeftRoom();
+    WidgetsBinding.instance.addPostFrameCallback(checkForUpdate);
     super.initState();
   }
 
