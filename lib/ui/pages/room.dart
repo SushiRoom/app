@@ -46,7 +46,7 @@ class _RoomPageState extends State<RoomPage> {
   void dispose() {
     if (!passwordNeeded) {
       for (var element in localUsers) {
-        removeUser(widget.roomId, element.uid);
+        removeUser(widget.roomId, element);
       }
     }
 
@@ -134,12 +134,7 @@ class _RoomPageState extends State<RoomPage> {
     }
   }
 
-  removeUser(roomId, userId) async {
-    Partecipant user = Partecipant(
-      uid: userId,
-      name: "",
-    );
-
+  removeUser(String roomId, Partecipant user) async {
     await roomsAPI.removeUser(roomId, user);
   }
 
@@ -218,7 +213,7 @@ class _RoomPageState extends State<RoomPage> {
                                 if (user.uid == localUsers[currentUser].uid) {
                                   currentUser = 0;
                                 }
-                                removeUser(widget.roomId, user.uid);
+                                removeUser(widget.roomId, user);
                                 localUsers.remove(user);
                                 localSetState(() {});
                               }
@@ -370,7 +365,7 @@ class _RoomPageState extends State<RoomPage> {
             ? StreamBuilder(
                 stream: FirebaseDatabase.instance.ref().child('rooms').child(widget.roomId).onValue,
                 builder: (context, snapshot) {
-                  if (snapshot.hasData) {
+                  if (snapshot.hasData && snapshot.data!.snapshot.value != null) {
                     Map<String, dynamic> roomData = (snapshot.data!.snapshot.value as Map).cast<String, dynamic>();
                     Room room = Room.fromJson(roomData);
 

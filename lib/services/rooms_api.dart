@@ -26,8 +26,9 @@ class RoomsAPI {
 
   Future<Room> getRoom(String roomId) async {
     DataSnapshot snapshot = await _roomsRef.child(roomId).get();
-    Map<String, dynamic> roomData = (snapshot.value as Map).cast<String, dynamic>();
+    if (!snapshot.exists) throw Exception('Room not found');
 
+    Map<String, dynamic> roomData = (snapshot.value as Map).cast<String, dynamic>();
     try {
       return Room.fromJson(roomData);
     } catch (e) {
@@ -65,7 +66,7 @@ class RoomsAPI {
     Room room = await getRoom(roomId);
 
     if (!room.users.any((element) => element.uid == user.uid)) return;
-    if (room.users.where((e) => e.parent == null).length > 1) {
+    if (room.users.where((e) => e.parent == null).length > 1 || user.parent != null) {
       room.users.removeWhere((u) => u.uid == user.uid || u.parent?.uid == user.uid);
       room.plates.removeWhere((p) => p.orderedBy.uid == user.uid || p.orderedBy.parent?.uid == user.uid);
 
