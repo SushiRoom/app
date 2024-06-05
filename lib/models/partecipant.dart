@@ -21,7 +21,7 @@ class Partecipant {
     return {
       'uid': uid,
       'name': name,
-      'parent': parent != null ? parent!.toJson() : null,
+      'parent': parent?.toJson(),
     };
   }
 }

@@ -6,16 +6,11 @@ class FloatingText extends AnimatedText {
   late AnimationController _controller;
 
   FloatingText({
-    required String text,
-    TextAlign textAlign = TextAlign.start,
-    TextStyle? textStyle,
-    Duration duration = const Duration(milliseconds: 2500),
-  }) : super(
-          text: text,
-          textAlign: textAlign,
-          textStyle: textStyle,
-          duration: duration,
-        );
+    required super.text,
+    super.textAlign,
+    super.textStyle,
+    super.duration = const Duration(milliseconds: 2500),
+  });
 
   @override
   void initAnimation(AnimationController controller) {

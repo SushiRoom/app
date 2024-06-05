@@ -10,11 +10,11 @@ class BouncingDVD extends StatefulWidget {
   final double width;
 
   const BouncingDVD({
-    Key? key,
+    super.key,
     required this.text,
     required this.height,
     required this.width,
-  }) : super(key: key);
+  });
 
   @override
   State<BouncingDVD> createState() => _BouncingDVDState();
