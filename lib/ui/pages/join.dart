@@ -163,7 +163,7 @@ class _JoinPageState extends State<JoinPage> {
                           2,
                         ),
                   );
-                  return distance <= 0.5;
+                  return distance < 0.1;
                 }
                 return false;
               });
