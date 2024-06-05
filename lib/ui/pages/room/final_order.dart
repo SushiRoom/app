@@ -111,7 +111,7 @@ class _FinalOrderPageState extends State<FinalOrderPage> with AutomaticKeepAlive
                           ],
                         ),
                       ),
-                      middleColor: Theme. of(context).colorScheme.surface,
+                      middleColor: Theme.of(context).colorScheme.surface,
                       closedColor: Theme.of(context).colorScheme.surface,
                       openColor: Theme.of(context).colorScheme.surface,
                     ),

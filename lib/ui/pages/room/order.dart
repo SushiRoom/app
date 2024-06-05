@@ -69,7 +69,10 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
     Widget field(Widget child) => Flexible(
           child: Card(
             child: Center(
-              child: child,
+              child: Padding(
+                padding: const EdgeInsets.all(4),
+                child: child,
+              ),
             ),
           ),
         );
