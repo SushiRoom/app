@@ -14,11 +14,15 @@
     This is a placeholder for base href that will be replaced by the value of
     the `--base-href` argument provided to `flutter build`.
   -->
+    <link rel="preload" href="style.css" as="style" />
+    <link rel="stylesheet" href="style.css" />
+
     <base href="$FLUTTER_BASE_HREF" />
 
     <meta charset="UTF-8" />
     <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
     <meta name="description" content="SushiRoom App" />
+    <meta flt-viewport="" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
     <!-- iOS meta tags & icons -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -36,28 +40,41 @@
       src="https://unpkg.com/@zxing/library@0.19.1"
       type="application/javascript"
     ></script>
-
-    <script>
-      // The value below is injected by flutter build, do not touch.
-      const serviceWorkerVersion = null;
-    </script>
-    <!-- This script adds the flutter initialization JS code -->
-    <script src="flutter.js" defer></script>
   </head>
   <body>
-    <script>
-      window.addEventListener("load", function (ev) {
-        // Download main.dart.js
-        _flutter.loader.loadEntrypoint({
-          serviceWorker: {
-            serviceWorkerVersion: serviceWorkerVersion,
-          },
-          onEntrypointLoaded: function (engineInitializer) {
-            engineInitializer.initializeEngine().then(function (appRunner) {
-              appRunner.runApp();
-            });
-          },
-        });
+
+    <h1 class="progress-text">◕_◕</h1>
+    <div class="progress">
+      <div class="progress-value"></div>
+    </div>
+
+    <script defer>
+      const progress = document.querySelector(".progress-value");
+      const progressBar = document.querySelector(".progress");
+      const progressText = document.querySelector(".progress-text");
+
+      
+      {{flutter_js}}
+      {{flutter_build_config}}
+      
+      const random = Math.floor(Math.random() * 33) + 10;
+      progress.style.width = `${random}%`;
+      
+      _flutter.loader.load({
+        onEntrypointLoaded: async function (engineInitializer) {
+          progress.style.width = `66%`;
+          
+          const appRunner = await engineInitializer.initializeEngine();
+
+          progress.style.width = `99%`;
+          await new Promise((resolve) => setTimeout(resolve, 500));
+          progressBar.style.opacity = 0;
+          progressText.style.opacity = 0;
+
+          await appRunner.runApp();
+
+          document.querySelector("flutter-view").classList.add("fade-in");
+        },
       });
     </script>
   </body>

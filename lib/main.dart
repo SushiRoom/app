@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:universal_io/io.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -9,7 +10,7 @@ import 'package:sushi_room/ui/theme/theme_manager.dart';
 import 'package:sushi_room/firebase_options.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();  
 
   InternalAPI internalAPI = InternalAPI();
   await internalAPI.init();
@@ -23,7 +24,7 @@ void main() async {
   );
 
   await Firebase.initializeApp(
-    name: Platform.isIOS ? "SushiRoom" : null,
+    name: (Platform.isIOS && !kIsWeb) ? "SushiRoom" : null,
     options: DefaultFirebaseOptions.currentPlatform,
   );
 

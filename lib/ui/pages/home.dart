@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
@@ -95,7 +96,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   checkForUpdate(_) async {
-    if (!Platform.isAndroid) return;
+    if (!Platform.isAndroid || kIsWeb) return;
 
     String latest = await internalAPI.getLatestVersion();
     String current = await internalAPI.getVersion();
@@ -103,7 +104,7 @@ class _HomePageState extends State<HomePage> {
     debugPrint("$latest $current");
     if (latest != "" && latest != current) {
       Navigator.push(
-      // ignore: use_build_context_synchronously
+        // ignore: use_build_context_synchronously
         context,
         MaterialPageRoute(
           builder: (context) => OtaSheet(

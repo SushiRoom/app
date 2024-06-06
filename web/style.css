@@ -1,0 +1,64 @@
+body,
+html {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+
+/* Styles for the body element */
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100%;
+  background: #1a110e;
+  flex-direction: column;
+}
+
+.progress {
+  background: #231a16;
+  justify-content: flex-start;
+  border-radius: 100px;
+  align-items: center;
+  position: relative;
+  padding: 0 5px;
+  display: flex;
+  height: 25px;
+  width: 70%;
+  transition: opacity 0.25s ease-out;
+}
+
+.progress-value {
+  transition: width 0.5s;
+  box-shadow: 0 10px 40px -10px #fff;
+  border-radius: 100px;
+  background: #ffb59b;
+  height: 20px;
+  width: 0;
+}
+
+.progress-text {
+  color: #ffb59b;
+  transition: opacity 0.25s ease-out;
+  font-size: 5em;
+  margin: 0 0 20px 0;
+}
+
+/* CSS for a fade-in animation */
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 1s ease-in-out forwards;
+}
+
+/* Keyframes for the fadeIn animation */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  60% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
