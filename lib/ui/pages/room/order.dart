@@ -65,6 +65,7 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
   Widget plateWidget({
     required Room room,
     required Plate plate,
+    required List<Plate> userPlates,
   }) {
     Widget field(Widget child) => Flexible(
           child: Card(
@@ -77,11 +78,12 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
           ),
         );
 
-    List<Plate> userPlates = room.plates.where((element) => element.orderedBy.uid == widget.currentUser.uid).toList();
     return Row(
+      key: Key("${plate.id!}_row"),
       children: [
         field(
           TextFormField(
+            key: Key("${plate.id!}_num"),
             focusNode: _focusNodes[userPlates.indexWhere((element) => element.id == plate.id)],
             textInputAction: TextInputAction.next,
             initialValue: plate.number,
@@ -104,6 +106,7 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
         ),
         field(
           TextFormField(
+            key: Key("${plate.id!}_qty"),
             keyboardType: TextInputType.number,
             initialValue: plate.quantity,
             textAlign: TextAlign.center,
@@ -190,6 +193,8 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
 
     Room room = widget.room;
     List<Plate> userPlates = room.plates.where((element) => element.orderedBy.uid == widget.currentUser.uid).toList();
+    userPlates.sort((a, b) => a.id!.compareTo(b.id!));
+
     if (userPlates.length > _focusNodes.length) {
       for (int i = _focusNodes.length; i < userPlates.length; i++) {
         _focusNodes.add(FocusNode());
@@ -237,6 +242,7 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
                           plateWidget(
                             room: room,
                             plate: plate,
+                            userPlates: userPlates,
                           ),
                         addingWidget(
                           room,
