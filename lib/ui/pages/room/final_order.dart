@@ -94,6 +94,15 @@ class _FinalOrderPageState extends State<FinalOrderPage> with AutomaticKeepAlive
                               "number": plateNumber,
                             },
                           ),
+                          leading: IconButton(
+                            icon: const Icon(Icons.arrow_back),
+                            onPressed: () {
+                              action();
+
+                              // for some reason the keyboard will open when closing the container.
+                              FocusScope.of(context).unfocus();
+                            },
+                          ),
                         ),
                         body: ListView(
                           children: [
