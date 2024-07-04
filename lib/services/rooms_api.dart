@@ -55,10 +55,7 @@ class RoomsAPI {
   Future<Partecipant> addUser(String roomId, Partecipant user) async {
     user.uid ??= _roomsRef.push().key;
 
-    Room room = await getRoom(roomId);
-    room.users.add(user);
-
-    await updateRoom(room);
+    _roomsRef.child(roomId).child('users').child(user.uid!).set(user.toJson());
     return user;
   }
 
@@ -67,41 +64,42 @@ class RoomsAPI {
 
     if (!room.users.any((element) => element.uid == user.uid)) return;
     if (room.users.where((e) => e.parent == null).length > 1 || user.parent != null) {
-      room.users.removeWhere((u) => u.uid == user.uid || u.parent?.uid == user.uid);
-      room.plates.removeWhere((p) => p.orderedBy.uid == user.uid || p.orderedBy.parent?.uid == user.uid);
+      room.users.where((u) => u.uid == user.uid || u.parent?.uid == user.uid).forEach(
+        (e) {
+          _roomsRef.child(roomId).child('users').child(e.uid!).remove();
+        },
+      );
+      room.plates.where((p) => p.orderedBy.uid == user.uid || p.orderedBy.parent?.uid == user.uid).forEach(
+        (e) {
+          _roomsRef.child(roomId).child('plates').child(e.id!).remove();
+        },
+      );
 
       if (user.uid == room.creator) {
         var noChildUser = room.users.where((u) => u.parent == null).toList();
-        room.creator = noChildUser[Random().nextInt(noChildUser.length)].uid!;
-      }
+        var randomUser = noChildUser[Random().nextInt(noChildUser.length)];
 
-      await updateRoom(room);
+        _roomsRef.child(roomId).update({'creator': randomUser.uid});
+      }
     } else {
       await deleteRoom(room.id!);
     }
   }
 
   Future<void> updateUser(String roomId, Partecipant user) async {
-    Room room = await getRoom(roomId);
-
-    room.users[room.users.indexWhere((u) => u.uid == user.uid)] = user;
-    await updateRoom(room);
+    _roomsRef.child(roomId).child('users').child(user.uid!).update(user.toJson());
   }
 
   Future<void> addPlate(Room room, Plate plate) async {
-    plate.id ??= _roomsRef.push().key;
-
-    room.plates.add(plate);
-    await updateRoom(room);
+    plate.id ??= _roomsRef.child(room.id!).child('plates').push().key;
+    _roomsRef.child(room.id!).child('plates').child(plate.id!).set(plate.toJson());
   }
 
   Future<void> removePlate(Room room, Plate plate) async {
-    room.plates.removeWhere((p) => p.id == plate.id);
-    await updateRoom(room);
+    _roomsRef.child(room.id!).child('plates').child(plate.id!).remove();
   }
 
   Future<void> updatePlate(Room room, Plate plate) async {
-    room.plates[room.plates.indexWhere((p) => p.id == plate.id)] = plate;
-    await updateRoom(room);
+    _roomsRef.child(room.id!).child('plates').child(plate.id!).update(plate.toJson());
   }
 }

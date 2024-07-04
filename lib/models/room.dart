@@ -31,8 +31,12 @@ class Room {
       location: json['location'] != null ? (json['location'] as List).map((e) => e.toString()).toList() : [],
       password: json['password'],
       creator: json['creator'],
-      users: json['users'] != null ? (json['users'] as List).map((e) => Partecipant.fromJson(e)).toList() : [],
-      plates: json['plates'] != null ? (json['plates'] as List).map((e) => Plate.fromJson(e)).toList() : [],
+      users: json['users'] != null
+          ? (json['users'] as Map<dynamic, dynamic>).map((key, value) => MapEntry(key, Partecipant.fromJson(value))).values.toList()
+          : [],
+      plates: json['plates'] != null
+          ? (json['plates'] as Map<dynamic, dynamic>).map((key, value) => MapEntry(key, Plate.fromJson(value))).values.toList()
+          : [],
     );
   }
 
@@ -44,8 +48,8 @@ class Room {
       'location': location,
       'password': password,
       'creator': creator,
-      'users': users.map((e) => e.toJson()).toList(),
-      'plates': plates.map((e) => e.toJson()).toList(),
+      'users': users.asMap().map((key, value) => MapEntry(key.toString(), value.toJson())),
+      'plates': plates.asMap().map((key, value) => MapEntry(key.toString(), value.toJson())),
     };
   }
 }
