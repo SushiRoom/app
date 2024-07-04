@@ -314,89 +314,101 @@ class _RoomPageState extends State<RoomPage> {
   //   );
   // }
 
+  showPopDialog() {
+    Get.dialog(
+      AlertDialog(
+        title: I18nText("roomLeaveDialog.title"),
+        content: I18nText("roomLeaveDialog.message"),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: I18nText("cancel"),
+          ),
+          TextButton(
+            onPressed: () {
+              Get.back(closeOverlays: true);
+            },
+            child: I18nText("confirm"),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        appBar: AppBar(
-          leading: BackButton(
-            onPressed: () {
-              Get.dialog(
-                AlertDialog(
-                  title: I18nText("roomLeaveDialog.title"),
-                  content: I18nText("roomLeaveDialog.message"),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Get.back();
-                      },
-                      child: I18nText("cancel"),
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (idkwhatthisis) {
+        if (idkwhatthisis) return;
+
+        showPopDialog();
+      },
+      child: DefaultTabController(
+        length: 3,
+        child: Scaffold(
+          appBar: AppBar(
+            leading: BackButton(
+              onPressed: () {
+                showPopDialog();
+              },
+            ),
+            title: Text(roomName),
+            bottom: TabBar(
+              tabs: [
+                Tab(text: FlutterI18n.translate(context, 'roomView.roomTabLabel')),
+                Tab(text: FlutterI18n.translate(context, 'roomView.orderTabLabel')),
+                Tab(text: FlutterI18n.translate(context, 'menuView.title')),
+              ],
+            ),
+            actions: !passwordNeeded
+                ? [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: circleUserAvatar(),
                     ),
-                    TextButton(
-                      onPressed: () {
-                        Get.back(closeOverlays: true);
-                      },
-                      child: I18nText("confirm"),
-                    ),
-                  ],
-                ),
-              );
-            },
+                  ]
+                : null,
           ),
-          title: Text(roomName),
-          bottom: TabBar(
-            tabs: [
-              Tab(text: FlutterI18n.translate(context, 'roomView.roomTabLabel')),
-              Tab(text: FlutterI18n.translate(context, 'roomView.orderTabLabel')),
-              Tab(text: FlutterI18n.translate(context, 'menuView.title')),
-            ],
-          ),
-          actions: !passwordNeeded
-              ? [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: circleUserAvatar(),
-                  ),
-                ]
+          body: !passwordNeeded
+              ? StreamBuilder(
+                  stream: FirebaseDatabase.instance.ref().child('rooms').child(widget.roomId).onValue,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData && snapshot.data!.snapshot.value != null) {
+                      Map<String, dynamic> roomData = (snapshot.data!.snapshot.value as Map).cast<String, dynamic>();
+                      Room room = Room.fromJson(roomData);
+
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        if (room.creator == FirebaseAuth.instance.currentUser!.uid) {
+                          return;
+                        }
+                        checkKickUser(room);
+                      });
+
+                      return TabBarView(
+                        children: [
+                          RoomLanding(
+                            room: room,
+                            currentUser: localUsers[currentUser],
+                          ),
+                          OrderPage(
+                            room: room,
+                            currentUser: localUsers[currentUser],
+                          ),
+                          const MenuPage(),
+                        ],
+                      );
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  },
+                )
               : null,
         ),
-        body: !passwordNeeded
-            ? StreamBuilder(
-                stream: FirebaseDatabase.instance.ref().child('rooms').child(widget.roomId).onValue,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData && snapshot.data!.snapshot.value != null) {
-                    Map<String, dynamic> roomData = (snapshot.data!.snapshot.value as Map).cast<String, dynamic>();
-                    Room room = Room.fromJson(roomData);
-
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      if (room.creator == FirebaseAuth.instance.currentUser!.uid) {
-                        return;
-                      }
-                      checkKickUser(room);
-                    });
-
-                    return TabBarView(
-                      children: [
-                        RoomLanding(
-                          room: room,
-                          currentUser: localUsers[currentUser],
-                        ),
-                        OrderPage(
-                          room: room,
-                          currentUser: localUsers[currentUser],
-                        ),
-                        const MenuPage(),
-                      ],
-                    );
-                  } else {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                },
-              )
-            : null,
       ),
     );
   }
