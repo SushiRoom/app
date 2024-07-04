@@ -22,6 +22,13 @@ class _ScanCodePageState extends State<ScanCodePage> {
   bool manualInput = false;
   TextEditingController textEditingController = TextEditingController();
 
+  @override
+  void dispose() {
+    controller.dispose();
+    textEditingController.dispose();
+    super.dispose();
+  }
+
   showDialog(Room room) {
     Get.dialog(
       AlertDialog(
@@ -63,7 +70,7 @@ class _ScanCodePageState extends State<ScanCodePage> {
             onPressed: () {
               setState(() {
                 manualInput = !manualInput;
-                if (manualInput == true) {
+                if (manualInput) {
                   controller.stop();
                 } else {
                   controller.start();

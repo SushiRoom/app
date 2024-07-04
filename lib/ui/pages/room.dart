@@ -49,7 +49,7 @@ class _RoomPageState extends State<RoomPage> {
         removeUser(widget.roomId, element);
       }
     }
-
+    _scrollController.dispose();
     super.dispose();
   }
 

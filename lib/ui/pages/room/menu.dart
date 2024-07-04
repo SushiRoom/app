@@ -73,6 +73,12 @@ class _MenuPageState extends State<MenuPage> with AutomaticKeepAliveClientMixin 
   }
 
   @override
+  void dispose() {
+    qrScanController?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     bool somethingOn = (menu == null && (url.isEmpty && !isUrl)) && !scanningCode;
 
