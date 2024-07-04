@@ -98,5 +98,10 @@
     "title": "Aggiornamento disponibile!",
     "downloadingUpdate": "Download in corso...",
     "updateBtn": "Aggiorna"
+  },
+  "homeSnackbar": {
+    "title": "Cambia nome",
+    "message": "Prima di inziare, cambia nome",
+    "buttonText": "Cambia"
   }
 }
