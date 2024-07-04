@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
@@ -35,7 +36,7 @@ class _FinalOrderPageState extends State<FinalOrderPage> with AutomaticKeepAlive
         plates[plate.number] = (plates[plate.number] ?? 0) + int.parse(plate.quantity);
       }
     }
-    plates = Map.fromEntries(plates.entries.toList()..sort((a, b) => a.key.compareTo(b.key)));
+    plates = Map.fromEntries(plates.entries.toList()..sort((a, b) => compareNatural(a.key, b.key)));
 
     return plates.isEmpty
         ? Center(
