@@ -20,11 +20,13 @@ class InternalAPI {
     prefs = await SharedPreferences.getInstance();
   }
 
+  bool get hasChangedUsername => prefs.getBool('hasChangedUsername') ?? false;
   bool get isDarkMode => prefs.getBool('isDarkMode') ?? true;
   bool get isDynamicTheme => prefs.getBool('isDynamicTheme') ?? false;
   String get currentUserName =>
       (prefs.getString('currentUserName') != null && prefs.getString('currentUserName')!.isNotEmpty) ? prefs.getString('currentUserName')! : 'TOTTI';
 
+  set hasChangedUsername(bool value) => prefs.setBool('hasChangedUsername', value);
   set isDarkMode(bool value) => prefs.setBool('isDarkMode', value);
   set isDynamicTheme(bool value) => prefs.setBool('isDynamicTheme', value);
   set currentUserName(String value) => prefs.setString('currentUserName', value);

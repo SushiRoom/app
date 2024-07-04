@@ -124,5 +124,11 @@
     "title": "New update available!",
     "downloadingUpdate": "Downloading...",
     "updateBtn": "Update"
+  },
+
+  "homeSnackbar": {
+    "title": "Change name",
+    "message": "Before you start, please change your name",
+    "buttonText": "Change"
   }
 }

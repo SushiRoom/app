@@ -32,6 +32,7 @@ class _HomePageState extends State<HomePage> {
 
   bool isOffline = true;
   late StreamSubscription<InternetStatus> listener;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   checkAnyLeftRoom() async {
     List<Room> rooms;
@@ -174,6 +175,7 @@ class _HomePageState extends State<HomePage> {
                       controller: TextEditingController(text: internalAPI.currentUserName),
                       onChanged: (value) {
                         internalAPI.currentUserName = value;
+                        internalAPI.hasChangedUsername = true;
                       },
                     ),
                   ),
@@ -285,6 +287,34 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  bool hasChangedName() {
+    if (!internalAPI.hasChangedUsername) {
+      Get.snackbar(
+        FlutterI18n.translate(context, 'homeSnackbar.title'),
+        FlutterI18n.translate(context, 'homeSnackbar.message'),
+        onTap: (_) {
+          Get.back();
+        },
+        mainButton: TextButton(
+          onPressed: () {
+            Get.back();
+            _scaffoldKey.currentState?.openDrawer();
+          },
+          style: TextButton.styleFrom(
+            foregroundColor: Theme.of(context).colorScheme.onError,
+          ),
+          child: Text(FlutterI18n.translate(context, 'homeSnackbar.buttonText')),
+        ),
+        colorText: Theme.of(context).colorScheme.onError,
+        backgroundColor: Theme.of(context).colorScheme.error,
+        snackPosition: SnackPosition.BOTTOM,
+        overlayBlur: 0,
+      );
+    }
+
+    return internalAPI.hasChangedUsername;
+  }
+
   Widget body() {
     return Stack(
       children: [
@@ -305,7 +335,9 @@ class _HomePageState extends State<HomePage> {
                   ElevatedButton(
                     onPressed: !isOffline
                         ? () {
-                            Get.toNamed(RouteGenerator.joinPageRoute);
+                            if (hasChangedName()) {
+                              Get.toNamed(RouteGenerator.joinPageRoute);
+                            }
                           }
                         : null,
                     child: I18nText("joinRoomLabel"),
@@ -314,7 +346,9 @@ class _HomePageState extends State<HomePage> {
                   FilledButton(
                     onPressed: !isOffline
                         ? () {
-                            Get.toNamed(RouteGenerator.createPageRoute);
+                            if (hasChangedName()) {
+                              Get.toNamed(RouteGenerator.createPageRoute);
+                            }
                           }
                         : null,
                     child: I18nText("createRoomLabel"),
@@ -381,6 +415,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return ThemeSwitchingArea(
       child: Scaffold(
+        key: _scaffoldKey,
         appBar: appBar(),
         drawer: drawer(),
         body: body(),
