@@ -70,6 +70,10 @@ class _FinalOrderPageState extends State<FinalOrderPage> with AutomaticKeepAlive
                   Padding(
                     padding: const EdgeInsets.all(6.0),
                     child: OpenContainer(
+                      onClosed: (data) {
+                        // close keyboard
+                        FocusManager.instance.primaryFocus?.unfocus();
+                      },
                       closedShape: const RoundedRectangleBorder(),
                       closedElevation: 0,
                       closedBuilder: (context, action) => Card(
@@ -93,15 +97,6 @@ class _FinalOrderPageState extends State<FinalOrderPage> with AutomaticKeepAlive
                             "roomView.whoOrderedTitle",
                             translationParams: {
                               "number": plateNumber,
-                            },
-                          ),
-                          leading: IconButton(
-                            icon: const Icon(Icons.arrow_back),
-                            onPressed: () {
-                              action();
-
-                              // for some reason the keyboard will open when closing the container.
-                              FocusScope.of(context).unfocus();
                             },
                           ),
                         ),
