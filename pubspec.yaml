@@ -12,6 +12,7 @@ dependencies:
   animated_theme_switcher: ^2.0.8
   animations: ^2.0.8
   app_settings: ^5.0.0
+  collection: ^1.18.0
   cupertino_icons: ^1.0.2
   device_info_plus: ^9.0.3
   dynamic_color: ^1.6.6
