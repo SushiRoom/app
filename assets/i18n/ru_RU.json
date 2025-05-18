@@ -95,13 +95,13 @@
     "roomFormCreateBtn": "Создать"
   },
   "updateDialog": {
-    "title": "New update available!",
-    "downloadingUpdate": "Downloading...",
-    "updateBtn": "Update"
+    "title": "Доступно новое обновление!",
+    "downloadingUpdate": "Загрузка...",
+    "updateBtn": "Обновить"
   },
   "homeSnackbar": {
-    "title": "Change name",
-    "message": "Before you start, please change your name",
-    "buttonText": "Change"
+    "title": "Сменить имя",
+    "message": "Перед началом, вам необходимо сменить имя",
+    "buttonText": "Сменить"
   }
 }
